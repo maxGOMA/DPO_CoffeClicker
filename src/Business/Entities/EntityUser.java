@@ -1,26 +1,25 @@
 package Business.Entities;
 
 public class EntityUser {
-    private final char username;
-    private final char password;
-    private final char email;
+    private final String username;
+    private final String password;
+    private final String email;
 
-    public EntityUser(char username,char password,char email) {
+    public EntityUser(String username,String password,String email) {
         this.username = username;
         this.password = password;
         this.email = email;
     }
 
-    public char getUsername() {
+    public String getUsername() {
         return username;
     }
 
-
-    public char getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public char getEmail() {
+    public String getEmail() {
         return email;
     }
 
