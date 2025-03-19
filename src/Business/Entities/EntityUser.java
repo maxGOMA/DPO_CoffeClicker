@@ -15,7 +15,6 @@ public class EntityUser {
         return username;
     }
 
-
     public char getPassword() {
         return password;
     }
