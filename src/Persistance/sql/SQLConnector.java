@@ -1,5 +1,9 @@
 package Persistance.sql;
 
+import Persistance.JsonDao;
+import Persistance.impl.JsonConfigDAO;
+
+import java.io.FileNotFoundException;
 import java.sql.*;
 
 /**
@@ -24,8 +28,15 @@ public class SQLConnector {
      */
     public static SQLConnector getInstance(){
         if (instance == null ){
+            JsonDao jsDao = null;
+            try{
+                jsDao = new JsonConfigDAO();
+                jsDao.loadInfo();
+            }catch(FileNotFoundException e){
+                System.out.println(e.getMessage());
+            }
             // NOT a good practice to hardcode connection data! Be aware of this for your project delivery ;)
-            instance = new SQLConnector("root", "", "localhost", 3306, "coffeeclickerdb");
+            instance = new SQLConnector(jsDao.getUsername(), jsDao.getPassword(), jsDao.getHost(), jsDao.getPort(), jsDao.getDbname());
             instance.connect();
         }
         return instance;
