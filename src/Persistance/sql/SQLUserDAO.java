@@ -102,6 +102,7 @@ public class SQLUserDAO implements UserDAO {
         try {
             String query = "SELECT * FROM user WHERE username = '" + username + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            rs.next();
             return new EntityUser(rs.getString("username"), rs.getString("email"), rs.getString("password"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find user in the database");

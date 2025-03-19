@@ -46,7 +46,6 @@ public interface UserDAO {
      */
     boolean emailRegistered(String email) throws PersistanceException;
 
-
     /**
      *  Method that returns if the email and password introduced are valid.
      *
