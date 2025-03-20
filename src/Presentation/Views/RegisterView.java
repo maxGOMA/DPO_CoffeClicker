@@ -1,5 +1,7 @@
 package Presentation.Views;
 
+import java.awt.event.ActionListener;
+
 public class RegisterView {
 
     public static final String REGISTER_COMMAND = "REGISTER_COMMAND";
@@ -42,6 +44,17 @@ public class RegisterView {
     public String getConfirmationPasswordText(){
         //TODO pillar info del recuadro de texto de user
         return "por rellenar";
+    }
+
+    public void showExceptionErrorMessage(){
+        //TODO informar de error al leer BBDD
+    }
+
+    public void controllerRegister(ActionListener actionListener) {
+        //Descomentar ->
+        //jbnLogOut.addActionListener(actionListener);
+        //jbnDeleteAccount.addActionListener(actionListener);
+        //jbnConfirmDeletion.setActionCommand(actionListener);
     }
 
 }

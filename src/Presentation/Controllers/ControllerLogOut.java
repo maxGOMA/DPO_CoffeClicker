@@ -3,6 +3,7 @@ package Presentation.Controllers;
 import Presentation.Views.LogOutView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Business.UserManager;
 
 public class ControllerLogOut implements ActionListener {
     private LogOutView view;

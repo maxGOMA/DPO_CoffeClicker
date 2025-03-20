@@ -1,7 +1,9 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
 import Business.Entities.EntityUser;
 import Business.UserManager;
+import Persistance.PersistanceException;
 import Presentation.Views.LoginView;
 import Presentation.Views.RegisterView;
 
@@ -9,53 +11,45 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
-public abstract class ControllerRegister implements ActionListener, KeyListener {
+public class ControllerRegister implements ActionListener {
     UserManager userManager;
-    private final RegisterView RegisterView;
+    private final RegisterView registerView;
 
-    public ControllerRegister(Presentation.Views.RegisterView registerView, UserManager userManager) {
-        RegisterView = registerView;
-        this.userManager = userManager;
+    public ControllerRegister(Presentation.Views.RegisterView registerView) {
+        this.registerView = registerView;
+        userManager = new UserManager();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(Presentation.Views.RegisterView.REGISTER_COMMAND)) {
-            //TODO mirar con Raúl quien hace el view
 
-            if(!userManager.verifyEmailFormat(RegisterView.getEmailText())){
-                RegisterView.showErrorEmailFormatMessage();
+            if(!userManager.verifyEmailFormat(registerView.getEmailText())){
+                registerView.showErrorEmailFormatMessage();
             }
             else{
-                if(!userManager.verifyConfirmationPassword(RegisterView.getConfirmationPasswordText(),RegisterView.getPasswordText())){
-                    RegisterView.showErrorPasswordConfirmationMessage();
+                if(!userManager.verifyConfirmationPassword(registerView.getConfirmationPasswordText(),registerView.getPasswordText())){
+                    registerView.showErrorPasswordConfirmationMessage();
                 }
                 else{
-                    if(userManager.checkUserRegistered(RegisterView.getUserText())){
-                        RegisterView.showErrorExistingUserMessage();
-                    }
-                    else{
-                        if(userManager.emailRegistered(RegisterView.getEmailText())){
-                            RegisterView.showErrorExistingEmailMessage();
+                    try {
+                        if (userManager.checkUserRegistered(registerView.getUserText())) {
+                            registerView.showErrorExistingUserMessage();
+                        } else {
+                            if (userManager.emailRegistered(registerView.getEmailText())) {
+                                registerView.showErrorExistingEmailMessage();
+                            } else {
+                                registerView.showSuccesfulLRegisterMessage();
+                                userManager.setUser(registerView.getUserText());
+                            }
                         }
-                        else{
-                            RegisterView.showSuccesfulLRegisterMessage();
-                            userManager.setUser(RegisterView.getUserText());
-                        }
+                    } catch(BusinessException ex){
+                          registerView.showExceptionErrorMessage();
                     }
                 }
             }
 
         }
     }
-
-    //TODO insertUser();
-    //TODO insertEmail();
-    //TODO verifyEmailFormat();
-    //TODO verifyEmailUnique();
-    //TODO insertPassword();
-    //TODO verifyConfirmationPassword();
-    //TODO changeView();
-
 
 }
