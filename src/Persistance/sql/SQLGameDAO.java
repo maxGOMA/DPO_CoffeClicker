@@ -21,13 +21,61 @@ public class SQLGameDAO implements GameDAO {
         try {
             String query = "SELECT * FROM game WHERE ID_game = " + ID_game + ";";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-            rs.next();
-            return new EntityGame(rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
+            if(!rs.next()){
+                return null;
+            }
+            return new EntityGame(rs.getString("name"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
                                   , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
                                   , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
+    }
+
+    /**
+     * Carga la información de un juego desde la base de datos utilizando su nombre.
+     *
+     * @param name Nombre del juego a buscar en la base de datos.
+     * @return Un objeto {@link EntityGame} con los datos del juego.
+     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     */
+    @Override
+    public EntityGame loadInfoGame(String name) throws PersistanceException {
+        try {
+            String query = "SELECT * FROM game WHERE name = '" + name + "';";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            if(!rs.next()){
+                return null;
+            }
+            return new EntityGame(rs.getString("name"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
+                    , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
+                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
+        } catch (SQLException e) {
+            throw new PersistanceException("Couldn't find game in the database");
+        }
+    }
+
+    /**
+     * Inserta la información de un juego en la base de datos.
+     *
+     * @param game Objeto de tipo EntityGame que contiene la información del juego a insertar.
+     * @throws PersistanceException Si ocurre un error al ejecutar la consulta en la base de datos.
+     */
+    @Override
+    public void setInfoGame(EntityGame game){
+        String query = "INSERT INTO game (name, username, Num_Coffees, Gold, Deluxe, Supreme, Upgrade_Gold, Upgrade_Deluxe, Upgrade_Supreme, Upgrade_Clicker) VALUES ('" +
+                 game.getName() + "', '" +
+                 game.getUsername()+ "', '" +
+                 game.getNum_Coffees()+ "', '" +
+                 game.getGold()+ "', '" +
+                 game.getDeluxe()+ "', '" +
+                 game.getSupreme()+ "', '" +
+                 game.getUpgrade_Gold()+ "', '" +
+                 game.getUpgrade_Deluxe()+ "', '" +
+                 game.getUpgrade_Supreme()+ "', '" +
+                 game.getUpgrade_Clicker() +
+                "');";
+        SQLConnector.getInstance().insertQuery(query);
     }
 
     /**

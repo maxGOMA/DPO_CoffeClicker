@@ -70,4 +70,8 @@ public class UserManager {
         user = null;
         //TODO supongo que borrar partidas y estadisticas usuario
     }
+
+    public EntityUser getUser() {
+        return user;
+    }
 }
