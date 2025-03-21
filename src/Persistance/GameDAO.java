@@ -18,6 +18,23 @@ public interface GameDAO {
     EntityGame loadInfoGame(int ID_game) throws PersistanceException;
 
     /**
+     * Carga la información de un juego desde la base de datos utilizando su nombre.
+     *
+     * @param name Nombre del juego a buscar en la base de datos.
+     * @return Un objeto {@link EntityGame} con los datos del juego.
+     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     */
+    EntityGame loadInfoGame(String name) throws PersistanceException;
+
+    /**
+     * Inserta la información de un juego en la base de datos.
+     *
+     * @param game Objeto de tipo EntityGame que contiene la información del juego a insertar.
+     * @throws PersistanceException Si ocurre un error al ejecutar la consulta en la base de datos.
+     */
+    void setInfoGame(EntityGame game);
+
+    /**
      * Obtiene el identificador de una partida desde la base de datos.
      *
      * @param ID_game Identificador único de la partida.

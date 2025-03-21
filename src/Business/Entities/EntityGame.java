@@ -3,6 +3,7 @@ package Business.Entities;
 public class EntityGame {
     private final int ID_Game;
     private final String username ;
+    private final String name;
     private final Double Num_Coffees;
     private final int Gold;
     private final int Deluxe;
@@ -12,7 +13,8 @@ public class EntityGame {
     private final int Upgrade_Supreme;
     private final int Upgrade_Clicker;
 
-    public EntityGame(int gold, int upgrade_Clicker, int upgrade_Supreme, int upgrade_Deluxe, int upgrade_Gold, int supreme, int deluxe, Double num_Coffees, String username, int ID_Game) {
+    public EntityGame(String name, int gold, int upgrade_Clicker, int upgrade_Supreme, int upgrade_Deluxe, int upgrade_Gold, int supreme, int deluxe, Double num_Coffees, String username, int ID_Game) {
+        this.name = name;
         Gold = gold;
         Upgrade_Clicker = upgrade_Clicker;
         Upgrade_Supreme = upgrade_Supreme;
@@ -23,6 +25,10 @@ public class EntityGame {
         Num_Coffees = num_Coffees;
         this.username = username;
         this.ID_Game = ID_Game;
+    }
+
+    public String getName(){
+        return name;
     }
 
     public int getID_Game() {
