@@ -12,11 +12,11 @@ import java.awt.event.KeyListener;
 
 public class ControllerLogin implements ActionListener {
     //TODO changeView();
-    UserManager userManager;
+    private final UserManager userManager;
     private final LoginView loginView;
 
     public ControllerLogin(LoginView loginView) {
-        this.userManager = userManager;
+        userManager = new UserManager();
         this.loginView = loginView;
     }
 

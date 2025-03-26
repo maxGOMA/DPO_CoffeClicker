@@ -7,12 +7,11 @@ import Persistance.sql.SQLUserDAO;
 import java.util.Objects;
 
 public class UserManager {
-    private EntityUser user;
+    private static EntityUser user;
     private final UserDAO userDAO;
 
     public UserManager() {
         this.userDAO = new SQLUserDAO();
-        this.user = null;
     }
 
     public boolean checkPassword(String userName, String userPassword) throws BusinessException{

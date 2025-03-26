@@ -4,7 +4,7 @@ public class EntityGame {
     private final int ID_Game;
     private final String username ;
     private final String name;
-    private final Double Num_Coffees;
+    private Double Num_Coffees;
     private final int Gold;
     private final int Deluxe;
     private final int Supreme;
@@ -23,6 +23,20 @@ public class EntityGame {
         Supreme = supreme;
         Deluxe = deluxe;
         Num_Coffees = num_Coffees;
+        this.username = username;
+        this.ID_Game = ID_Game;
+    }
+
+    public EntityGame(String name, String username, int ID_Game) {
+        this.name = name;
+        this.Gold = 0;
+        Upgrade_Clicker = 0;
+        Upgrade_Supreme = 0;
+        Upgrade_Deluxe = 0;
+        Upgrade_Gold = 0;
+        Supreme = 0;
+        Deluxe = 0;
+        Num_Coffees = 0.0;
         this.username = username;
         this.ID_Game = ID_Game;
     }
@@ -70,4 +84,12 @@ public class EntityGame {
     public int getUpgrade_Clicker() {
         return Upgrade_Clicker;
     }
+
+    public double IncrementCoffee(){
+        //TODO IMPORTANTE: la mejora empieza en 0!!!!
+        // Devuelve el numero de cafés que ha incrementado NO EL TOTAL!!
+        Num_Coffees += 2^(Upgrade_Clicker);
+        return 2^(Upgrade_Clicker);
+    }
+
 }

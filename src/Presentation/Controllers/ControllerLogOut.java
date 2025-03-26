@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import Business.UserManager;
 
 public class ControllerLogOut implements ActionListener {
-    private LogOutView view;
-    private UserManager userManager;
+    private final LogOutView view;
+    private final UserManager userManager;
 
     public ControllerLogOut(LogOutView view) {
         this.view = view;
