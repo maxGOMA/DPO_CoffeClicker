@@ -1,94 +1,55 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
+import Business.Entities.EntityUser;
 import Business.UserManager;
+import Persistance.PersistanceException;
+import Presentation.Views.LoginView;
 import Presentation.Views.RegisterView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.regex.Pattern;
-
-import static Presentation.Views.RegisterView.showError;
+import java.awt.event.KeyListener;
 
 public class ControllerRegister implements ActionListener {
     UserManager userManager;
     private final RegisterView registerView;
 
-    public ControllerRegister(RegisterView registerView) {
+    public ControllerRegister(Presentation.Views.RegisterView registerView) {
         this.registerView = registerView;
         userManager = new UserManager();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
+        if (e.getActionCommand().equals(Presentation.Views.RegisterView.REGISTER_COMMAND)) {
 
-        if(command.equals(RegisterView.REGISTER_COMMAND)){
-            validateAndRegister();
+            if(!userManager.verifyEmailFormat(registerView.getEmailText())){
+                registerView.showErrorEmailFormatMessage();
+            }
+            else{
+                if(!userManager.verifyConfirmationPassword(registerView.getConfirmationPasswordText(),registerView.getPasswordText())){
+                    registerView.showErrorPasswordConfirmationMessage();
+                }
+                else{
+                    try {
+                        if (userManager.checkUserRegistered(registerView.getUserText())) {
+                            registerView.showErrorExistingUserMessage();
+                        } else {
+                            if (userManager.emailRegistered(registerView.getEmailText())) {
+                                registerView.showErrorExistingEmailMessage();
+                            } else {
+                                registerView.showSuccesfulLRegisterMessage();
+                                userManager.setUser(registerView.getUserText());
+                            }
+                        }
+                    } catch(BusinessException ex){
+                          registerView.showExceptionErrorMessage();
+                    }
+                }
+            }
+
         }
-        if(command.equals(RegisterView.BACK_COMMAND)){
-            registerView.clearFields();
-            registerView.clearErrorMessages();
-            registerView.getApp().showPanel("MainMenuView");
-        }
-
-    }
-
-    private void validateAndRegister() {
-        String user = registerView.getTextFields().get("USER").getText().trim();
-        String email = registerView.getTextFields().get("EMAIL").getText().trim();
-        String password = registerView.getTextFields().get("PASSWORD").getText().trim();
-        String confirmPassword = registerView.getTextFields().get("CONFIRM PASSWORD").getText().trim();
-
-        registerView.clearErrorMessages();
-        boolean isValid = true;
-
-        if (user.isEmpty()) {
-            showError("USER", "User field cannot be empty!");
-            isValid = false;
-        }
-        // TODO: Check if user already exists in the database -----------------------------------------------------------------------------------------------------
-
-        if (email.isEmpty() || !isValidEmail(email)) {
-            showError("EMAIL", "Invalid email format!");
-            isValid = false;
-        }
-
-        // TODO: Check if email already exists in the database -----------------------------------------------------------------------------------------------------
-
-        if (!isValidPassword(password)) {
-            showError("PASSWORD", "Password must have at least 8 characters, including uppercase, lowercase, and a number!");
-            isValid = false;
-        }
-
-        if (confirmPassword.isEmpty()) {
-            showError("CONFIRM PASSWORD", "Confirmation password cannot be empty!");
-            isValid = false;
-        } else if (!password.equals(confirmPassword)) {
-            showError("CONFIRM PASSWORD", "Passwords do not match!");
-            isValid = false;
-        }
-
-        if (isValid) {
-            System.out.println("USER: " + user);
-            System.out.println("EMAIL: " + email);
-            System.out.println("PASSWORD: " + password);
-            // TODO: send data to the database --------------------------------------------------------------------------------------------------------------------
-            registerView.clearFields();
-            registerView.clearErrorMessages();
-            registerView.getApp().showPanel("MainMenuView");
-        }
-    }
-
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        return Pattern.matches(emailRegex, email);
-    }
-
-    private boolean isValidPassword(String password) {
-        return password.length() >= 8 &&
-                password.matches(".*[A-Z].*") &&
-                password.matches(".*[a-z].*") &&
-                password.matches(".*\\d.*");
     }
 
 }
