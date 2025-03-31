@@ -8,3 +8,4 @@
 /dataSources.local.xml
 # Ignorar el archivo de configuración JSON
 data/config.json
+out/
