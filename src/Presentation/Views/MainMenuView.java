@@ -1,17 +1,22 @@
 package Presentation.Views;
 
+import Presentation.Controllers.ControllerMainMenu;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
-public class LogOutView extends JPanel {
-    public static final String LOGOUT_COMMAND = "LOGOUT_COMMAND";
-    public static final String DELETE_ACCOUNT_COMMAND = "DELETE_ACCOUNT_COMMAND";
-    public static final String CONFIRMATION_COMMAND = "CONFIRMATION_COMMAND";
+public class MainMenuView extends JPanel {
+    public static final String VIEW_LOGIN = "VIEW_LOGIN";
+    public static final String VIEW_REGISTER = "VIEW_REGISTER";
+    public static final String VIEW_LOGOUT = "VIEW_LOGOUT";
+    public static final String VIEW_EXIT = "VIEW_EXIT";
     private final CoffeeClickerApp app;
+    private final HashMap<String, JButton> buttons = new HashMap<>();
 
-    public LogOutView(CoffeeClickerApp app) {
+    public MainMenuView(CoffeeClickerApp app) {
         this.app = app;
         setLayout(new BorderLayout());
 
@@ -19,8 +24,20 @@ public class LogOutView extends JPanel {
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
         contentPane.setSize(new Dimension(765,579));
 
-        JButton deleteAccountButton = newButton("<html><div style='text-align:center;'>DELETE<br>ACCOUNT</div></html>");
-        JButton logoutButton = newButton("LOGOUT");
+        JLabel creditsLabel = new JLabel("Made by: Elena Balfagon Costa, Raul Corominas San Agustin, Max Gomez Manso, Alexia Julia Asin, Santiago Martinez Roques");
+        creditsLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 8));
+        creditsLabel.setForeground(Color.BLACK);
+        creditsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topLeftPanel.add(creditsLabel);
+        topLeftPanel.setOpaque(false);
+        add(topLeftPanel, BorderLayout.NORTH);
+
+        JButton loginButton = newButton("LOGIN", VIEW_LOGIN);
+        JButton registerButton = newButton("REGISTER", VIEW_REGISTER);
+        JButton logoutButton = newButton("LOGOUT", VIEW_LOGOUT);
+        JButton exitButton = newButton("EXIT", VIEW_EXIT);
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
                 .getImage().getScaledInstance(765, 171, Image.SCALE_SMOOTH));
@@ -30,9 +47,13 @@ public class LogOutView extends JPanel {
         contentPane.add(Box.createVerticalStrut(50)); // Espaciado superior
         contentPane.add(label);
         contentPane.add(Box.createVerticalStrut(30)); // Espaciado entre header y botones
-        contentPane.add(deleteAccountButton);
+        contentPane.add(loginButton);
+        contentPane.add(Box.createVerticalStrut(20)); // Espaciado entre botones
+        contentPane.add(registerButton);
         contentPane.add(Box.createVerticalStrut(20)); // Espaciado entre botones
         contentPane.add(logoutButton);
+        contentPane.add(Box.createVerticalStrut(20)); // Espaciado entre botones
+        contentPane.add(exitButton);
 
         JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.add(contentPane);
@@ -43,12 +64,12 @@ public class LogOutView extends JPanel {
         setVisible(true);
     }
 
-    private JButton newButton(String text){
+    private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
-                .getImage().getScaledInstance(515, 164, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(319, 102, Image.SCALE_DEFAULT));
 
         ImageIcon buttonHoverIcon = new ImageIcon(new ImageIcon("imgs/button_selected.png")
-                .getImage().getScaledInstance(515, 164, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(319, 102, Image.SCALE_DEFAULT));
 
         JButton button = new JButton(text, buttonIcon);
         button.setHorizontalTextPosition(JButton.CENTER);
@@ -72,26 +93,20 @@ public class LogOutView extends JPanel {
             }
         });
 
+        button.setActionCommand(actionCommand);
+
+        buttons.put(actionCommand, button);
+
         return button;
+    }
+
+    public void setController(ControllerMainMenu controller) {
+        for (JButton button : buttons.values()) {
+            button.addActionListener(controller);
+        }
     }
 
     public CoffeeClickerApp getApp(){
         return app;
     }
-
-
-    //Se asignan estos comandos a los componentes de la interfaz despueés de crearlos
-    //Descomentar ->
-    //jbnLogOut.setActionCommand(LOGOUT_COMMAND); //Botón
-    //jbnDeleteAccount.setActionCommand(DELETE_ACCOUNT_COMMAND); //Botón
-    //jbnConfirmDeletion.setActionCommand(CONFIRMATION_COMMAND); //Botón
-//
-//    public void showLogOutMessage() {
-//        //TODO implementar funcion que me enseñe un mensaje de bye,bye! O de logOut!
-//    }
-//
-//    public void showConfirmationMessage() {
-//        //TODO implementa funcion que enseñe mensaje de confirmacion, mostrando el boton correspondiente.
-//    }
-
 }

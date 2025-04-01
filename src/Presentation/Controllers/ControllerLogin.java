@@ -1,14 +1,12 @@
 package Presentation.Controllers;
 
-import Business.BusinessException;
 import Business.UserManager;
-import Persistance.PersistanceException;
 import Presentation.Views.LoginView;
-import Presentation.Views.RegisterView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
+
+import static Presentation.Views.LoginView.showError;
 
 public class ControllerLogin implements ActionListener {
     //TODO changeView();
@@ -18,22 +16,56 @@ public class ControllerLogin implements ActionListener {
     public ControllerLogin(LoginView loginView) {
         userManager = new UserManager();
         this.loginView = loginView;
+        this.loginView.setController(this);
+    }
+
+    private void validateAndLogin() {
+        String userEmail = loginView.getTextFields().get("USER/EMAIL").getText().trim();
+        String password = loginView.getTextFields().get("PASSWORD").getText().trim();
+
+        loginView.clearErrorMessages();
+        boolean isValid = true;
+
+        if (userEmail.isEmpty()) {
+            showError("USER/EMAIL", "User/Email field cannot be empty!");
+            isValid = false;
+        }
+
+        if (password.isEmpty()) {
+            showError("PASSWORD", "Password field cannot be empty!");
+            isValid = false;
+        }
+
+        // Simulación de verificación con la base de datos
+        boolean userExists = /*checkUserInDatabase(userEmail);*/ true;
+        boolean passwordCorrect = /*checkPasswordInDatabase(userEmail, password);*/ true;
+
+        if (isValid) {
+            if (!userExists) {
+                showError("USER/EMAIL", "User/Email not found in database!");
+                return;
+            }
+
+            if (!passwordCorrect) {
+                showError("PASSWORD", "Incorrect password!");
+                return;
+            }
+
+            System.out.println("LOGIN SUCCESSFUL");
+            loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(LoginView.LOGIN_COMMAND)) {
-           //TODO mirar con Raúl quien hace el view
-            try {
-                if (!userManager.checkUserRegistered(loginView.getUserText()) || !userManager.checkPassword(loginView.getUserText(), loginView.getPasswordText())) {
-                    loginView.showErrorInputMessage();
-                } else {
-                    loginView.showSuccesfulLoginMessage();
-                    userManager.setUser(loginView.getUserText());
-                }
-            }catch (BusinessException ex){
-                LoginView.showExceptionErrorMessage();
-            }
+        String command = e.getActionCommand();
+
+        if (command.equals(LoginView.LOGIN_COMMAND)) {
+            validateAndLogin();
+        } else if (command.equals(LoginView.BACK_COMMAND)) {
+            loginView.clearFields();
+            loginView.clearErrorMessages();
+            loginView.getApp().showPanel("MainMenuView");
         }
     }
 }
