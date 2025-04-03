@@ -16,10 +16,13 @@ public class LoginView extends JPanel {
     private static final HashMap<String, JLabel> errorLabels = new HashMap<>();
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private final CoffeeClickerApp app;
+    private Font coffeeClickerFont;
 
     public LoginView (CoffeeClickerApp app) {
         this.app = app;
         setLayout(new BorderLayout());
+
+        coffeeClickerFont = MainMenuView.loadCustomFont();
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
                 .getImage().getScaledInstance(765, 171, Image.SCALE_SMOOTH));
@@ -61,28 +64,34 @@ public class LoginView extends JPanel {
     public JPanel askInfo(String text) {
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
-        infoBox.setPreferredSize(new Dimension(617, 130));
-        infoBox.setMaximumSize(new Dimension(617, 130));
+        infoBox.setPreferredSize(new Dimension(617, 140));
+        infoBox.setMinimumSize(new Dimension(617, 140));
+        infoBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel label = new JLabel(text + ":");
-        label.setFont(new Font("CoffeeClicker", Font.BOLD, 24));
+        if (coffeeClickerFont != null) {
+            label.setFont(coffeeClickerFont.deriveFont(24f));
+        }
         label.setForeground(Color.black);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        infoBox.add(label);
 
         JPanel textBox = addTextbox(text);
-        textBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        infoBox.add(textBox);
 
         JLabel errorLabel = new JLabel(" ");
         errorLabel.setForeground(Color.RED);
-        errorLabel.setFont(new Font("CoffeeClicker", Font.BOLD, 10));
+        if (coffeeClickerFont != null) {
+            errorLabel.setFont(coffeeClickerFont.deriveFont(10f));
+        }
         errorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        errorLabel.setMaximumSize(new Dimension(600, 40));
+        errorLabel.setVerticalAlignment(SwingConstants.TOP);
+        errorLabel.setMaximumSize(new Dimension(600, 20));
         errorLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
-        infoBox.add(errorLabel);
 
         errorLabels.put(text, errorLabel);
+
+        infoBox.add(label);
+        infoBox.add(textBox);
+        infoBox.add(errorLabel);
 
         return infoBox;
     }
@@ -103,19 +112,22 @@ public class LoginView extends JPanel {
         textField.setOpaque(false);
         textField.setBorder(BorderFactory.createEmptyBorder());
         textField.setForeground(new Color(127, 51, 0));
-        textField.setFont(new Font("CoffeeClicker", Font.BOLD, 24));
+        if (coffeeClickerFont != null) {
+            textField.setFont(coffeeClickerFont.deriveFont(24f));
+        }
         textField.setPreferredSize(new Dimension(600, 70));
 
         textFields.put(text, textField);
 
-        JPanel textFieldPanel = new JPanel(new GridBagLayout());
-        textFieldPanel.setOpaque(false);
-        textFieldPanel.add(textField);
-
-        panel.add(textFieldPanel);
+        panel.add(textField);
         frame.add(panel);
         frame.setOpaque(false);
         frame.setPreferredSize(new Dimension(617, 75));
+
+        frame.setAlignmentX(Component.LEFT_ALIGNMENT);
+        frame.setMaximumSize(new Dimension(617, 85));
+        frame.setMinimumSize(new Dimension(617, 85));
+
         return frame;
     }
 
@@ -129,7 +141,9 @@ public class LoginView extends JPanel {
         JButton button = new JButton(text, buttonIcon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);
-        button.setFont(new Font("CoffeeClicker", Font.PLAIN, 36));
+        if (coffeeClickerFont != null) {
+            button.setFont(coffeeClickerFont.deriveFont(36f));
+        }
         button.setBorderPainted(false);
         button.setForeground(new Color(107, 41, 0));
         button.setContentAreaFilled(false);
