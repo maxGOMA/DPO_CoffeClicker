@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+/*
 import Business.Entities.EntityGame;
 import Business.GameManager;
 import Business.UserManager;
@@ -28,3 +29,4 @@ public class ControllerManualClicker implements ActionListener {
         }
     }
 }
+*/
