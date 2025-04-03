@@ -10,10 +10,13 @@ public class LogOutView extends JPanel {
     public static final String DELETE_ACCOUNT_COMMAND = "DELETE_ACCOUNT_COMMAND";
     public static final String CONFIRMATION_COMMAND = "CONFIRMATION_COMMAND";
     private final CoffeeClickerApp app;
+    private Font coffeeClickerFont;
 
     public LogOutView(CoffeeClickerApp app) {
         this.app = app;
         setLayout(new BorderLayout());
+
+        coffeeClickerFont = MainMenuView.loadCustomFont();
 
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
@@ -53,7 +56,9 @@ public class LogOutView extends JPanel {
         JButton button = new JButton(text, buttonIcon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);
-        button.setFont(new Font("CoffeeClicker", Font.PLAIN, 36));
+        if (coffeeClickerFont != null) {
+            button.setFont(coffeeClickerFont.deriveFont(36f));
+        }
         button.setBorderPainted(false);
         button.setForeground(new Color(107, 41, 0));
         button.setContentAreaFilled(false);
@@ -78,20 +83,4 @@ public class LogOutView extends JPanel {
     public CoffeeClickerApp getApp(){
         return app;
     }
-
-
-    //Se asignan estos comandos a los componentes de la interfaz despueés de crearlos
-    //Descomentar ->
-    //jbnLogOut.setActionCommand(LOGOUT_COMMAND); //Botón
-    //jbnDeleteAccount.setActionCommand(DELETE_ACCOUNT_COMMAND); //Botón
-    //jbnConfirmDeletion.setActionCommand(CONFIRMATION_COMMAND); //Botón
-//
-//    public void showLogOutMessage() {
-//        //TODO implementar funcion que me enseñe un mensaje de bye,bye! O de logOut!
-//    }
-//
-//    public void showConfirmationMessage() {
-//        //TODO implementa funcion que enseñe mensaje de confirmacion, mostrando el boton correspondiente.
-//    }
-
 }

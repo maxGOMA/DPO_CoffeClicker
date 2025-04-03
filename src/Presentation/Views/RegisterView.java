@@ -1,6 +1,7 @@
 package Presentation.Views;
 
 import Presentation.Controllers.ControllerRegister;
+import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +16,14 @@ public class RegisterView extends JPanel {
     private final HashMap<String, JTextField> textFields = new HashMap<>();
     private static final HashMap<String, JLabel> errorLabels = new HashMap<>();
     private final HashMap<String, JButton> buttons = new HashMap<>();
+    private Font coffeeClickerFont;
 
 
     public RegisterView(CoffeeClickerApp app) {
         this.app = app;
         setLayout(new BorderLayout());
+
+        coffeeClickerFont = MainMenuView.loadCustomFont();
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
                 .getImage().getScaledInstance(765, 171, Image.SCALE_SMOOTH));
@@ -34,7 +38,6 @@ public class RegisterView extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
         centerPanel.add(mainPanel, gbc);
 
         JPanel buttonPanel = new JPanel();
@@ -70,28 +73,23 @@ public class RegisterView extends JPanel {
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
         infoBox.setPreferredSize(new Dimension(617, 140));
-        infoBox.setMaximumSize(new Dimension(617, 140));
+        infoBox.setMinimumSize(new Dimension(617, 140));
         infoBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel label = new JLabel(text + ":");
-        label.setFont(new Font("CoffeeClicker", Font.BOLD, 24));
+        if (coffeeClickerFont != null) {
+            label.setFont(coffeeClickerFont.deriveFont(24f));
+        }
         label.setForeground(Color.black);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JPanel textBoxContainer = new JPanel();
-        textBoxContainer.setLayout(new BoxLayout(textBoxContainer, BoxLayout.Y_AXIS));
-        textBoxContainer.setPreferredSize(new Dimension(617, 85));
-        textBoxContainer.setMaximumSize(new Dimension(617, 85));
-        textBoxContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
-        textBoxContainer.setOpaque(false);
-
         JPanel textBox = addTextbox(text);
-        textBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-        textBoxContainer.add(textBox);
 
         JLabel errorLabel = new JLabel(" ");
         errorLabel.setForeground(Color.RED);
-        errorLabel.setFont(new Font("CoffeeClicker", Font.BOLD, 10));
+        if (coffeeClickerFont != null) {
+            errorLabel.setFont(coffeeClickerFont.deriveFont(10f));
+        }
         errorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         errorLabel.setVerticalAlignment(SwingConstants.TOP);
         errorLabel.setMaximumSize(new Dimension(600, 20));
@@ -100,7 +98,7 @@ public class RegisterView extends JPanel {
         errorLabels.put(text, errorLabel);
 
         infoBox.add(label);
-        infoBox.add(textBoxContainer);
+        infoBox.add(textBox);
         infoBox.add(errorLabel);
 
         return infoBox;
@@ -122,19 +120,22 @@ public class RegisterView extends JPanel {
         textField.setOpaque(false);
         textField.setBorder(BorderFactory.createEmptyBorder());
         textField.setForeground(new Color(127, 51, 0));
-        textField.setFont(new Font("CoffeeClicker", Font.BOLD, 24));
+        if (coffeeClickerFont != null) {
+            textField.setFont(coffeeClickerFont.deriveFont(24f));
+        }
         textField.setPreferredSize(new Dimension(600, 70));
 
         textFields.put(text, textField);
 
-        JPanel textFieldPanel = new JPanel(new GridBagLayout());
-        textFieldPanel.setOpaque(false);
-        textFieldPanel.add(textField);
-
-        panel.add(textFieldPanel);
+        panel.add(textField);
         frame.add(panel);
         frame.setOpaque(false);
         frame.setPreferredSize(new Dimension(617, 75));
+
+        frame.setAlignmentX(Component.LEFT_ALIGNMENT);
+        frame.setMaximumSize(new Dimension(617, 85));
+        frame.setMinimumSize(new Dimension(617, 85));
+
         return frame;
     }
 
