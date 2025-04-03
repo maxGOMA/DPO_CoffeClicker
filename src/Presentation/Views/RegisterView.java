@@ -26,7 +26,7 @@ public class RegisterView extends JPanel {
         coffeeClickerFont = MainMenuView.loadCustomFont();
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
-                .getImage().getScaledInstance(765, 171, Image.SCALE_SMOOTH));
+                .getImage().getScaledInstance(382, 85, Image.SCALE_DEFAULT));
         JLabel label = new JLabel(headerIcon);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -44,23 +44,23 @@ public class RegisterView extends JPanel {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
         mainPanel.add(label);
-        mainPanel.add(Box.createVerticalStrut(50));
+        mainPanel.add(Box.createVerticalStrut(25));
         JPanel askUserPanel = askInfo("USER");
         askUserPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(askUserPanel);
-        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(Box.createVerticalStrut(10));
         JPanel askEmailPanel = askInfo("EMAIL");
         askEmailPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(askEmailPanel);
-        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(Box.createVerticalStrut(10));
         JPanel askPasswordPanel = askInfo("PASSWORD");
         askPasswordPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(askPasswordPanel);
-        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(Box.createVerticalStrut(10));
         JPanel askConfirmationPanel = askInfo("CONFIRM PASSWORD");
         askConfirmationPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(askConfirmationPanel);
-        mainPanel.add(Box.createVerticalStrut(50));
+        mainPanel.add(Box.createVerticalStrut(25));
         buttonPanel.add(newButton("BACK", BACK_COMMAND));
         buttonPanel.add(newButton("REGISTER", REGISTER_COMMAND));
 
@@ -72,13 +72,14 @@ public class RegisterView extends JPanel {
     public JPanel askInfo(String text) {
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
-        infoBox.setPreferredSize(new Dimension(617, 140));
-        infoBox.setMinimumSize(new Dimension(617, 140));
+        infoBox.setMaximumSize(new Dimension(308, 90));
+        infoBox.setPreferredSize(new Dimension(308, 90));
+        infoBox.setMinimumSize(new Dimension(308, 90));
         infoBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel label = new JLabel(text + ":");
         if (coffeeClickerFont != null) {
-            label.setFont(coffeeClickerFont.deriveFont(24f));
+            label.setFont(coffeeClickerFont.deriveFont(12f));
         }
         label.setForeground(Color.black);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -88,11 +89,11 @@ public class RegisterView extends JPanel {
         JLabel errorLabel = new JLabel(" ");
         errorLabel.setForeground(Color.RED);
         if (coffeeClickerFont != null) {
-            errorLabel.setFont(coffeeClickerFont.deriveFont(10f));
+            errorLabel.setFont(coffeeClickerFont.deriveFont(8f));
         }
         errorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         errorLabel.setVerticalAlignment(SwingConstants.TOP);
-        errorLabel.setMaximumSize(new Dimension(600, 20));
+        errorLabel.setMaximumSize(new Dimension(300, 25));
         errorLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
 
         errorLabels.put(text, errorLabel);
@@ -108,48 +109,48 @@ public class RegisterView extends JPanel {
         JPanel frame = new JPanel();
 
         ImageIcon textbox_img = new ImageIcon(new ImageIcon("imgs/textBox.png")
-                .getImage().getScaledInstance(617, 75, Image.SCALE_SMOOTH));
+                .getImage().getScaledInstance(308, 37, Image.SCALE_DEFAULT));
 
         BackgroundPanel panel = new BackgroundPanel(textbox_img);
         panel.setLayout(new GridBagLayout());
-        panel.setPreferredSize(new Dimension(617, 75));
-        panel.setMaximumSize(new Dimension(617, 75));
+        panel.setPreferredSize(new Dimension(308, 37));
+        panel.setMaximumSize(new Dimension(308, 37));
         panel.setOpaque(false);
 
-        JTextField textField = new JTextField(20);
+        JTextField textField = new JTextField(10);
         textField.setOpaque(false);
         textField.setBorder(BorderFactory.createEmptyBorder());
         textField.setForeground(new Color(127, 51, 0));
         if (coffeeClickerFont != null) {
-            textField.setFont(coffeeClickerFont.deriveFont(24f));
+            textField.setFont(coffeeClickerFont.deriveFont(12f));
         }
-        textField.setPreferredSize(new Dimension(600, 70));
+        textField.setPreferredSize(new Dimension(300, 35));
 
         textFields.put(text, textField);
 
         panel.add(textField);
         frame.add(panel);
         frame.setOpaque(false);
-        frame.setPreferredSize(new Dimension(617, 75));
+        frame.setPreferredSize(new Dimension(308, 37));
 
         frame.setAlignmentX(Component.LEFT_ALIGNMENT);
-        frame.setMaximumSize(new Dimension(617, 85));
-        frame.setMinimumSize(new Dimension(617, 85));
+        frame.setMaximumSize(new Dimension(308, 43));
+        frame.setMinimumSize(new Dimension(308, 43));
 
         return frame;
     }
 
     private JButton newButton(String text, String actionCommand) {
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
-                .getImage().getScaledInstance(319, 102, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(159, 51, Image.SCALE_DEFAULT));
 
         ImageIcon buttonHoverIcon = new ImageIcon(new ImageIcon("imgs/button_selected.png")
-                .getImage().getScaledInstance(319, 102, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(159, 51, Image.SCALE_DEFAULT));
 
         JButton button = new JButton(text, buttonIcon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);
-        button.setFont(new Font("CoffeeClicker", Font.PLAIN, 36));
+        button.setFont(new Font("CoffeeClicker", Font.PLAIN, 18));
         button.setBorderPainted(false);
         button.setForeground(new Color(107, 41, 0));
         button.setContentAreaFilled(false);

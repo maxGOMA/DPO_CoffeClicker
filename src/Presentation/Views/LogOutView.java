@@ -26,7 +26,7 @@ public class LogOutView extends JPanel {
         JButton logoutButton = newButton("LOGOUT");
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
-                .getImage().getScaledInstance(765, 171, Image.SCALE_SMOOTH));
+                .getImage().getScaledInstance(382, 85, Image.SCALE_DEFAULT));
         JLabel label = new JLabel(headerIcon);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -48,16 +48,16 @@ public class LogOutView extends JPanel {
 
     private JButton newButton(String text){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
-                .getImage().getScaledInstance(515, 164, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(257, 82, Image.SCALE_DEFAULT));
 
         ImageIcon buttonHoverIcon = new ImageIcon(new ImageIcon("imgs/button_selected.png")
-                .getImage().getScaledInstance(515, 164, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(257, 82, Image.SCALE_DEFAULT));
 
         JButton button = new JButton(text, buttonIcon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);
         if (coffeeClickerFont != null) {
-            button.setFont(coffeeClickerFont.deriveFont(36f));
+            button.setFont(coffeeClickerFont.deriveFont(18f));
         }
         button.setBorderPainted(false);
         button.setForeground(new Color(107, 41, 0));
