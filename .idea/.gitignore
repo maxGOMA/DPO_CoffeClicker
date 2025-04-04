@@ -6,5 +6,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+out/
 # Ignorar el archivo de configuración JSON
 data/config.json

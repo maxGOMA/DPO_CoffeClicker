@@ -10,10 +10,13 @@ public class LogOutView extends JPanel {
     public static final String DELETE_ACCOUNT_COMMAND = "DELETE_ACCOUNT_COMMAND";
     public static final String CONFIRMATION_COMMAND = "CONFIRMATION_COMMAND";
     private final CoffeeClickerApp app;
+    private Font coffeeClickerFont;
 
     public LogOutView(CoffeeClickerApp app) {
         this.app = app;
         setLayout(new BorderLayout());
+
+        coffeeClickerFont = MainMenuView.loadCustomFont();
 
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
@@ -23,7 +26,7 @@ public class LogOutView extends JPanel {
         JButton logoutButton = newButton("LOGOUT");
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
-                .getImage().getScaledInstance(765, 171, Image.SCALE_SMOOTH));
+                .getImage().getScaledInstance(382, 85, Image.SCALE_DEFAULT));
         JLabel label = new JLabel(headerIcon);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -45,15 +48,17 @@ public class LogOutView extends JPanel {
 
     private JButton newButton(String text){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
-                .getImage().getScaledInstance(515, 164, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(257, 82, Image.SCALE_DEFAULT));
 
         ImageIcon buttonHoverIcon = new ImageIcon(new ImageIcon("imgs/button_selected.png")
-                .getImage().getScaledInstance(515, 164, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(257, 82, Image.SCALE_DEFAULT));
 
         JButton button = new JButton(text, buttonIcon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);
-        button.setFont(new Font("CoffeeClicker", Font.PLAIN, 36));
+        if (coffeeClickerFont != null) {
+            button.setFont(coffeeClickerFont.deriveFont(18f));
+        }
         button.setBorderPainted(false);
         button.setForeground(new Color(107, 41, 0));
         button.setContentAreaFilled(false);
@@ -78,20 +83,4 @@ public class LogOutView extends JPanel {
     public CoffeeClickerApp getApp(){
         return app;
     }
-
-
-    //Se asignan estos comandos a los componentes de la interfaz despueés de crearlos
-    //Descomentar ->
-    //jbnLogOut.setActionCommand(LOGOUT_COMMAND); //Botón
-    //jbnDeleteAccount.setActionCommand(DELETE_ACCOUNT_COMMAND); //Botón
-    //jbnConfirmDeletion.setActionCommand(CONFIRMATION_COMMAND); //Botón
-//
-//    public void showLogOutMessage() {
-//        //TODO implementar funcion que me enseñe un mensaje de bye,bye! O de logOut!
-//    }
-//
-//    public void showConfirmationMessage() {
-//        //TODO implementa funcion que enseñe mensaje de confirmacion, mostrando el boton correspondiente.
-//    }
-
 }

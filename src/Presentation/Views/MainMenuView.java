@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class MainMenuView extends JPanel {
@@ -15,17 +17,22 @@ public class MainMenuView extends JPanel {
     public static final String VIEW_EXIT = "VIEW_EXIT";
     private final CoffeeClickerApp app;
     private final HashMap<String, JButton> buttons = new HashMap<>();
+    private static Font coffeeClickerFont;
 
     public MainMenuView(CoffeeClickerApp app) {
         this.app = app;
         setLayout(new BorderLayout());
 
+        loadCustomFont();
+
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-        contentPane.setSize(new Dimension(765,579));
+        contentPane.setSize(new Dimension(510,398));
 
         JLabel creditsLabel = new JLabel("Made by: Elena Balfagon Costa, Raul Corominas San Agustin, Max Gomez Manso, Alexia Julia Asin, Santiago Martinez Roques");
-        creditsLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 8));
+        if (coffeeClickerFont != null) {
+            creditsLabel.setFont(coffeeClickerFont.deriveFont(8f));
+        }
         creditsLabel.setForeground(Color.BLACK);
         creditsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -40,19 +47,19 @@ public class MainMenuView extends JPanel {
         JButton exitButton = newButton("EXIT", VIEW_EXIT);
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
-                .getImage().getScaledInstance(765, 171, Image.SCALE_SMOOTH));
+                .getImage().getScaledInstance(382, 85, Image.SCALE_DEFAULT));
         JLabel label = new JLabel(headerIcon);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        contentPane.add(Box.createVerticalStrut(50)); // Espaciado superior
+        contentPane.add(Box.createVerticalStrut(25)); // Espaciado superior
         contentPane.add(label);
-        contentPane.add(Box.createVerticalStrut(30)); // Espaciado entre header y botones
+        contentPane.add(Box.createVerticalStrut(15)); // Espaciado entre header y botones
         contentPane.add(loginButton);
-        contentPane.add(Box.createVerticalStrut(20)); // Espaciado entre botones
+        contentPane.add(Box.createVerticalStrut(10)); // Espaciado entre botones
         contentPane.add(registerButton);
-        contentPane.add(Box.createVerticalStrut(20)); // Espaciado entre botones
+        contentPane.add(Box.createVerticalStrut(10)); // Espaciado entre botones
         contentPane.add(logoutButton);
-        contentPane.add(Box.createVerticalStrut(20)); // Espaciado entre botones
+        contentPane.add(Box.createVerticalStrut(10)); // Espaciado entre botones
         contentPane.add(exitButton);
 
         JPanel centerPanel = new JPanel(new GridBagLayout());
@@ -66,15 +73,17 @@ public class MainMenuView extends JPanel {
 
     private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
-                .getImage().getScaledInstance(319, 102, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(159, 51, Image.SCALE_DEFAULT));
 
         ImageIcon buttonHoverIcon = new ImageIcon(new ImageIcon("imgs/button_selected.png")
-                .getImage().getScaledInstance(319, 102, Image.SCALE_DEFAULT));
+                .getImage().getScaledInstance(159, 51, Image.SCALE_DEFAULT));
 
         JButton button = new JButton(text, buttonIcon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);
-        button.setFont(new Font("CoffeeClicker", Font.PLAIN, 36));
+        if (coffeeClickerFont != null) {
+            button.setFont(coffeeClickerFont.deriveFont(18f));
+        }
         button.setBorderPainted(false);
         button.setForeground(new Color(107, 41, 0));
         button.setContentAreaFilled(false);
@@ -98,6 +107,22 @@ public class MainMenuView extends JPanel {
         buttons.put(actionCommand, button);
 
         return button;
+    }
+
+    public static Font loadCustomFont() {
+        try {
+            InputStream is = MainMenuView.class.getResourceAsStream("/res/font/CoffeeClicker.ttf");
+            if (is != null) {
+                coffeeClickerFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, 12);
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(coffeeClickerFont);
+            } else {
+                System.err.println("⚠ No se pudo cargar la fuente CoffeeClicker.ttf");
+            }
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        return coffeeClickerFont;
     }
 
     public void setController(ControllerMainMenu controller) {
