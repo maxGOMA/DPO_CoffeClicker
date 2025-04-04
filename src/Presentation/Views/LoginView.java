@@ -12,7 +12,7 @@ public class LoginView extends JPanel {
     public static final String LOGIN_COMMAND = "LOGIN_COMMAND";
     public static final String BACK_COMMAND = "BACK_COMMAND";
 
-    private final HashMap<String, JTextField> textFields = new HashMap<>();
+    private final HashMap<String, JTextField> textFields= new HashMap<>();
     private static final HashMap<String, JLabel> errorLabels = new HashMap<>();
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private final CoffeeClickerApp app;

@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
 import Business.UserManager;
 import Presentation.Views.LoginView;
 
@@ -36,23 +37,43 @@ public class ControllerLogin implements ActionListener {
             isValid = false;
         }
 
-        // Simulación de verificación con la base de datos
-        boolean userExists = /*checkUserInDatabase(userEmail);*/ true;
-        boolean passwordCorrect = /*checkPasswordInDatabase(userEmail, password);*/ true;
+        boolean errorDatabase = false;
+        boolean userExists = false, passwordCorrect = false;
+
+        try {
+            if (userEmail.contains("@")) {
+                userExists = userManager.emailRegistered(userEmail);
+            } else {
+                userExists = userManager.checkUserRegistered(userEmail);
+            }
+        } catch (BusinessException e) {
+            errorDatabase = true;
+        }
+
+        if (userExists) {
+            try {
+                passwordCorrect = userManager.checkPassword(userEmail, password);
+            } catch (BusinessException e){
+                errorDatabase = true;
+            }
+        }
 
         if (isValid) {
-            if (!userExists) {
-                showError("USER/EMAIL", "User/Email not found in database!");
-                return;
+            if (!errorDatabase) {
+                if (!userExists) {
+                    showError("USER/EMAIL", "User/Email not found in database!");
+                } else {
+                    if (!passwordCorrect) {
+                        showError("PASSWORD", "Incorrect password!");
+                    } else {
+                        System.out.println("LOGIN SUCCESSFUL");
+                        loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
+                    }
+                }
+            } else {
+                showError("USER/EMAIL", "Problem accessing the database!");
+                showError("PASSWORD", "Problem accessing the database!");
             }
-
-            if (!passwordCorrect) {
-                showError("PASSWORD", "Incorrect password!");
-                return;
-            }
-
-            System.out.println("LOGIN SUCCESSFUL");
-            loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
         }
     }
 
