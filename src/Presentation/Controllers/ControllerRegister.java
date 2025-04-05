@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
 import Business.UserManager;
 import Presentation.Views.RegisterView;
 
@@ -45,15 +46,36 @@ public class ControllerRegister implements ActionListener {
         if (user.isEmpty()) {
             showError("USER", "User field cannot be empty!");
             isValid = false;
+        } else {
+            // TODO: Check if user already exists in the database -----------------------------------------------------------------------------------------------------
+            try {
+                if (userManager.checkUserRegistered(user)) {
+                    showError("USER", "Username is already registered!");
+                    isValid = false;
+                }
+            } catch (BusinessException e) {
+                showError("USER", "Could not acces the database!");
+                isValid = false;
+            }
         }
-        // TODO: Check if user already exists in the database -----------------------------------------------------------------------------------------------------
 
         if (email.isEmpty() || !isValidEmail(email)) {
             showError("EMAIL", "Invalid email format!");
             isValid = false;
+        } else {
+            // TODO: Check if email already exists in the database -----------------------------------------------------------------------------------------------------
+            try {
+                if (userManager.emailRegistered(email)) {
+                    showError("EMAIL", "Email is already registered!");
+                    isValid = false;
+                }
+            } catch (BusinessException e) {
+                showError("EMAIL", "Could not acces the database!");
+                isValid = false;
+            }
         }
 
-        // TODO: Check if email already exists in the database -----------------------------------------------------------------------------------------------------
+
 
         if (!isValidPassword(password)) {
             showError("PASSWORD", "Password must have at least 8 characters, including uppercase, lowercase, and a number!");
@@ -72,10 +94,16 @@ public class ControllerRegister implements ActionListener {
             System.out.println("USER: " + user);
             System.out.println("EMAIL: " + email);
             System.out.println("PASSWORD: " + password);
-            // TODO: send data to the database --------------------------------------------------------------------------------------------------------------------
-            registerView.clearFields();
-            registerView.clearErrorMessages();
-            registerView.getApp().showPanel("MainMenuView");
+            try {
+                userManager.registerUser(user, password, email);
+                userManager.setUser(user);
+                registerView.clearFields();
+                registerView.clearErrorMessages();
+                registerView.getApp().showPanel("MainMenuView");
+            } catch (BusinessException e){
+                showError("USER", "Could not acces the database!");
+            }
+
         }
     }
 
