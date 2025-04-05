@@ -23,12 +23,17 @@ public class ControllerLogOut implements ActionListener {
 //    public void actionPerformed(ActionEvent e) {
 //        if (e.getActionCommand().equals(view.LOGOUT_COMMAND)) {
 //            view.showLogOutMessage();
+//            view.gotoMenu();
 //            userManager.logOut();
 //        } else if (e.getActionCommand().equals(view.DELETE_ACCOUNT_COMMAND)) {
 //            view.showConfirmationMessage();
+//
 //        } else if (e.getActionCommand().equals(view.CONFIRMATION_COMMAND)) {
 //            userManager.deleteAccount();
 //        }
+//          else if(e.getActionCommand().equals(view.CANCEL_COMMAND)){
+//            view.hideConfirmationMessage();
+//          }
 //    }
 }
 
