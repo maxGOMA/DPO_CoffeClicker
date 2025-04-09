@@ -21,10 +21,11 @@ public interface GameDAO {
      * Carga la información de un juego desde la base de datos utilizando su nombre.
      *
      * @param name Nombre del juego a buscar en la base de datos.
+     * @param userName Nombre del usuario al que pertenece el juego.
      * @return Un objeto {@link EntityGame} con los datos del juego.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
-    EntityGame loadInfoGame(String name) throws PersistanceException;
+    EntityGame loadInfoGame(String name, String userName) throws PersistanceException;
 
     /**
      * Inserta la información de un juego en la base de datos.
@@ -33,6 +34,21 @@ public interface GameDAO {
      * @throws PersistanceException Si ocurre un error al ejecutar la consulta en la base de datos.
      */
     void setInfoGame(EntityGame game);
+
+    /**
+     * Elimina un juego del sistema según su identificador único.
+     *
+     * @param ID_game El identificador único del juego que se desea eliminar.
+     */
+    public void deleteGame(int ID_game);
+
+    /**
+     * Elimina un juego del sistema según su identificador único.
+     *
+     * @param name El nombre del juego que se desea eliminar.
+     * @param userName El nombre del jugador al que pertenece el juego.
+     */
+    public void deleteGame(String name, String userName);
 
     /**
      * Obtiene el identificador de una partida desde la base de datos.
@@ -124,7 +140,10 @@ public interface GameDAO {
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     int getGold(int ID_game) throws PersistanceException;
+
+    String getName(int ID_game) throws PersistanceException;
 }
+
 
 
 

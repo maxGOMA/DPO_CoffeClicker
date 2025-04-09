@@ -30,9 +30,9 @@ public class UserManager {
         }
     }
 
-    public EntityUser setUser(String userName) throws BusinessException {
+    public void setUser(String userName) throws BusinessException {
         try {
-            return userDAO.getUserFromusername(userName);
+            user = userDAO.getUserFromusername(userName);
         }catch(PersistanceException e){
            throw  new BusinessException(e.getMessage());
         }

@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SQLGameDAO implements GameDAO {
-
     /**
      * Carga la información de una partida desde la base de datos.
      *
@@ -24,9 +23,9 @@ public class SQLGameDAO implements GameDAO {
             if(!rs.next()){
                 return null;
             }
-            return new EntityGame(rs.getString("name"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
-                                  , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
-                                  , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
+            return new EntityGame(rs.getString("Name_Game"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
+                    , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
+                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
@@ -36,18 +35,19 @@ public class SQLGameDAO implements GameDAO {
      * Carga la información de un juego desde la base de datos utilizando su nombre.
      *
      * @param name Nombre del juego a buscar en la base de datos.
+     * @param userName Nombre del usuario al que pertenece el juego.
      * @return Un objeto {@link EntityGame} con los datos del juego.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public EntityGame loadInfoGame(String name) throws PersistanceException {
+    public EntityGame loadInfoGame(String name, String userName) throws PersistanceException {
         try {
-            String query = "SELECT * FROM game WHERE name = '" + name + "';";
+            String query = "SELECT * FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             if(!rs.next()){
                 return null;
             }
-            return new EntityGame(rs.getString("name"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
+            return new EntityGame(rs.getString("Name_Game"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
                     , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
                     , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
         } catch (SQLException e) {
@@ -63,19 +63,42 @@ public class SQLGameDAO implements GameDAO {
      */
     @Override
     public void setInfoGame(EntityGame game){
-        String query = "INSERT INTO game (name, username, Num_Coffees, Gold, Deluxe, Supreme, Upgrade_Gold, Upgrade_Deluxe, Upgrade_Supreme, Upgrade_Clicker) VALUES ('" +
-                 game.getName() + "', '" +
-                 game.getUsername()+ "', '" +
-                 game.getNum_Coffees()+ "', '" +
-                 game.getGold()+ "', '" +
-                 game.getDeluxe()+ "', '" +
-                 game.getSupreme()+ "', '" +
-                 game.getUpgrade_Gold()+ "', '" +
-                 game.getUpgrade_Deluxe()+ "', '" +
-                 game.getUpgrade_Supreme()+ "', '" +
-                 game.getUpgrade_Clicker() +
+        String query = "INSERT INTO game (Name_Game, username, Num_Coffees, Gold, Deluxe, Supreme, Upgrade_Gold, Upgrade_Deluxe, Upgrade_Supreme, Upgrade_Clicker) VALUES ('" +
+                game.getName() + "', '" +
+                game.getUsername()+ "', '" +
+                game.getCurrentNumberOfCoffees() + "', '" +
+                game.getNumGoldGenerators()+ "', '" +
+                game.getNumDeluxeGenerators()+ "', '" +
+                game.getNumSupremeGenerators()+ "', '" +
+                game.getUpgradeGold()+ "', '" +
+                game.getUpgradeDeluxe()+ "', '" +
+                game.getUpgradeSupreme()+ "', '" +
+                game.getClickerLevelUpgrade() +
                 "');";
         SQLConnector.getInstance().insertQuery(query);
+    }
+
+    /**
+     * Elimina un juego de la base de datos utilizando su identificador único.
+     *
+     * Este método construye una consulta SQL DELETE y la ejecuta mediante el conector SQL.
+     *
+     * @param ID_game El identificador único del juego que se desea eliminar de la base de datos.
+     */
+    public void deleteGame(int ID_game){
+        String query = "DELETE FROM game WHERE ID_game = " + ID_game + ";";
+        SQLConnector.getInstance().deleteQuery(query);
+    }
+
+    /**
+     * Elimina un juego del sistema según su identificador único.
+     *
+     * @param name El nombre del juego que se desea eliminar.
+     * @param userName El nombre del jugador al que pertenece el juego.
+     */
+    public void deleteGame(String name, String userName) {
+        String query = "DELETE FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
+        SQLConnector.getInstance().deleteQuery(query);
     }
 
     /**
@@ -268,4 +291,15 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    @Override
+    public String getName(int ID_game) throws PersistanceException {
+        try {
+            String query = "SELECT Name_Game FROM game WHERE ID_game = " + ID_game + ";";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            rs.next();
+            return rs.getString("Name_Game");
+        } catch (SQLException e) {
+            throw new PersistanceException("Couldn't find game name in the database");
+        }
+    }
 }

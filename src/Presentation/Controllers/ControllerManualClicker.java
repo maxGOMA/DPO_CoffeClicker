@@ -22,7 +22,7 @@
 //        if (e.getActionCommand().equals(gameView.COOKIE_MANUAL_CLICK_COMMAND)) {
 //            double incrementedCoffees;
 //            GameManager gameManager = new GameManager();
-//            incrementedCoffees = gameManager.IncrementCoffee();
+//            incrementedCoffees = gameManager.incrementCoffeeByClicker();
 //            //TODO mostrar en la view encima del café cuantos se han sumado
 //            gameView.ShowHowManyAdded(incrementedCoffees);
 //        }

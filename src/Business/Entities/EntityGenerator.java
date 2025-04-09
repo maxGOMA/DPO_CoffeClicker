@@ -5,8 +5,9 @@ public class EntityGenerator extends Thread {
     private String type;
     private int levelUpgrade;
     boolean active;
+
     private long sleepRatio;
-    private int coffeRatio;
+    private double coffeRatio;
 
     public EntityGenerator (EntityGame entityGame, String type, int levelUpgrade) {
         this.entityGame = entityGame;
@@ -18,14 +19,14 @@ public class EntityGenerator extends Thread {
             case "gold": //Produccio base 0.2 cafes - 1s
                 // 5seg - 1 cafe
                 //considero q levelUpgrade empieza en 0.
-                if (levelUpgrade == 0) coffeRatio = 1;
-                else coffeRatio = (levelUpgrade + 1);
-                sleepRatio = 5000;
+                if (levelUpgrade == 0) coffeRatio = 0.2;
+                else coffeRatio = (0.2 * (levelUpgrade + 1));
+                sleepRatio = 1000;
                 break;
             case "deluxe": //Produccio base 0.5 cafes - 0.7s
-                if (levelUpgrade == 0) coffeRatio = 1;
-                else coffeRatio = (levelUpgrade + 1);
-                sleepRatio = 1400;
+                if (levelUpgrade == 0) coffeRatio = 0.5;
+                else coffeRatio = (0.5 * (levelUpgrade + 1));
+                sleepRatio = 700;
                 break;
             case "supreme": //Produccio base 30 cafes - 1.3s
                 if (levelUpgrade == 0) coffeRatio = 30;
@@ -49,12 +50,19 @@ public class EntityGenerator extends Thread {
 
     public void incrementLevel_upgrade() {
         levelUpgrade++;
-        if (type == "supreme") {
-            coffeRatio = 30 * (levelUpgrade + 1);
-        } else {
-            coffeRatio = levelUpgrade + 1;
+        switch (type) {
+            case "gold":
+                coffeRatio = (0.2 * (levelUpgrade + 1));
+                break;
+            case "deluxe":
+                coffeRatio = (0.5 * (levelUpgrade + 1));
+                break;
+            case "supreme":
+                coffeRatio = 30 * (levelUpgrade + 1);
+                break;
         }
     }
+
 
     public String getType() {
         return type;
@@ -68,8 +76,7 @@ public class EntityGenerator extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            entityGame.IncrementCoffeeByGenerator(coffeRatio);
-            //Como aviso a la view de que esto ha sucedido!
+            entityGame.incrementCoffeeByGenerator(coffeRatio);
         }
     }
 }
