@@ -14,15 +14,16 @@ public class UserManager {
         this.userDAO = new SQLUserDAO();
     }
 
-    public boolean checkPassword(String userName, String userPassword) throws BusinessException{
+    //UserIdentifier es el email o username.
+    public boolean checkPassword (String userIdentifier, String userPassword) throws BusinessException {
         try {
-            return userDAO.verifyPassword(userName, userPassword);
+            return userDAO.verifyPassword(userIdentifier, userPassword);
         }catch (PersistanceException e){
             throw new BusinessException(e.getMessage());
         }
     }
 
-    public boolean checkUserRegistered(String userName) throws BusinessException{
+    public boolean checkUserRegistered (String userName) throws BusinessException{
         try {
             return userDAO.usernameRegistered(userName);
         }catch(PersistanceException e){
@@ -30,7 +31,7 @@ public class UserManager {
         }
     }
 
-    public EntityUser setUser(String userName) throws BusinessException {
+    public EntityUser setUser (String userName) throws BusinessException {
         try {
             return userDAO.getUserFromusername(userName);
         }catch(PersistanceException e){

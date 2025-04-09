@@ -49,11 +49,11 @@ public interface UserDAO {
     /**
      *  Method that returns if the email and password introduced are valid.
      *
-     *  @param username username form the user (already verifyed with usernameRegistered).
+     *  @param userIdentifier username or email from the user (already verifyed with usernameRegistered or emailRegistered).
      *  @param password password to check.
      *  @return Returns true if the username,password are correct.
      */
-    boolean verifyPassword(String username, String password) throws PersistanceException;
+    boolean verifyPassword(String userIdentifier, String password) throws PersistanceException;
 
     /**
      *  Method that returns the user from the database (class User).

@@ -18,7 +18,7 @@ public class SQLUserDAO implements UserDAO {
      */
     @Override
     public void registerUser(String username, String password, String email) {
-        String query = "INSERT INTO user (username, email, password) VALUES ('" +
+        String query = "INSERT INTO users (username, email, password) VALUES ('" +
                 username + "', '" +
                 email + "', '" +
                 password +
@@ -34,7 +34,7 @@ public class SQLUserDAO implements UserDAO {
      */
     @Override
     public void deleteUser(String username) {
-        String query = "DELETE FROM user WHERE username = '" + username + "';";
+        String query = "DELETE FROM users WHERE username = '" + username + "';";
         SQLConnector.getInstance().deleteQuery(query);
     }
 
@@ -47,7 +47,7 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public boolean usernameRegistered(String username) throws PersistanceException {
         try {
-            String query = "SELECT * FROM user WHERE username = '" + username + "';";
+            String query = "SELECT * FROM users WHERE username = '" + username + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             return rs.next();
         } catch (SQLException e) {
@@ -64,7 +64,7 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public boolean emailRegistered(String email) throws PersistanceException {
         try {
-            String query = "SELECT * FROM user WHERE email = '" + email + "';";
+            String query = "SELECT * FROM users WHERE email = '" + email + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             return rs.next();
         } catch (SQLException e) {
@@ -76,14 +76,14 @@ public class SQLUserDAO implements UserDAO {
     /**
      *  Method that returns if the email and password introduced are valid.
      *
-     *  @param username username form the user (already verifyed with usernameRegistered).
+     *  @param userIdentifier username or email from the user (already verifyed with usernameRegistered or emailRegistered).
      *  @param password password to check.
      *  @return Returns true if the username,password are correct.
      */
     @Override
-    public boolean verifyPassword(String username, String password) throws PersistanceException {
+    public boolean verifyPassword(String userIdentifier, String password) throws PersistanceException {
         try {
-            String query = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "';";
+            String query = "SELECT * FROM users WHERE (username = '" + userIdentifier + "' OR email = '" + userIdentifier + "' ) AND password = '" + password + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             return rs.next();
         } catch (SQLException e) {
@@ -100,7 +100,7 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public EntityUser getUserFromusername(String username) throws PersistanceException {
         try {
-            String query = "SELECT * FROM user WHERE username = '" + username + "';";
+            String query = "SELECT * FROM users WHERE username = '" + username + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
             return new EntityUser(rs.getString("username"), rs.getString("email"), rs.getString("password"));
