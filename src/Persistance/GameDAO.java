@@ -35,6 +35,20 @@ public interface GameDAO {
     void setInfoGame(EntityGame game);
 
     /**
+     * Elimina un juego del sistema según su identificador único.
+     *
+     * @param ID_game El identificador único del juego que se desea eliminar.
+     */
+    public void deleteGame(int ID_game);
+
+    /**
+     * Elimina un juego del sistema según su identificador único.
+     *
+     * @param name El nombre del juego que se desea eliminar.
+     */
+    public void deleteGame(String name);
+
+    /**
      * Obtiene el identificador de una partida desde la base de datos.
      *
      * @param ID_game Identificador único de la partida.
@@ -124,6 +138,8 @@ public interface GameDAO {
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     int getGold(int ID_game) throws PersistanceException;
+
+    String getName(int ID_game) throws PersistanceException;
 }
 
 
