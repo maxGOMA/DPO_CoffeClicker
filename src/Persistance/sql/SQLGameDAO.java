@@ -79,6 +79,30 @@ public class SQLGameDAO implements GameDAO {
     }
 
     /**
+     * Elimina un juego de la base de datos utilizando su identificador único.
+     *
+     * Este método construye una consulta SQL DELETE y la ejecuta mediante el conector SQL.
+     *
+     * @param ID_game El identificador único del juego que se desea eliminar de la base de datos.
+     */
+    public void deleteGame(int ID_game){
+        String query = "DELETE FROM game WHERE ID_game = " + ID_game + ";";
+        SQLConnector.getInstance().deleteQuery(query);
+    }
+
+    /**
+     * Elimina un juego de la base de datos utilizando su identificador único.
+     *
+     * Este método construye una consulta SQL DELETE y la ejecuta mediante el conector SQL.
+     *
+     * @param name El nombre del juego que se desea eliminar de la base de datos.
+     */
+    public void deleteGame(String name){
+        String query = "DELETE FROM game WHERE name = " + name + ";";
+        SQLConnector.getInstance().deleteQuery(query);
+    }
+
+    /**
      * Obtiene el identificador de una partida desde la base de datos.
      *
      * @param ID_game Identificador único de la partida.
@@ -268,4 +292,15 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    @Override
+    public String getName(int ID_game) throws PersistanceException {
+        try {
+            String query = "SELECT name FROM game WHERE ID_game = " + ID_game + ";";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            rs.next();
+            return rs.getString("name");
+        } catch (SQLException e) {
+            throw new PersistanceException("Couldn't find game name in the database");
+        }
+    }
 }
