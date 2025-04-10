@@ -12,14 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControllerGameList implements ActionListener {
-
-    private GameDAO gDao;
     private GameManager gameManager;
     static String name;
     //variable de la view
 
     public ControllerGameList() {
-        this.gDao = new SQLGameDAO();
         this.gameManager = new GameManager();
         name = null;
         //view CUANDO SE CREE
@@ -46,7 +43,7 @@ public class ControllerGameList implements ActionListener {
         String command = e.getActionCommand();
 
         if(command.equals("CONFIRMAR_BORRAR")){ //Se VALIDA borrar la partida
-            gDao.deleteGame(name);
+            gameManager.deleteGame(name);
             //view.getApp().showPanel("MainMenuView");
         }else if(command.equals("CANCELAR")){ //No se VALIDA borrar la partida
             // OCULTAR CONFIRMACIÓN
@@ -54,10 +51,10 @@ public class ControllerGameList implements ActionListener {
             //MOSTRAR PANTALLA PARA CREAR
         }else if(command.contains("RESUME")){ // RESUME_nameGame -> crear funcion para separarlo
             //SE INICIA UNA PARTIDA N EL ESTADO EN LA QUE SE ENCONTRABA LA SELECIONADA
-            name = findName(command);
+            //name = findName(command);
         }else if(command.contains("BORRAR")){
             //MOSTRAR CONFIRMACIÓN
-            name = findName(command);
+            //name = findName(command);
         }
     }
 }

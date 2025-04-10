@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
 import Business.GameManager;
 import Persistance.PersistanceException;
 
@@ -7,10 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControllerCreationGame implements ActionListener {
-
     private GameManager gameManager;
 
-    public ControllerCreationGame(){
+    public ControllerCreationGame (){
         this.gameManager = new GameManager();
     }
 
@@ -22,10 +22,14 @@ public class ControllerCreationGame implements ActionListener {
         if(command.equals("CREAR")){
             //MOSTRAR LO Q SEA
             try {
-                gameManager.setGameToPersistance(name);
-                //start game
-            } catch (PersistanceException ex) {
-                // ERROR
+                if (gameManager.gameNameAlreadyRegisteredByUser(name)) {
+                    //mostrar mensaje de nombre ya utilitzado
+                } else {
+                    //Le he cambiado el nombre de setGameToPersistance a createNewGame
+                    gameManager.createNewGame(name);
+                }
+            } catch (BusinessException ex) {
+                // Mostrar mensaje de error de acceso a la base de datos
             }
         }
     }

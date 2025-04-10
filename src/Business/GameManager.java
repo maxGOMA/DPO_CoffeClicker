@@ -5,53 +5,97 @@ import Persistance.GameDAO;
 import Persistance.PersistanceException;
 import Persistance.sql.SQLGameDAO;
 
-
 public class GameManager {
     private static EntityGame entityGame;
     private final GameDAO gameDAO;
-    private UserManager um;
+    private UserManager userManager;
 
     public GameManager() {
         entityGame = null;
         this.gameDAO = new SQLGameDAO();
-        this.um = um;
+        this.userManager = new UserManager();
     }
-    
-    public void getGameFromPersistance(String name) throws PersistanceException {
-        try{
-            entityGame = gameDAO.loadInfoGame(name);
-        }
-        catch (PersistanceException e){
-            throw new PersistanceException(e.getMessage());
+
+    //Modificado respecto santi -> BussinessException
+    public void getGameFromPersistance(String gameName) throws BusinessException {
+        try {
+            entityGame = gameDAO.loadInfoGame(gameName, userManager.getUser().getUsername());
+        } catch (PersistanceException e){
+            throw new BusinessException(e.getMessage());
         }
 
     }
 
-    /**
-     * Crea un nuevo juego con el nombre proporcionado si aún no existe uno con ese nombre.
-     *
-     * Este método verifica si ya existe un juego con el nombre especificado.
-     * Si ya existe, retorna {@code false}. Si no existe, crea un nuevo objeto
-     * {@link EntityGame} con valores iniciales predeterminados y lo guarda usando el {@link GameDAO}.
-     *
-     * @param name el nombre del juego que se desea crear.
-     * @return {@code true} si el juego fue creado exitosamente, {@code false} si ya existe un juego con ese nombre.
-     * @throws PersistanceException si ocurre un error al acceder a la base de datos durante la operación.
-     */
-    public void setGameToPersistance(String name) throws PersistanceException {
-        try{
-            if(gameDAO.loadInfoGame(name) != null){
-                //Usar la showError()
-            }else{
-                gameDAO.setInfoGame(new EntityGame(name, 0, 0, 0, 0, 0, 0, 0 ,0.0, um.getUser().getUsername(), -1));
+    public boolean gameNameAlreadyRegisteredByUser(String gameName) throws BusinessException {
+        try {
+            if (gameDAO.loadInfoGame(gameName, userManager.getUser().getUsername()) != null) {
+                return true;
             }
-        }catch(PersistanceException e){
-            //ERROR: AL PILLAR INFO (PROBLEMA BASE DE DATOS)
-            throw new PersistanceException(e.getMessage());
+            return false;
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
         }
     }
 
-    public double IncrementCoffee() {
-        return entityGame.IncrementCoffee();
+    public void createNewGame(String name) {
+            entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1);
+            gameDAO.setInfoGame(entityGame);
+    }
+
+    public void deleteGame(String name) {
+        gameDAO.deleteGame(name, userManager.getUser().getUsername());
+    }
+
+    public void endGame() {
+        entityGame.stopGenerators();
+        //TODO añadir todo lo de guardar en la persistencia los datos.
+    }
+
+    public double getGeneratorCost(String generatorType) {
+        return entityGame.getGeneratorCost(generatorType);
+    }
+
+    public boolean hasResourcesToBuyGenerator(String generatorType) {
+        return (float) entityGame.getCurrentNumberOfCoffees() >= entityGame.getGeneratorCost(generatorType);
+    }
+
+    public void buyNewGenerator(String generatorType) {
+        entityGame.addNewGenerator(generatorType);
+    }
+
+    public boolean hasResourcesToUpgradeGenerator(String generatorType) {
+        return entityGame.getCurrentNumberOfCoffees() >= entityGame.getNextGeneratorUpgradeCost(generatorType);
+    }
+
+    public void upgradeGenerators(String generatorType) {
+        entityGame.upgradeGenerators(generatorType);
+    }
+
+    public boolean hasResourcesToUpgradeClicker() {
+        return entityGame.getCurrentNumberOfCoffees() >= entityGame.getNextClickerUpgradeCost();
+    }
+
+    public void upgradeClicker() {
+        entityGame.upgradeCliker();
+    }
+
+    public int getTotalNumberOfGenerators(String generatorType) {
+        return entityGame.getTotalNumberOfGenerators(generatorType);
+    }
+
+    public String getUnitProduction(String generatorType) {
+        return entityGame.getUnitProduction(generatorType);
+    }
+
+    public String getTotalProduction(String generatorType) {
+        return entityGame.getTotalProduction(generatorType);
+    }
+
+    public String getProductionShare(String generatorType) {
+        return entityGame.getProductionShare(generatorType);
+    }
+
+    public double incrementCoffeeByClicker() {
+        return entityGame.incrementCoffeeByClicker();
     }
 }
