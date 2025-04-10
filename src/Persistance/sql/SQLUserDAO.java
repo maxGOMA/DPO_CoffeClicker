@@ -76,14 +76,14 @@ public class SQLUserDAO implements UserDAO {
     /**
      *  Method that returns if the email and password introduced are valid.
      *
-     *  @param username username form the user (already verifyed with usernameRegistered).
+     *  @param userIdentifier username or email from the user (already verifyed with usernameRegistered or emailRegistered).
      *  @param password password to check.
      *  @return Returns true if the username,password are correct.
      */
     @Override
-    public boolean verifyPassword(String username, String password) throws PersistanceException {
+    public boolean verifyPassword(String userIdentifier, String password) throws PersistanceException {
         try {
-            String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "';";
+            String query = "SELECT * FROM users WHERE (username = '" + userIdentifier + "' OR email = '" + userIdentifier + "' ) AND password = '" + password + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             return rs.next();
         } catch (SQLException e) {
