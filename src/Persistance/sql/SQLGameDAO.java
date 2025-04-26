@@ -4,8 +4,11 @@ import Business.Entities.EntityGame;
 import Persistance.GameDAO;
 import Persistance.PersistanceException;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLGameDAO implements GameDAO {
     /**
@@ -302,6 +305,33 @@ public class SQLGameDAO implements GameDAO {
             return rs.getString("Name_Game");
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game name in the database");
+        }
+    }
+  
+    public List<EntityGame> getGamesByUser(String user) throws PersistanceException {
+        try {
+            List<EntityGame> games = new ArrayList<>();
+            String query = "SELECT * FROM game WHERE username = '" + user + "';";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            while (rs.next()) {
+                games.add(new EntityGame(
+                        rs.getString("name"),
+                        rs.getInt("Gold"),
+                        rs.getInt("Upgrade_Clicker"),
+                        rs.getInt("Upgrade_Supreme"),
+                        rs.getInt("Upgrade_Deluxe"),
+                        rs.getInt("Upgrade_Gold"),
+                        rs.getInt("Supreme"),
+                        rs.getInt("Deluxe"),
+                        rs.getDouble("Num_Coffees"),
+                        rs.getString("username"),
+                        rs.getInt("ID_Game")
+                ));
+            }
+
+            return games;
+        } catch (SQLException e) {
+            throw new PersistanceException("Couldn't find games in the database");
         }
     }
 }

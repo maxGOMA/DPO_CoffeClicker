@@ -1,8 +1,6 @@
 package Presentation.Views;
 
-import Presentation.Controllers.ControllerLogin;
-import Presentation.Controllers.ControllerMainMenu;
-import Presentation.Controllers.ControllerRegister;
+import Presentation.Controllers.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +32,7 @@ public class CoffeeClickerApp extends JFrame {
         register.setController(controller_register);
 
         LogOutView logout = new LogOutView(this);
-        //ControllerLogOut controller_logout = new ControllerLogOut(logout);
+        ControllerLogOut controller_logout = new ControllerLogOut(logout);
         //logout.setController(controller_logout);
 
         mainPanel.add(mainMenuView, "MainMenuView");
@@ -44,6 +42,13 @@ public class CoffeeClickerApp extends JFrame {
 
         add(mainPanel);
         setVisible(true);
+    }
+
+    public void createSelectGame() {
+        GameListView selectGame = new GameListView(this);
+        ControllerGameList controllerGameList = new ControllerGameList(selectGame);
+        selectGame.setController(controllerGameList);
+        mainPanel.add(selectGame, "SelectGame");
     }
 
     public void showPanel(String panelName) {
