@@ -45,12 +45,12 @@ public class SQLGameDAO implements GameDAO {
     @Override
     public EntityGame loadInfoGame(String name, String userName) throws PersistanceException {
         try {
-            String query = "SELECT * FROM game WHERE (name = '" + name + "'AND username = '" + userName + "');";
+            String query = "SELECT * FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             if(!rs.next()){
                 return null;
             }
-            return new EntityGame(rs.getString("name"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
+            return new EntityGame(rs.getString("Name_Game"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
                     , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
                     , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
         } catch (SQLException e) {
