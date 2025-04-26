@@ -1,5 +1,8 @@
 package Presentation.Views;
 
+import Presentation.Controllers.ControllerGame;
+import Presentation.Controllers.ControllerLogin;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -11,6 +14,8 @@ public class GameView extends JPanel {
     public static final String BUY_BEANS_COMMAND = "BUY_BEANS_COMMAND";
     public static final String BUY_MAKER_COMMAND = "BUY_MAKER_COMMAND";
     public static final String BUY_TAKEAWAY_COMMAND = "BUY_TAKEAWAY_COMMAND";
+
+    private final CoffeeClickerApp app;
 
     private final double ASPECT_RATIO = 1085.0 / 802.0;
     private BackgroundPanel centralPanel;
@@ -33,7 +38,9 @@ public class GameView extends JPanel {
     private HashMap<String, JButton> upgrades = new HashMap<>();
     private HashMap<String, JButton> generators = new HashMap<>();
 
-    public GameView() {
+    public GameView(CoffeeClickerApp app) {
+        this.app = app;
+
         setPreferredSize(new Dimension(1200, 800));
         setMinimumSize(new Dimension(800, 600));
         setLayout(new BorderLayout());
@@ -378,18 +385,29 @@ public class GameView extends JPanel {
         totalCoffeeLabel.setText(totalNumCoffees + " cfs");
     }
 
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Coffee Clicker");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            GameView ui = new GameView();
-            frame.setContentPane(ui);
-
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
+    public void setController(ControllerGame controller) {
+        //Asocio listener boton cafe
+        coffeeButton.addActionListener(controller);
+        //Asocio listeners botones comprar generador.
+        for (JButton button : generators.values()) {
+            button.addActionListener(controller);
+        }
     }
+
+
+
+
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame frame = new JFrame("Coffee Clicker");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//            GameView ui = new GameView();
+//            frame.setContentPane(ui);
+//
+//            frame.pack();
+//            frame.setLocationRelativeTo(null);
+//            frame.setVisible(true);
+//        });
+//    }
 }

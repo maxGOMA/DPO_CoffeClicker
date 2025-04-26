@@ -1,5 +1,6 @@
 package Presentation.Views;
 
+import Presentation.Controllers.ControllerGame;
 import Presentation.Controllers.ControllerLogin;
 import Presentation.Controllers.ControllerMainMenu;
 import Presentation.Controllers.ControllerRegister;
@@ -36,6 +37,10 @@ public class CoffeeClickerApp extends JFrame {
         LogOutView logout = new LogOutView(this);
         //ControllerLogOut controller_logout = new ControllerLogOut(logout);
         //logout.setController(controller_logout);
+
+        GameView gameView = new GameView(this);
+        ControllerGame controllerGame = new ControllerGame(gameView);
+        gameView.setController(controllerGame);
 
         mainPanel.add(mainMenuView, "MainMenuView");
         mainPanel.add(login, "Login");
