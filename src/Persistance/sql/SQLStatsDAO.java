@@ -11,11 +11,10 @@ import java.util.List;
 public class SQLStatsDAO implements StatsDAO {
 
     public void saveNewStats(int ID_game, double numCoffees, int minutesPlayed){
-        String query = "INSERT INTO stats (ID_Game, numCoffees, minutesPlayed) VALUES ('" +
+        String query = "INSERT INTO stats (ID_Game, Num_Coffees, Minute) VALUES ('" +
                 ID_game +  "', '" +
                 numCoffees +  "', '" +
-                minutesPlayed +  "', '" +
-                "');";
+                minutesPlayed +  "');";
         SQLConnector.getInstance().insertQuery(query);
     }
 
@@ -24,12 +23,12 @@ public class SQLStatsDAO implements StatsDAO {
             ArrayList<Double> minutesList = new ArrayList<Double>();
 
             for(int i = 1; i <= minutesPlayed; i++){
-                String query = "SELECT * FROM stats WHERE (ID_Game = '" + ID_game + "'AND minutesPlayed = '" + i + "');";
+                String query = "SELECT * FROM stats WHERE (ID_Game = '" + ID_game + "'AND Minute = '" + i + "');";
                 ResultSet rs = SQLConnector.getInstance().selectQuery(query);
                 if(!rs.next()){
                     return null;
                 }
-                minutesList.add(rs.getDouble("numCoffees"));
+                minutesList.add(rs.getDouble("Num_Coffees"));
             }
             return minutesList;
         } catch (SQLException e) {

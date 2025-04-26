@@ -53,11 +53,11 @@ public interface GameDAO {
     /**
      * Obtiene el identificador de una partida desde la base de datos.
      *
-     * @param ID_game Identificador único de la partida.
-     * @return El identificador de la partida.
+     * @param name El nombre del juego que se desea eliminar.
+     * @param userName El nombre del jugador al que pertenece el juego.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
-    int getIdGame(int ID_game) throws PersistanceException;
+    int getIdGame(String name, String userName) throws PersistanceException;
 
     /**
      * Obtiene el nombre de usuario asociado a una partida.
