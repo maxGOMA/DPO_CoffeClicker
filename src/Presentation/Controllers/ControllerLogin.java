@@ -67,7 +67,14 @@ public class ControllerLogin implements ActionListener {
                         showError("PASSWORD", "Incorrect password!");
                     } else {
                         System.out.println("LOGIN SUCCESSFUL");
-                        loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
+                        try{
+                            userManager.setUser(userEmail);
+                        }catch(BusinessException e){
+                            //ERROR
+                        }
+                        //loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
+                        loginView.getApp().createSelectGame();
+                        loginView.getApp().showPanel("SelectGame");
                     }
                 }
             } else {

@@ -5,6 +5,8 @@ package Persistance;
 
 import Business.Entities.EntityGame;
 
+import java.util.List;
+
 
 public interface GameDAO {
 
@@ -142,6 +144,8 @@ public interface GameDAO {
     int getGold(int ID_game) throws PersistanceException;
 
     String getName(int ID_game) throws PersistanceException;
+
+    List<EntityGame> getGamesByUser(String user) throws PersistanceException;
 }
 
 

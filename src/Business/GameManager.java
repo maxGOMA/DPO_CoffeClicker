@@ -5,6 +5,9 @@ import Persistance.GameDAO;
 import Persistance.PersistanceException;
 import Persistance.sql.SQLGameDAO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameManager {
     private static EntityGame entityGame;
     private final GameDAO gameDAO;
@@ -18,13 +21,31 @@ public class GameManager {
 
     //--------------------------Creación del juego-----------------------------------------------------
     //Modificado respecto santi -> BussinessException
-    public void getGameFromPersistance(String gameName) throws BusinessException {
+    public EntityGame getGameFromPersistance(String gameName) throws BusinessException {
         try {
             entityGame = gameDAO.loadInfoGame(gameName, userManager.getUser().getUsername());
+            return entityGame;
         } catch (PersistanceException e){
             throw new BusinessException(e.getMessage());
         }
 
+    }
+
+    public List<EntityGame> getGamesByUser(){
+        GameDAO gameDao = new SQLGameDAO();
+        List< EntityGame > games;
+        try{
+            try{
+                games = gameDao.getGamesByUser(userManager.getUser().getUsername());
+                //games = gameDao.getGamesByUser("bob");
+            }catch (PersistanceException e) {
+                throw new RuntimeException(e);
+            }
+        }catch (NullPointerException e){
+            games = new ArrayList<>();
+        }
+
+        return games;
     }
 
     public boolean gameNameAlreadyRegisteredByUser(String gameName) throws BusinessException {
