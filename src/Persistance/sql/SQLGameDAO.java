@@ -28,7 +28,7 @@ public class SQLGameDAO implements GameDAO {
             }
             return new EntityGame(rs.getString("Name_Game"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
                     , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
-                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
+                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("minutesPlayed"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
@@ -52,7 +52,7 @@ public class SQLGameDAO implements GameDAO {
             }
             return new EntityGame(rs.getString("Name_Game"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
                     , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
-                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"));
+                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"), rs.getInt("minutesPlayed"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
@@ -66,7 +66,7 @@ public class SQLGameDAO implements GameDAO {
      */
     @Override
     public void setInfoGame(EntityGame game){
-        String query = "INSERT INTO game (Name_Game, username, Num_Coffees, Gold, Deluxe, Supreme, Upgrade_Gold, Upgrade_Deluxe, Upgrade_Supreme, Upgrade_Clicker) VALUES ('" +
+                String query = "INSERT INTO game (Name_Game, username, Num_Coffees, Gold, Deluxe, Supreme, Upgrade_Gold, Upgrade_Deluxe, Upgrade_Supreme, Upgrade_Clicker, minutesPlayed) VALUES ('" +
                 game.getName() + "', '" +
                 game.getUsername()+ "', '" +
                 game.getCurrentNumberOfCoffees() + "', '" +
@@ -77,6 +77,8 @@ public class SQLGameDAO implements GameDAO {
                 game.getUpgradeDeluxe()+ "', '" +
                 game.getUpgradeSupreme()+ "', '" +
                 game.getClickerLevelUpgrade() +
+                game.getClickerLevelUpgrade() + "', '" +
+                game.getMinutesPlayed() +
                 "');";
         SQLConnector.getInstance().insertQuery(query);
     }
@@ -305,7 +307,7 @@ public class SQLGameDAO implements GameDAO {
             throw new PersistanceException("Couldn't find game name in the database");
         }
     }
-
+  
     public List<EntityGame> getGamesByUser(String user) throws PersistanceException {
         try {
             List<EntityGame> games = new ArrayList<>();

@@ -14,11 +14,12 @@ public class EntityGame {
     private int deluxeLevelUpgrade;
     private int supremeLevelUpgrade;
     private int clickerLevelUpgrade;
+    private int minutesPlayed;
 
     ArrayList<EntityGenerator> generators;
 
     //Si cojo la partida de la persistencia
-    public EntityGame(String name, int gold, int upgrade_Clicker, int upgrade_Supreme, int upgrade_Deluxe, int upgrade_Gold, int supreme, int deluxe, Double num_Coffees, String username, int ID_Game) {
+    public EntityGame(String name, int gold, int upgrade_Clicker, int upgrade_Supreme, int upgrade_Deluxe, int upgrade_Gold, int supreme, int deluxe, Double num_Coffees, String username, int ID_Game,int minutesPlayed) {
         EntityGenerator generator;
         generators = new ArrayList();
 
@@ -36,6 +37,7 @@ public class EntityGame {
         this.goldLevelUpgrade = upgrade_Gold;
 
         this.numCoffees = num_Coffees;
+        this.minutesPlayed = minutesPlayed;
 
         for (int i = 0; i < gold; i++) {
             generator = new EntityGenerator(this,"gold", upgrade_Gold);
@@ -70,6 +72,7 @@ public class EntityGame {
         goldLevelUpgrade = 0;
 
         numCoffees = 0.0f;
+        minutesPlayed = 0;
 
         generators = new ArrayList<>();
     }
@@ -283,5 +286,7 @@ public class EntityGame {
         return clickerLevelUpgrade;
     }
 
-
+    public int getMinutesPlayed() {
+        return minutesPlayed;
+    }
 }
