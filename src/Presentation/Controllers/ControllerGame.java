@@ -1,7 +1,9 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
 import Business.CoffeGenerationListener;
 import Business.GameManager;
+import Persistance.PersistanceException;
 import Presentation.Views.GameView;
 
 import java.awt.event.ActionEvent;
@@ -15,20 +17,25 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
         this.gameManager = gameManager;
         this.gameView = gameView;
 
-        gameManager.activateGenerators(this);
+        try {
+            gameManager.activateGenerators(this, new String[] {"beans", "coffeeMaker", "TakeAway"});
 
-        //Incializar num coffees.
-        gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
-        //Inicializar num coffesPerSecond
-        gameView.setCoffeesPerSecondValue(gameManager.getCoffesGeneratedPerSecond());
-        //Inicializar num de generadores
-        gameView.setTotalNumberGenerators("beans", gameManager.getTotalNumberOfGenerators("gold"));
-        gameView.setTotalNumberGenerators("maker", gameManager.getTotalNumberOfGenerators("deluxe"));
-        gameView.setTotalNumberGenerators("takeaway", gameManager.getTotalNumberOfGenerators("supreme"));
-        //Inicializar coste de generadores
-        gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("gold"));
-        gameView.setActualPriceGenerator("maker", gameManager.getGeneratorCost("deluxe"));
-        gameView.setActualPriceGenerator("takeaway", gameManager.getGeneratorCost("supreme"));
+            //Incializar num coffees.
+            gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+            //Inicializar num coffesPerSecond
+            gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+            //Inicializar num de generadores
+            gameView.setTotalNumberGenerators("beans", gameManager.getTotalNumberOfGenerators("beans"));
+            gameView.setTotalNumberGenerators("coffeeMaker", gameManager.getTotalNumberOfGenerators("coffeeMaker"));
+            gameView.setTotalNumberGenerators("TakeAway", gameManager.getTotalNumberOfGenerators("TakeAway"));
+            //Inicializar coste de generadores
+            gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("beans"));
+            gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
+            gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
+        } catch (BusinessException e) {
+            System.out.println(e.getMessage());
+            //TODO mostrar mensaje de error de persistencia.
+        }
     }
 
     @Override
@@ -40,54 +47,68 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
         }
 
         else if (command.equals(GameView.BUY_BEANS_COMMAND)) {
-            if (gameManager.hasResourcesToBuyGenerator("gold")) {
-                gameManager.buyNewGenerator("gold", this);
-                //Actualizar num coffes (automatico decrementa)
-                gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
-                //Actualizar num generadores
-                gameView.setTotalNumberGenerators("beans", gameManager.getTotalNumberOfGenerators("gold"));
-                //Actualizar precio del generador
-                gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("gold"));
-                //Actualizar cafes por segundo
-                gameView.setCoffeesPerSecondValue(gameManager.getCoffesGeneratedPerSecond());
-            } else {
-                //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                gameView.showErrorMessage("You don't have enough coffees to buy another beans generator.");
+            try {
+                if (gameManager.hasResourcesToBuyGenerator("beans")) {
+                    gameManager.buyNewGenerator("beans", this);
+                    //Actualizar num coffes (automatico decrementa)
+                    gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                    //Actualizar num generadores
+                    gameView.setTotalNumberGenerators("beans", gameManager.getTotalNumberOfGenerators("beans"));
+                    //Actualizar precio del generador
+                    gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("beans"));
+                    //Actualizar cafes por segundo
+                    gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                } else {
+                    //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
+                    gameView.showErrorMessage("You don't have enough coffees to buy another beans generator.");
+                }
+            } catch (BusinessException exception) {
+                //TODO mostrar mensaje de error de persistencia.
             }
+
         }
 
         else if (command.equals(GameView.BUY_MAKER_COMMAND)) {
-            if (gameManager.hasResourcesToBuyGenerator("deluxe")) {
-                gameManager.buyNewGenerator("deluxe", this);
-                //Actualizar num coffes (automatico decrementa)
-                gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
-                //Actualizar num generadores
-                gameView.setTotalNumberGenerators("maker", gameManager.getTotalNumberOfGenerators("deluxe"));
-                //Actualizar precio del generador
-                gameView.setActualPriceGenerator("maker", gameManager.getGeneratorCost("deluxe"));
-                //Actualizar cafes por segundo
-                gameView.setCoffeesPerSecondValue(gameManager.getCoffesGeneratedPerSecond());
-            } else {
-                //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                gameView.showErrorMessage("You don't have enough coffees to buy another coffe maker generator.");
+            try {
+                if (gameManager.hasResourcesToBuyGenerator("coffeeMaker")) {
+                    gameManager.buyNewGenerator("coffeeMaker", this);
+                    //Actualizar num coffes (automatico decrementa)
+                    gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                    //Actualizar num generadores
+                    gameView.setTotalNumberGenerators("coffeeMaker", gameManager.getTotalNumberOfGenerators("coffeeMaker"));
+                    //Actualizar precio del generador
+                    gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
+                    //Actualizar cafes por segundo
+                    gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                } else {
+                    //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
+                    gameView.showErrorMessage("You don't have enough coffees to buy another coffe maker generator.");
+                }
+            } catch (BusinessException exception) {
+                //TODO mostrar mensaje de error de persistencia.
             }
         }
 
         else if (command.equals(GameView.BUY_TAKEAWAY_COMMAND)) {
-            if (gameManager.hasResourcesToBuyGenerator("supreme")) {
-                gameManager.buyNewGenerator("supreme", this);
-                //Actualizar num coffes (automatico decrementa)
-                gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
-                //Actualizar num generadores
-                gameView.setTotalNumberGenerators("takeaway", gameManager.getTotalNumberOfGenerators("supreme"));
-                //Actualizar precio del generador
-                gameView.setActualPriceGenerator("takeaway", gameManager.getGeneratorCost("supreme"));
-                //Actualizar cafes por segundo
-                gameView.setCoffeesPerSecondValue(gameManager.getCoffesGeneratedPerSecond());
-            } else {
-                //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                gameView.showErrorMessage("You don't have enough coffees to buy another coffe takeaway generator.");
+            try {
+                if (gameManager.hasResourcesToBuyGenerator("TakeAway")) {
+                    gameManager.buyNewGenerator("TakeAway", this);
+                    //Actualizar num coffes (automatico decrementa)
+                    gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                    //Actualizar num generadores
+                    gameView.setTotalNumberGenerators("TakeAway", gameManager.getTotalNumberOfGenerators("TakeAway"));
+                    //Actualizar precio del generador
+                    gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
+                    //Actualizar cafes por segundo
+                    gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                } else {
+                    //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
+                    gameView.showErrorMessage("You don't have enough coffees to buy another coffe takeaway generator.");
+                }
+            } catch (BusinessException exception) {
+                //TODO mostrar mensaje de error de persistencia.
             }
+
         }
 
 //        else if (command.equals("UpgradeteGenerator")) {

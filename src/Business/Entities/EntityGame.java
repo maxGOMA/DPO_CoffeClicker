@@ -9,12 +9,12 @@ public class EntityGame {
     private String username ;
     private String name;
     private double numCoffees;
-    private int numGoldGenerators;
-    private int numDeluxeGenerators;
-    private int numSupremeGenerators;
-    private int goldLevelUpgrade;
-    private int deluxeLevelUpgrade;
-    private int supremeLevelUpgrade;
+    private int numBeansGenerators;
+    private int numCoffeeMakerGenerators;
+    private int numTakeAwayGenerators;
+    private int beansLevelUpgrade;
+    private int coffeMakerLevelUpgrade;
+    private int takeAwayLevelUpgrade;
     private int clickerLevelUpgrade;
     private int minutesPlayed;
 
@@ -22,7 +22,7 @@ public class EntityGame {
 
     //-----------Inicialización del juego----------------------------------
     //Si recupero la partida de la persistencia
-    public EntityGame(String name, int gold, int upgrade_Clicker, int upgrade_Supreme, int upgrade_Deluxe, int upgrade_Gold, int supreme, int deluxe, Double num_Coffees, String username, int ID_Game,int minutesPlayed) {
+    public EntityGame(String name, int beansGenerators, int upgradeClicker, int upgradeTakeAway, int upgradeCoffeMaker, int upgradeBeans, int takeAwayGenerators, int coffeeMakersGenerators, Double num_Coffees, String username, int ID_Game,int minutesPlayed) {
         EntityGenerator generator;
         generators = new ArrayList();
 
@@ -30,14 +30,15 @@ public class EntityGame {
         this.username = username;
         this.ID_Game = ID_Game;
 
-        this.numGoldGenerators = gold;
-        this.numDeluxeGenerators = deluxe;
-        this.numSupremeGenerators = supreme;
+        this.numBeansGenerators = beansGenerators;
+        this.numCoffeeMakerGenerators = coffeeMakersGenerators;
+        this.numTakeAwayGenerators = takeAwayGenerators;
 
-        this.clickerLevelUpgrade = upgrade_Clicker;
-        this.supremeLevelUpgrade = upgrade_Supreme;
-        this.deluxeLevelUpgrade = upgrade_Deluxe;
-        this.goldLevelUpgrade = upgrade_Gold;
+        this.clickerLevelUpgrade = upgradeClicker;
+        this.beansLevelUpgrade = upgradeBeans;
+        this.coffeMakerLevelUpgrade = upgradeCoffeMaker;
+        this.takeAwayLevelUpgrade = upgradeTakeAway;
+
 
         this.numCoffees = num_Coffees;
         this.minutesPlayed = minutesPlayed;
@@ -49,14 +50,14 @@ public class EntityGame {
         this.username = username;
         this.ID_Game = ID_Game;
 
-        numGoldGenerators = 0;
-        numSupremeGenerators = 0;
-        numDeluxeGenerators = 0;
+        numBeansGenerators = 0;
+        numCoffeeMakerGenerators = 0;
+        numTakeAwayGenerators = 0;
 
         clickerLevelUpgrade = 0;
-        supremeLevelUpgrade = 0;
-        deluxeLevelUpgrade = 0;
-        goldLevelUpgrade = 0;
+        takeAwayLevelUpgrade = 0;
+        coffeMakerLevelUpgrade = 0;
+        beansLevelUpgrade = 0;
 
         numCoffees = 0.0f;
         minutesPlayed = 0;
@@ -64,27 +65,27 @@ public class EntityGame {
         generators = new ArrayList<>();
     }
 
-    public void activateGenerators(CoffeGenerationListener listener) {
+    public void activateGenerators(CoffeGenerationListener listener, ArrayList<Float> generatorsBaseProduction, ArrayList<Float> generatorsIntervalProduction) {
         for (EntityGenerator generator : generators) {
             generator.activateGenerator(listener);
         }
 
         EntityGenerator generator;
 
-        for (int i = 0; i < numGoldGenerators; i++) {
-            generator = new EntityGenerator(this,"gold", goldLevelUpgrade);
+        for (int i = 0; i < numBeansGenerators; i++) {
+            generator = new EntityGenerator(this,"beans", generatorsBaseProduction.get(0), beansLevelUpgrade, generatorsIntervalProduction.get(0));
             generator.activateGenerator(listener);
             generator.start();
             generators.add(generator);
         }
-        for (int i = 0; i < numDeluxeGenerators; i++) {
-            generator = new EntityGenerator(this,"deluxe", deluxeLevelUpgrade);
+        for (int i = 0; i < numCoffeeMakerGenerators; i++) {
+            generator = new EntityGenerator(this,"coffeeMaker", generatorsBaseProduction.get(1), coffeMakerLevelUpgrade, generatorsIntervalProduction.get(1));
             generator.activateGenerator(listener);
             generator.start();
             generators.add(generator);
         }
-        for (int i = 0; i < numSupremeGenerators; i++) {
-            generator = new EntityGenerator(this,"supreme", supremeLevelUpgrade);
+        for (int i = 0; i < numTakeAwayGenerators; i++) {
+            generator = new EntityGenerator(this,"TakeAway", generatorsBaseProduction.get(2), beansLevelUpgrade, generatorsIntervalProduction.get(2));
             generator.activateGenerator(listener);
             generator.start();
             generators.add(generator);
@@ -93,53 +94,6 @@ public class EntityGame {
 
     public void setID(int ID) {
         ID_Game = ID;
-    }
-
-    //------------- Estadísticas ----------------------------------------------
-    public double getCurrentNumberOfCoffees() {
-        return numCoffees;
-    }
-
-    public int getTotalNumberOfGenerators(String generatorType) {
-        switch (generatorType) {
-            case "gold":
-                return numGoldGenerators;
-            case "deluxe":
-                return numDeluxeGenerators;
-            case "supreme":
-                return numSupremeGenerators;
-        }
-        return 0;
-    }
-
-    public String getUnitProduction(String generatorType) {
-        switch (generatorType) {
-
-        }
-        return "";
-    }
-
-    public String getTotalProduction(String generatorType) {
-        switch (generatorType) {
-
-        }
-        return "";
-    }
-
-    public double getProductionShare(String generatorType) {
-        switch (generatorType) {
-            case "gold":
-                return numGoldGenerators * (0.2 / 1.0) * (goldLevelUpgrade + 1);
-            case "deluxe":
-                return numDeluxeGenerators * (0.5 / 0.7) * (deluxeLevelUpgrade + 1);
-            case "supreme":
-                return numSupremeGenerators * (30.0 / 1.3) * (supremeLevelUpgrade + 1);
-        }
-        return 0.0;
-    }
-
-    public double getCoffeesGeneratedPerSecond() {
-        return getProductionShare("gold") + getProductionShare("deluxe") + (getProductionShare("supreme"));
     }
 
     //-------------Funciones generación de cafes------------------------------
@@ -159,90 +113,40 @@ public class EntityGame {
     }
 
     //-------------Funciones compras y upgrades--------------------------------
-    public double getGeneratorCost(String generatorType) {
-        float baseCost = 0, numOfGenerators = 0, costIncrement = 0;
+
+    public void addNewGenerator(String generatorType, CoffeGenerationListener listener, double generatorCost, float generatorBaseProduction, float timeIntervalProduction) {
+        numCoffees = numCoffees - generatorCost;
         switch (generatorType) {
-            case "gold":
-                baseCost = 10;
-                costIncrement = 1.07f;
-                numOfGenerators = numGoldGenerators;
+            case "beans":
+                numBeansGenerators++;
                 break;
-            case "deluxe":
-                baseCost = 150;
-                costIncrement = 1.15f;
-                numOfGenerators = numDeluxeGenerators;
+            case "coffeeMaker":
+                numCoffeeMakerGenerators++;
                 break;
-            case "supreme":
-                baseCost = 2000;
-                costIncrement = 1.12f;
-                numOfGenerators = numSupremeGenerators;
+            case "takeAway":
+                numTakeAwayGenerators++;
                 break;
+
         }
 
-        return (float) (baseCost * Math.pow(costIncrement, numOfGenerators));
-    }
-
-    public void addNewGenerator(String generatorType, CoffeGenerationListener listener) {
-        numCoffees = numCoffees - getGeneratorCost(generatorType);
-        EntityGenerator newGenerator;
-        switch (generatorType) {
-            case "gold":
-                numGoldGenerators++;
-                newGenerator = new EntityGenerator(this,"gold", goldLevelUpgrade);
-                newGenerator.activateGenerator(listener);
-                newGenerator.start();
-                generators.add(newGenerator);
-                break;
-            case "deluxe":
-                numDeluxeGenerators++;
-                newGenerator = new EntityGenerator(this,"deluxe", goldLevelUpgrade);
-                newGenerator.start();
-                newGenerator.activateGenerator(listener);
-                generators.add(newGenerator);
-                break;
-            case "supreme":
-                numSupremeGenerators++;
-                newGenerator = new EntityGenerator(this,"supreme", goldLevelUpgrade);
-                newGenerator.activateGenerator(listener);
-                newGenerator.start();
-                generators.add(newGenerator);
-                break;
-        }
+        EntityGenerator newGenerator = new EntityGenerator(this,generatorType, generatorBaseProduction, getUpgradeGenerators(generatorType), timeIntervalProduction);
+        newGenerator.activateGenerator(listener);
+        newGenerator.start();
+        generators.add(newGenerator);
     }
 
     //Upgraders
-    public double getNextGeneratorUpgradeCost (String generatorType) {
-        double baseCostUpgrade = 0;
-        int levelUpgrade = 0;
+    public void upgradeGenerators(String generatorType, Double upgradeCost) {
+        numCoffees = numCoffees - upgradeCost;
         switch (generatorType) {
-            case "gold":
-                baseCostUpgrade = 30;
-                levelUpgrade = goldLevelUpgrade;
+            case "beans":
+                beansLevelUpgrade++;
                 break;
-            case "deluxe":
-                baseCostUpgrade = 450;
-                levelUpgrade = deluxeLevelUpgrade;
+            case "coffeMaker":
+                coffeMakerLevelUpgrade++;
                 break;
-            case "supreme":
-                baseCostUpgrade = 4000;
-                levelUpgrade = supremeLevelUpgrade;
-                break;
-        }
-
-        return baseCostUpgrade * Math.pow(2, levelUpgrade);
-    }
-
-    public void upgradeGenerators(String generatorType) {
-        numCoffees = numCoffees - getNextGeneratorUpgradeCost(generatorType);
-        switch (generatorType) {
-            case "gold":
-                goldLevelUpgrade++;
-                break;
-            case "deluxe":
-                deluxeLevelUpgrade++;
-                break;
-            case "supreme":
-                supremeLevelUpgrade++;
+            case "TakeAway":
+                takeAwayLevelUpgrade++;
                 break;
         }
 
@@ -262,20 +166,8 @@ public class EntityGame {
         clickerLevelUpgrade++;
     }
 
-    //Ns si se acabaran utilizando
-    public int getNextUpgradeMultiplicator (String generatorType) {
-        switch (generatorType) {
-            case "gold":
-                return goldLevelUpgrade + 1;
-            case "deluxe":
-                return deluxeLevelUpgrade + 1;
-            case "supreme":
-                return supremeLevelUpgrade + 1;
-        }
-        return 0;
-    }
 
-    //getters
+    //-----------------GETTERS Y ESTADÍSTICAS--------------------------------------------------------
     public String getName(){
         return name;
     }
@@ -288,28 +180,28 @@ public class EntityGame {
         return username;
     }
 
-    public int getNumGoldGenerators() {
-        return numGoldGenerators;
+    public int getNumGenerators(String generatorType) {
+        switch (generatorType) {
+            case "beans":
+                return numBeansGenerators;
+            case "coffeeMaker":
+                return numCoffeeMakerGenerators;
+            case "TakeAway":
+                return numTakeAwayGenerators;
+        }
+        return 0;
     }
 
-    public int getNumDeluxeGenerators() {
-        return numDeluxeGenerators;
-    }
-
-    public int getNumSupremeGenerators() {
-        return numSupremeGenerators;
-    }
-
-    public int getUpgradeGold() {
-        return goldLevelUpgrade;
-    }
-
-    public int getUpgradeDeluxe() {
-        return deluxeLevelUpgrade;
-    }
-
-    public int getUpgradeSupreme() {
-        return supremeLevelUpgrade;
+    public int getUpgradeGenerators(String generatorType) {
+        switch (generatorType) {
+            case "beans":
+                return beansLevelUpgrade;
+            case "coffeeMaker":
+                return coffeMakerLevelUpgrade;
+            case "TakeAway":
+                return takeAwayLevelUpgrade;
+        }
+        return 0;
     }
 
     public int getClickerLevelUpgrade() {
@@ -318,5 +210,9 @@ public class EntityGame {
 
     public int getMinutesPlayed() {
         return minutesPlayed;
+    }
+
+    public double getCurrentNumberOfCoffees() {
+        return numCoffees;
     }
 }

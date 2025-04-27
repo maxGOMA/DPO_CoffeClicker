@@ -4,7 +4,10 @@ package Persistance;
 //Guardaremos en estructuras "USER": user_name, password, email
 
 import Business.Entities.EntityGame;
+import Persistance.sql.SQLConnector;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -80,50 +83,58 @@ public interface GameDAO {
     Double getNumCoffees(int ID_game) throws PersistanceException;
 
     /**
-     * Obtiene la cantidad de mejoras Deluxe en la partida.
+     * Obtiene la cantidad de generadores beans en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Deluxe como un entero.
+     * @return Número de generadores beans como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
-    int getDeluxe(int ID_game) throws PersistanceException;
+    public int getNumBeansGenerators(int ID_game) throws PersistanceException;
 
     /**
-     * Obtiene la cantidad de mejoras Supreme en la partida.
+     * Obtiene la cantidad de generadores CoffeeMakers en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Supreme como un entero.
+     * @return Número de generadores CoffeeMakers como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
-    int getSupreme(int ID_game) throws PersistanceException;
+    public int getNumCoffeeMakersGenerators(int ID_game) throws PersistanceException;
 
     /**
-     * Obtiene la cantidad de mejoras Gold en la partida.
+     * Obtiene la cantidad de generadores takeAway en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Gold como un entero.
+     * @return Número de generadores de TakeAways como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
-    int getUpgradeGold(int ID_game) throws PersistanceException;
+    public int getNumTakeAwayGenerators(int ID_game) throws PersistanceException;
 
     /**
-     * Obtiene la cantidad de mejoras Deluxe en la partida.
+     * Obtiene la cantidad de mejoras del generador Beans en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Deluxe como un entero.
+     * @return Número de mejoras del generador Beans como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
-    int getUpgradeDeluxe(int ID_game) throws PersistanceException;
-
+    public int getUpgradeBeans(int ID_game) throws PersistanceException;
 
     /**
-     * Obtiene la cantidad de mejoras Supreme en la partida.
+     * Obtiene la cantidad de mejoras del generador coffeeMaker en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Supreme como un entero.
+     * @return úmero de mejoras del generador coffeMaker como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
-    int getUpgradeSupreme(int ID_game) throws PersistanceException;
+    public int getUpgradeCoffeeMakers(int ID_game) throws PersistanceException;
+
+    /**
+     * Obtiene la cantidad de mejoras del generador takeAway en la partida.
+     *
+     * @param ID_game Identificador único de la partida.
+     * @return Número de mejoras del generador takeAway como un entero.
+     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     */
+    public int getUpgradeTakeAway(int ID_game) throws PersistanceException;
 
     /**
      * Obtiene la cantidad de mejoras Clicker en la partida.
@@ -134,14 +145,6 @@ public interface GameDAO {
      */
     int getUpgradeClicker(int ID_game) throws PersistanceException;
 
-    /**
-     * Obtiene la cantidad de oro en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Cantidad de oro como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    int getGold(int ID_game) throws PersistanceException;
 
     String getName(int ID_game) throws PersistanceException;
 
