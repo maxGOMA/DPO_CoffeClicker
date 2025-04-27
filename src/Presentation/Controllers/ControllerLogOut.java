@@ -9,9 +9,9 @@ public class ControllerLogOut implements ActionListener {
     private final LogOutView view;
     private final UserManager userManager;
 
-    public ControllerLogOut(LogOutView view) {
+    public ControllerLogOut(LogOutView view, UserManager userManager) {
         this.view = view;
-        userManager = new UserManager();
+        this.userManager = userManager;
     }
 
     @Override

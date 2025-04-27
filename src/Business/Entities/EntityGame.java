@@ -41,22 +41,6 @@ public class EntityGame {
 
         this.numCoffees = num_Coffees;
         this.minutesPlayed = minutesPlayed;
-
-        for (int i = 0; i < gold; i++) {
-            generator = new EntityGenerator(this,"gold", upgrade_Gold);
-            generator.start();
-            generators.add(generator);
-        }
-        for (int i = 0; i < deluxe; i++) {
-            generator = new EntityGenerator(this,"deluxe", upgrade_Deluxe);
-            generator.start();
-            generators.add(generator);
-        }
-        for (int i = 0; i < supreme; i++) {
-            generator = new EntityGenerator(this,"supreme", upgrade_Deluxe);
-            generator.start();
-            generators.add(generator);
-        }
     }
 
     //Si se trata de una nueva partida.
@@ -83,6 +67,27 @@ public class EntityGame {
     public void activateGenerators(CoffeGenerationListener listener) {
         for (EntityGenerator generator : generators) {
             generator.activateGenerator(listener);
+        }
+
+        EntityGenerator generator;
+
+        for (int i = 0; i < numGoldGenerators; i++) {
+            generator = new EntityGenerator(this,"gold", goldLevelUpgrade);
+            generator.activateGenerator(listener);
+            generator.start();
+            generators.add(generator);
+        }
+        for (int i = 0; i < numDeluxeGenerators; i++) {
+            generator = new EntityGenerator(this,"deluxe", deluxeLevelUpgrade);
+            generator.activateGenerator(listener);
+            generator.start();
+            generators.add(generator);
+        }
+        for (int i = 0; i < numSupremeGenerators; i++) {
+            generator = new EntityGenerator(this,"supreme", supremeLevelUpgrade);
+            generator.activateGenerator(listener);
+            generator.start();
+            generators.add(generator);
         }
     }
 
@@ -121,26 +126,26 @@ public class EntityGame {
         return "";
     }
 
-    public String getProductionShare(String generatorType) {
+    public double getProductionShare(String generatorType) {
         switch (generatorType) {
             case "gold":
-                return numGoldGenerators + "";
+                return numGoldGenerators * (0.2 / 1.0) * (goldLevelUpgrade + 1);
             case "deluxe":
-                return numDeluxeGenerators + "";
+                return numDeluxeGenerators * (0.5 / 0.7) * (deluxeLevelUpgrade + 1);
             case "supreme":
-                return numSupremeGenerators + "";
+                return numSupremeGenerators * (30.0 / 1.3) * (supremeLevelUpgrade + 1);
         }
-        return "";
+        return 0.0;
     }
 
     public double getCoffeesGeneratedPerSecond() {
-        return Double.valueOf(getProductionShare("gold")) + Double.valueOf(getProductionShare("deluxe")) + Double.valueOf(getProductionShare("supreme"));
+        return getProductionShare("gold") + getProductionShare("deluxe") + (getProductionShare("supreme"));
     }
 
     //-------------Funciones generación de cafes------------------------------
     public double incrementCoffeeByClicker(){
         numCoffees += Math.pow(2, clickerLevelUpgrade);
-        return 2^(clickerLevelUpgrade); //Devuelve el numero de cafés que ha incrementado, no el total actual!
+        return Math.pow(2, clickerLevelUpgrade); //Devuelve el numero de cafés que ha incrementado, no el total actual!
     }
 
     public synchronized void incrementCoffeeByGenerator(double numCoffeesProduced) {

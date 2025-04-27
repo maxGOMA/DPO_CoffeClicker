@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    private static EntityGame entityGame;
+    private EntityGame entityGame;
     private final GameDAO gameDAO;
     private UserManager userManager;
 
-    public GameManager() {
+    public GameManager(UserManager userManager) {
         entityGame = null;
         this.gameDAO = new SQLGameDAO();
-        this.userManager = new UserManager();
+        this.userManager = userManager;
     }
 
     //--------------------------Creación del juego-----------------------------------------------------
@@ -31,15 +31,14 @@ public class GameManager {
 
     }
 
-    public List<EntityGame> getGamesByUser(){
+    public List<EntityGame> getGamesByUser() throws BusinessException {
         GameDAO gameDao = new SQLGameDAO();
         List< EntityGame > games;
         try{
             try{
                 games = gameDao.getGamesByUser(userManager.getUser().getUsername());
-                //games = gameDao.getGamesByUser("bob");
             }catch (PersistanceException e) {
-                throw new RuntimeException(e);
+                throw new BusinessException(e.getMessage());
             }
         }catch (NullPointerException e){
             games = new ArrayList<>();
@@ -143,7 +142,7 @@ public class GameManager {
         return entityGame.getTotalProduction(generatorType);
     }
 
-    public String getProductionShare(String generatorType) {
+    public Double getProductionShare(String generatorType) {
         return entityGame.getProductionShare(generatorType);
     }
 }

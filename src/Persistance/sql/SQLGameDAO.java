@@ -316,7 +316,7 @@ public class SQLGameDAO implements GameDAO {
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             while (rs.next()) {
                 games.add(new EntityGame(
-                        rs.getString("name"),
+                        rs.getString("Name_Game"),
                         rs.getInt("Gold"),
                         rs.getInt("Upgrade_Clicker"),
                         rs.getInt("Upgrade_Supreme"),
@@ -326,10 +326,10 @@ public class SQLGameDAO implements GameDAO {
                         rs.getInt("Deluxe"),
                         rs.getDouble("Num_Coffees"),
                         rs.getString("username"),
-                        rs.getInt("ID_Game")
+                        rs.getInt("ID_Game"),
+                        rs.getInt("Mins_played")
                 ));
             }
-
             return games;
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find games in the database");

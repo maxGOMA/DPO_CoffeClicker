@@ -342,7 +342,7 @@ public class GameView extends JPanel {
     //TODO RAUL ESTO ES NUEVO
     public void setTotalCoffeeLabel(double numCoffees) {
         totalNumCoffees = numCoffees;
-        totalCoffeeLabel.setText(totalNumCoffees + " cfs");
+        totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
     }
 
     //TODO implementar esto en un cartel o algo
@@ -371,7 +371,7 @@ public class GameView extends JPanel {
     }
 
     public void setCoffeesPerSecondValue(double coffeesPerSecond) {
-        cpsLabel.setText(coffeesPerSecond + "cfs/s");
+        cpsLabel.setText(String.format("%.2f cfs/s", coffeesPerSecond));
     }
 
     //TODO MOSTRAR MENSAJE DE ERROR
@@ -382,7 +382,7 @@ public class GameView extends JPanel {
     //TODO RAUL ESTO ES NUEVO
     public void incrementNumCoffees(double numCoffees) {
         totalNumCoffees += numCoffees;
-        totalCoffeeLabel.setText(totalNumCoffees + " cfs");
+        totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
     }
 
     public void setController(ControllerGame controller) {
@@ -393,21 +393,4 @@ public class GameView extends JPanel {
             button.addActionListener(controller);
         }
     }
-
-
-
-
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            JFrame frame = new JFrame("Coffee Clicker");
-//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//            GameView ui = new GameView();
-//            frame.setContentPane(ui);
-//
-//            frame.pack();
-//            frame.setLocationRelativeTo(null);
-//            frame.setVisible(true);
-//        });
-//    }
 }

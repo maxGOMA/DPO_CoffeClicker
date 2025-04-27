@@ -11,9 +11,10 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
     private GameManager gameManager;
     private GameView gameView;
 
-    public ControllerGame(GameView gameView) {
-        gameManager = new GameManager();
+    public ControllerGame(GameView gameView, GameManager gameManager) {
+        this.gameManager = gameManager;
         this.gameView = gameView;
+
         gameManager.activateGenerators(this);
 
         //Incializar num coffees.

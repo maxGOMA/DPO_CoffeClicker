@@ -37,8 +37,6 @@ public class EntityGenerator extends Thread {
                 sleepRatio = 1300;
                 break;
         }
-
-        this.coffGenlistener = coffGenlistener;
     }
 
     void activateGenerator(CoffeGenerationListener coffeGenerationListener) {
