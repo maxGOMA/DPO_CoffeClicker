@@ -1,19 +1,22 @@
 package Business.Entities;
 
+import Business.CoffeGenerationListener;
+
 public class EntityGenerator extends Thread {
     private EntityGame entityGame;
     private String type;
     private int levelUpgrade;
     boolean active;
-
     private long sleepRatio;
     private double coffeRatio;
+
+    private CoffeGenerationListener coffGenlistener;
 
     public EntityGenerator (EntityGame entityGame, String type, int levelUpgrade) {
         this.entityGame = entityGame;
         this.type = type;
         this.levelUpgrade = levelUpgrade;
-        active = true;
+        active = false;
 
         switch (type) {
             case "gold": //Produccio base 0.2 cafes - 1s
@@ -34,10 +37,13 @@ public class EntityGenerator extends Thread {
                 sleepRatio = 1300;
                 break;
         }
+
+        this.coffGenlistener = coffGenlistener;
     }
 
-    void activateGenerator() {
+    void activateGenerator(CoffeGenerationListener coffeGenerationListener) {
         active = true;
+        this.coffGenlistener = coffeGenerationListener;
     }
 
     void desactivateGenerator() {
@@ -63,7 +69,6 @@ public class EntityGenerator extends Thread {
         }
     }
 
-
     public String getType() {
         return type;
     }
@@ -77,6 +82,7 @@ public class EntityGenerator extends Thread {
                 e.printStackTrace();
             }
             entityGame.incrementCoffeeByGenerator(coffeRatio);
+            coffGenlistener.newCoffeesGenerated(coffeRatio);
         }
     }
 }

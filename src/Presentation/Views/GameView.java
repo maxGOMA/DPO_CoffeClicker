@@ -1,12 +1,21 @@
 package Presentation.Views;
 
+import Presentation.Controllers.ControllerGame;
+import Presentation.Controllers.ControllerLogin;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
-public class gameView extends JPanel {
+public class GameView extends JPanel {
+    public static final String CLICKED_COFFEE_COMMAND = "CLICKED_COFFEE_COMMAND";
+    public static final String BUY_BEANS_COMMAND = "BUY_BEANS_COMMAND";
+    public static final String BUY_MAKER_COMMAND = "BUY_MAKER_COMMAND";
+    public static final String BUY_TAKEAWAY_COMMAND = "BUY_TAKEAWAY_COMMAND";
+
+    private final CoffeeClickerApp app;
 
     private final double ASPECT_RATIO = 1085.0 / 802.0;
     private BackgroundPanel centralPanel;
@@ -24,10 +33,14 @@ public class gameView extends JPanel {
     private ImageIcon settings;
     private ImageIcon stats;
 
+    private double totalNumCoffees;
+
     private HashMap<String, JButton> upgrades = new HashMap<>();
     private HashMap<String, JButton> generators = new HashMap<>();
 
-    public gameView() {
+    public GameView(CoffeeClickerApp app) {
+        this.app = app;
+
         setPreferredSize(new Dimension(1200, 800));
         setMinimumSize(new Dimension(800, 600));
         setLayout(new BorderLayout());
@@ -50,7 +63,8 @@ public class gameView extends JPanel {
         gbcLeft.insets = new Insets(5, 5, 5, 5);
 
         // 1. Total (20%)
-        totalCoffeeLabel = new JLabel("475.21M cfs", SwingConstants.CENTER);
+        totalNumCoffees = 0;
+        totalCoffeeLabel = new JLabel(totalNumCoffees +" cfs", SwingConstants.CENTER);
         totalCoffeeLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 30));
         totalCoffeeLabel.setForeground(Color.WHITE);
         gbcLeft.gridy = 0;
@@ -83,6 +97,9 @@ public class gameView extends JPanel {
             }
         });
 
+        //TODO: RAUL HEMOS Añadido comand a coffeeButton!
+        coffeeButton.setActionCommand(CLICKED_COFFEE_COMMAND);
+
         JPanel coffeeButtonPanel = new JPanel(new GridBagLayout());
         coffeeButtonPanel.setOpaque(false);
         coffeeButtonPanel.add(coffeeButton);
@@ -91,7 +108,6 @@ public class gameView extends JPanel {
         leftPanel.add(coffeeButtonPanel, gbcLeft);
 
         centralPanel.add(leftPanel);
-
 
         // === RIGHT PANEL ===
         JPanel rightPanel = new JPanel(new GridBagLayout());
@@ -150,9 +166,14 @@ public class gameView extends JPanel {
                 "<html>TAKE<br>AWAY<br>Lv.3</html>"
         };
         String[] keys = {"beans", "maker", "takeaway"};
+        String[] buyGenerators_commands =  {BUY_BEANS_COMMAND, BUY_MAKER_COMMAND, BUY_TAKEAWAY_COMMAND};
         for (int i = 0; i < names.length; i++) {
             JButton generatorButton = new JButton(names[i]);
             generatorButton.setPreferredSize(new Dimension(100, 80));
+
+            //TODO esto va asi?? AMI ME PARECE BIEN
+            generatorButton.setActionCommand(buyGenerators_commands[i]);
+
             generators.put(keys[i], generatorButton);
             generatorsPanel.add(generatorButton);
         }
@@ -287,7 +308,6 @@ public class gameView extends JPanel {
     }
 
     private void animatePop() {
-
         final int frames = 6;
         final int delay  = 15;
         final double popFactor = 1.5;
@@ -319,17 +339,75 @@ public class gameView extends JPanel {
         t.start();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Coffee Clicker");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            gameView ui = new gameView();
-            frame.setContentPane(ui);
-
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
+    //TODO RAUL ESTO ES NUEVO
+    public void setTotalCoffeeLabel(double numCoffees) {
+        totalNumCoffees = numCoffees;
+        totalCoffeeLabel.setText(totalNumCoffees + " cfs");
     }
+
+    //TODO implementar esto en un cartel o algo
+    public void setActualPriceGenerator(String generatorType, double priceGenerator) {
+        System.out.println("The new price for" + generatorType + ": " + priceGenerator);
+        //TODO RAUL no sabemos donde esta el precio del generador
+    }
+
+    public void setTotalNumberGenerators(String generatorType, int numGenerators) {
+        JButton generatorButton = generators.get(generatorType);
+        if (generatorButton != null) {
+            String buttonText = "";
+            switch (generatorType) {
+                case "beans":
+                    buttonText = "<html>COFFEE<br>BEANS<br>Lv." + numGenerators + "</html>";
+                    break;
+                case "maker":
+                    buttonText = "<html>COFFEE<br>MAKER<br>Lv." + numGenerators + "</html>";
+                    break;
+                case "takeaway":
+                    buttonText = "<html>TAKE<br>AWAY<br>Lv." + numGenerators + "</html>";
+                    break;
+            }
+            generatorButton.setText(buttonText);
+        }
+    }
+
+    public void setCoffeesPerSecondValue(double coffeesPerSecond) {
+        cpsLabel.setText(coffeesPerSecond + "cfs/s");
+    }
+
+    //TODO MOSTRAR MENSAJE DE ERROR
+    public void showErrorMessage(String text) {
+        System.out.println(text);
+    }
+
+    //TODO RAUL ESTO ES NUEVO
+    public void incrementNumCoffees(double numCoffees) {
+        totalNumCoffees += numCoffees;
+        totalCoffeeLabel.setText(totalNumCoffees + " cfs");
+    }
+
+    public void setController(ControllerGame controller) {
+        //Asocio listener boton cafe
+        coffeeButton.addActionListener(controller);
+        //Asocio listeners botones comprar generador.
+        for (JButton button : generators.values()) {
+            button.addActionListener(controller);
+        }
+    }
+
+
+
+
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame frame = new JFrame("Coffee Clicker");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//            GameView ui = new GameView();
+//            frame.setContentPane(ui);
+//
+//            frame.pack();
+//            frame.setLocationRelativeTo(null);
+//            frame.setVisible(true);
+//        });
+//    }
 }
