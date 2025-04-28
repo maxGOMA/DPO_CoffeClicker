@@ -14,9 +14,9 @@ public class ControllerRegister implements ActionListener {
     UserManager userManager;
     private final RegisterView registerView;
 
-    public ControllerRegister(RegisterView registerView) {
+    public ControllerRegister(RegisterView registerView, UserManager userManager) {
         this.registerView = registerView;
-        userManager = new UserManager();
+        this.userManager = userManager;
     }
 
     @Override

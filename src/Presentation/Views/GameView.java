@@ -165,7 +165,7 @@ public class GameView extends JPanel {
                 "<html>COFFEE<br>MAKER<br>Lv.3</html>",
                 "<html>TAKE<br>AWAY<br>Lv.3</html>"
         };
-        String[] keys = {"beans", "maker", "takeaway"};
+        String[] keys = {"beans", "coffeeMaker", "TakeAway"};
         String[] buyGenerators_commands =  {BUY_BEANS_COMMAND, BUY_MAKER_COMMAND, BUY_TAKEAWAY_COMMAND};
         for (int i = 0; i < names.length; i++) {
             JButton generatorButton = new JButton(names[i]);
@@ -342,7 +342,7 @@ public class GameView extends JPanel {
     //TODO RAUL ESTO ES NUEVO
     public void setTotalCoffeeLabel(double numCoffees) {
         totalNumCoffees = numCoffees;
-        totalCoffeeLabel.setText(totalNumCoffees + " cfs");
+        totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
     }
 
     //TODO implementar esto en un cartel o algo
@@ -357,12 +357,15 @@ public class GameView extends JPanel {
             String buttonText = "";
             switch (generatorType) {
                 case "beans":
+                    System.out.println("beans");
                     buttonText = "<html>COFFEE<br>BEANS<br>Lv." + numGenerators + "</html>";
                     break;
-                case "maker":
+                case "coffeeMaker":
+                    System.out.println("coffeMAker");
                     buttonText = "<html>COFFEE<br>MAKER<br>Lv." + numGenerators + "</html>";
                     break;
-                case "takeaway":
+                case "TakeAway":
+                    System.out.println("takeaway");
                     buttonText = "<html>TAKE<br>AWAY<br>Lv." + numGenerators + "</html>";
                     break;
             }
@@ -371,7 +374,7 @@ public class GameView extends JPanel {
     }
 
     public void setCoffeesPerSecondValue(double coffeesPerSecond) {
-        cpsLabel.setText(coffeesPerSecond + "cfs/s");
+        cpsLabel.setText(String.format("%.2f cfs/s", coffeesPerSecond));
     }
 
     //TODO MOSTRAR MENSAJE DE ERROR
@@ -382,7 +385,7 @@ public class GameView extends JPanel {
     //TODO RAUL ESTO ES NUEVO
     public void incrementNumCoffees(double numCoffees) {
         totalNumCoffees += numCoffees;
-        totalCoffeeLabel.setText(totalNumCoffees + " cfs");
+        totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
     }
 
     public void setController(ControllerGame controller) {
@@ -393,21 +396,4 @@ public class GameView extends JPanel {
             button.addActionListener(controller);
         }
     }
-
-
-
-
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            JFrame frame = new JFrame("Coffee Clicker");
-//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//            GameView ui = new GameView();
-//            frame.setContentPane(ui);
-//
-//            frame.pack();
-//            frame.setLocationRelativeTo(null);
-//            frame.setVisible(true);
-//        });
-//    }
 }

@@ -5,6 +5,8 @@ import Business.CoffeGenerationListener;
 public class EntityGenerator extends Thread {
     private EntityGame entityGame;
     private String type;
+    private float baseProduction;
+
     private int levelUpgrade;
     boolean active;
     private long sleepRatio;
@@ -12,33 +14,17 @@ public class EntityGenerator extends Thread {
 
     private CoffeGenerationListener coffGenlistener;
 
-    public EntityGenerator (EntityGame entityGame, String type, int levelUpgrade) {
+    public EntityGenerator (EntityGame entityGame, String type, float baseProduction, int levelUpgrade,  float timeIntervalProduction) {
         this.entityGame = entityGame;
         this.type = type;
         this.levelUpgrade = levelUpgrade;
         active = false;
 
-        switch (type) {
-            case "gold": //Produccio base 0.2 cafes - 1s
-                // 5seg - 1 cafe
-                //considero q levelUpgrade empieza en 0.
-                if (levelUpgrade == 0) coffeRatio = 0.2;
-                else coffeRatio = (0.2 * (levelUpgrade + 1));
-                sleepRatio = 1000;
-                break;
-            case "deluxe": //Produccio base 0.5 cafes - 0.7s
-                if (levelUpgrade == 0) coffeRatio = 0.5;
-                else coffeRatio = (0.5 * (levelUpgrade + 1));
-                sleepRatio = 700;
-                break;
-            case "supreme": //Produccio base 30 cafes - 1.3s
-                if (levelUpgrade == 0) coffeRatio = 30;
-                else coffeRatio = 30 * (levelUpgrade + 1);
-                sleepRatio = 1300;
-                break;
-        }
+        this.baseProduction = baseProduction;
 
-        this.coffGenlistener = coffGenlistener;
+        if (levelUpgrade == 0) coffeRatio = baseProduction;
+        else coffeRatio = baseProduction * (levelUpgrade + 1);
+        sleepRatio = (long) (timeIntervalProduction * 1000);
     }
 
     void activateGenerator(CoffeGenerationListener coffeGenerationListener) {
@@ -56,17 +42,8 @@ public class EntityGenerator extends Thread {
 
     public void incrementLevel_upgrade() {
         levelUpgrade++;
-        switch (type) {
-            case "gold":
-                coffeRatio = (0.2 * (levelUpgrade + 1));
-                break;
-            case "deluxe":
-                coffeRatio = (0.5 * (levelUpgrade + 1));
-                break;
-            case "supreme":
-                coffeRatio = 30 * (levelUpgrade + 1);
-                break;
-        }
+
+        coffeRatio = baseProduction * (levelUpgrade + 1);
     }
 
     public String getType() {

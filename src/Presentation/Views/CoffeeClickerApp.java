@@ -1,5 +1,7 @@
 package Presentation.Views;
 
+import Business.GameManager;
+import Business.UserManager;
 import Presentation.Controllers.*;
 import javax.swing.*;
 import java.awt.*;
@@ -7,8 +9,13 @@ import java.awt.*;
 public class CoffeeClickerApp extends JFrame {
     private final CardLayout cardLayout;
     private final JPanel mainPanel;
+    private UserManager userManager;
+    private GameManager gameManager;
 
     public CoffeeClickerApp() {
+        userManager = new UserManager();
+        gameManager = new GameManager(userManager);
+
         setTitle("Coffee Clicker G3");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1350, 1080);
@@ -23,20 +30,16 @@ public class CoffeeClickerApp extends JFrame {
         mainMenuView.setController(controller_main_menu);
 
         LoginView login = new LoginView(this);
-        ControllerLogin controller_login = new ControllerLogin(login);
+        ControllerLogin controller_login = new ControllerLogin(login, userManager);
         login.setController(controller_login);
 
         RegisterView register = new RegisterView(this);
-        ControllerRegister controller_register = new ControllerRegister(register);
+        ControllerRegister controller_register = new ControllerRegister(register, userManager);
         register.setController(controller_register);
 
         LogOutView logout = new LogOutView(this);
-        ControllerLogOut controller_logout = new ControllerLogOut(logout);
+        ControllerLogOut controller_logout = new ControllerLogOut(logout, userManager);
         //logout.setController(controller_logout);
-
-        GameView gameView = new GameView(this);
-        ControllerGame controllerGame = new ControllerGame(gameView);
-        gameView.setController(controllerGame);
 
         mainPanel.add(mainMenuView, "MainMenuView");
         mainPanel.add(login, "Login");
@@ -49,9 +52,16 @@ public class CoffeeClickerApp extends JFrame {
 
     public void createSelectGame() {
         GameListView selectGame = new GameListView(this);
-        ControllerGameList controllerGameList = new ControllerGameList(selectGame);
+        ControllerGameList controllerGameList = new ControllerGameList(selectGame, gameManager);
         selectGame.setController(controllerGameList);
         mainPanel.add(selectGame, "SelectGame");
+    }
+
+    public void createGameScreen() {
+        GameView gameView = new GameView(this);
+        ControllerGame controllerGame = new ControllerGame(gameView, gameManager);
+        gameView.setController(controllerGame);
+        mainPanel.add(gameView, "GameView");
     }
 
     public void showPanel(String panelName) {

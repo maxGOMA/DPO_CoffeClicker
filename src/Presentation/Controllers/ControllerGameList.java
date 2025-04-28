@@ -3,15 +3,9 @@ package Presentation.Controllers;
 import Business.BusinessException;
 import Business.Entities.EntityGame;
 import Business.GameManager;
-import Business.UserManager;
-import Persistance.GameDAO;
-import Persistance.PersistanceException;
-import Persistance.sql.SQLGameDAO;
 import Presentation.Views.GameListView;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -22,15 +16,13 @@ import static Presentation.Views.GameListView.NEW_GAME;
 
 public class ControllerGameList implements ActionListener {
     private GameManager gameManager;
-    private UserManager userManager;
     private GameListView view;
     private static String name;
 
     //variable de la view
 
-    public ControllerGameList(GameListView gameListView) {
-        this.gameManager = new GameManager();
-        this.userManager = new UserManager();
+    public ControllerGameList(GameListView gameListView, GameManager gameManager) {
+        this.gameManager = gameManager;
         this.view = gameListView;
         //this.view.setController();
         //view CUANDO SE CREE
@@ -51,7 +43,12 @@ public class ControllerGameList implements ActionListener {
     }
 
     public List<EntityGame> getGamesByUser(){
-        return gameManager.getGamesByUser();
+        try {
+            return gameManager.getGamesByUser();
+        } catch (BusinessException e) {
+            //TODO mostrar error de persistencia
+        }
+        return null;
     }
 
     @Override
@@ -72,7 +69,6 @@ public class ControllerGameList implements ActionListener {
             view.clearGameSelected();
 
         }else if(command.equals("NEWGAME")){
-
             //PANTALLA NEW GAME
             System.out.println(command);
 
@@ -81,7 +77,8 @@ public class ControllerGameList implements ActionListener {
             try {
                 EntityGame game = gameManager.getGameFromPersistance(name);
             } catch (BusinessException ex) {
-                throw new RuntimeException(ex);
+                //TODO mostrar error de persistencia
+
             }
             // PASA AL NEW GAME CON LOS DATOS DE ESTE
             System.out.println(command);
@@ -100,8 +97,16 @@ public class ControllerGameList implements ActionListener {
             System.out.println("LOGOUT");
 
         }else if(command.contains("START")){
-
             // COMIENZA EL JUEGO
+            name = findName(command);
+            try {
+                EntityGame game = gameManager.getGameFromPersistance(name);
+            } catch (BusinessException ex) {
+                //TODO mostrar error de persistencia
+
+            }
+            view.getApp().createGameScreen();
+            view.getApp().showPanel("GameView");
             System.out.println(command);
 
         }

@@ -2,21 +2,25 @@ package Business;
 
 import Business.Entities.EntityGame;
 import Persistance.GameDAO;
+import Persistance.GeneratorsDAO;
 import Persistance.PersistanceException;
 import Persistance.sql.SQLGameDAO;
+import Persistance.sql.SQLGeneratorsDAO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameManager {
-    private static EntityGame entityGame;
+    private EntityGame entityGame;
     private final GameDAO gameDAO;
+    private final GeneratorsDAO generatorsDAO;
     private UserManager userManager;
 
-    public GameManager() {
+    public GameManager(UserManager userManager) {
         entityGame = null;
         this.gameDAO = new SQLGameDAO();
-        this.userManager = new UserManager();
+        this.generatorsDAO = new SQLGeneratorsDAO();
+        this.userManager = userManager;
     }
 
     //--------------------------Creación del juego-----------------------------------------------------
@@ -31,15 +35,14 @@ public class GameManager {
 
     }
 
-    public List<EntityGame> getGamesByUser(){
+    public List<EntityGame> getGamesByUser() throws BusinessException {
         GameDAO gameDao = new SQLGameDAO();
         List< EntityGame > games;
         try{
             try{
                 games = gameDao.getGamesByUser(userManager.getUser().getUsername());
-                //games = gameDao.getGamesByUser("bob");
             }catch (PersistanceException e) {
-                throw new RuntimeException(e);
+                throw new BusinessException(e.getMessage());
             }
         }catch (NullPointerException e){
             games = new ArrayList<>();
@@ -80,9 +83,22 @@ public class GameManager {
 
 
     //-----------------Generación de cafes------------------------------------------------------------
-    //No estoy muy convencida del generatorListener pasarle el gameController, por tema de capas
-    public void activateGenerators(CoffeGenerationListener listener) {
-        entityGame.activateGenerators(listener);
+    public void activateGenerators(CoffeGenerationListener listener, String[] generatorsNames) throws BusinessException {
+        try {
+            ArrayList<Float> generatorsBaseProd = new ArrayList<>();
+            ArrayList<Float> generatorsIntervalProduction= new ArrayList<>();
+
+            for (String generatorName : generatorsNames) {
+                generatorsBaseProd.add(generatorsDAO.getGeneratorBaseProduction(generatorName));
+                generatorsIntervalProduction.add(generatorsDAO.getGeneratorProductionInterval(generatorName));
+            }
+
+
+            entityGame.activateGenerators(listener, generatorsBaseProd, generatorsIntervalProduction);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
+
     }
 
 
@@ -92,24 +108,42 @@ public class GameManager {
 
     //-------------------Tienda de generadores y mejoras----------------------------------------------
 
-    public double getGeneratorCost(String generatorType) {
-        return entityGame.getGeneratorCost(generatorType);
+    public double getGeneratorCost(String generatorType) throws BusinessException {
+        try {
+            return generatorsDAO.getGeneratorBaseCost(generatorType) * Math.pow(generatorsDAO.getGeneratorCostIncrease(generatorType), entityGame.getNumGenerators(generatorType));
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public boolean hasResourcesToBuyGenerator(String generatorType) {
-        return (float) entityGame.getCurrentNumberOfCoffees() >= entityGame.getGeneratorCost(generatorType);
+    public boolean hasResourcesToBuyGenerator(String generatorType) throws BusinessException {
+        return (float) entityGame.getCurrentNumberOfCoffees() >= getGeneratorCost(generatorType);
     }
 
-    public void buyNewGenerator(String generatorType, CoffeGenerationListener listener) {
-        entityGame.addNewGenerator(generatorType, listener);
+    public void buyNewGenerator(String generatorType, CoffeGenerationListener listener) throws BusinessException {
+            try {
+                entityGame.addNewGenerator(generatorType, listener, getGeneratorCost(generatorType), generatorsDAO.getGeneratorBaseProduction(generatorType), generatorsDAO.getGeneratorProductionInterval(generatorType));
+            } catch (PersistanceException e) {
+                throw new BusinessException(e.getMessage());
+            }
+
     }
 
-    public boolean hasResourcesToUpgradeGenerator(String generatorType) {
-        return entityGame.getCurrentNumberOfCoffees() >= entityGame.getNextGeneratorUpgradeCost(generatorType);
+    //Formula coste del nuevo upgrade = 1/4 coste generador * 2 (level upgrade actual del generador)
+    public double getNextUprgadeGeneratorCost(String generatorType) throws BusinessException {
+        try {
+            return generatorsDAO.getGeneratorBaseCost(generatorType)/4 * Math.pow(2, entityGame.getUpgradeGenerators(generatorType));
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public void upgradeGenerators(String generatorType) {
-        entityGame.upgradeGenerators(generatorType);
+    public boolean hasResourcesToUpgradeGenerator(String generatorType) throws BusinessException {
+        return entityGame.getCurrentNumberOfCoffees() >= getNextUprgadeGeneratorCost(generatorType);
+    }
+
+    public void upgradeGenerators(String generatorType) throws BusinessException {
+        entityGame.upgradeGenerators(generatorType, getNextUprgadeGeneratorCost(generatorType));
     }
 
     public boolean hasResourcesToUpgradeClicker() {
@@ -127,23 +161,44 @@ public class GameManager {
     }
 
     public int getTotalNumberOfGenerators(String generatorType) {
-        return entityGame.getTotalNumberOfGenerators(generatorType);
+        return entityGame.getNumGenerators(generatorType);
     }
 
-    public double getCoffesGeneratedPerSecond() {
-        return entityGame.getCoffeesGeneratedPerSecond();
+    public String getUnitProduction(String generatorType) throws BusinessException {
+        try {
+            return generatorsDAO.getGeneratorBaseProduction(generatorType) + "c/" + generatorsDAO.getGeneratorProductionInterval(generatorType) + "s";
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    //TODO MIRAR ESTAS TRES FUNCIONES
-    public String getUnitProduction(String generatorType) {
-        return entityGame.getUnitProduction(generatorType);
+    public String getTotalProduction(String generatorType) throws BusinessException {
+        try {
+            return generatorsDAO.getGeneratorBaseProduction(generatorType) * entityGame.getNumGenerators(generatorType) + "c/" + generatorsDAO.getGeneratorProductionInterval(generatorType) + "s";
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public String getTotalProduction(String generatorType) {
-        return entityGame.getTotalProduction(generatorType);
+    public String getGlobalProduction(String generatorType) throws BusinessException {
+        try {
+            Float totalProduction = (generatorsDAO.getGeneratorBaseProduction("beans") * entityGame.getNumGenerators("beans") + generatorsDAO.getGeneratorBaseProduction("coffeeMaker") * entityGame.getNumGenerators("coffeeMaker") + generatorsDAO.getGeneratorBaseProduction("TakeAway") * entityGame.getNumGenerators("TakeAway"));
+            return (generatorsDAO.getGeneratorBaseProduction(generatorType) * entityGame.getNumGenerators(generatorType)) / totalProduction + " %";
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public String getProductionShare(String generatorType) {
-        return entityGame.getProductionShare(generatorType);
+    public double getCoffeesGeneratedPerSecond() throws BusinessException {
+        return getProductionShare("beans") + getProductionShare("coffeeMaker") + (getProductionShare("TakeAway"));
+    }
+
+
+    public double getProductionShare(String generatorType) throws BusinessException {
+        try {
+            return entityGame.getNumGenerators(generatorType) * (generatorsDAO.getGeneratorBaseProduction(generatorType)/generatorsDAO.getGeneratorProductionInterval(generatorType)) * (entityGame.getUpgradeGenerators(generatorType) + 1);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 }

@@ -10,8 +10,8 @@ import java.awt.event.ActionListener;
 public class ControllerCreationGame implements ActionListener {
     private GameManager gameManager;
 
-    public ControllerCreationGame (){
-        this.gameManager = new GameManager();
+    public ControllerCreationGame (GameManager gameManager){
+        this.gameManager = gameManager;
     }
 
     @Override

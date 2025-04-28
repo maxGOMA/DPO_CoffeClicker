@@ -7,7 +7,7 @@ import Persistance.sql.SQLUserDAO;
 import java.util.Objects;
 
 public class UserManager {
-    private static EntityUser user;
+    private EntityUser user;
     private final UserDAO userDAO;
 
     public UserManager() {
@@ -34,7 +34,7 @@ public class UserManager {
         try {
             user = userDAO.getUserFromusername(userName);
         }catch(PersistanceException e){
-           throw  new BusinessException(e.getMessage());
+           throw new BusinessException(e.getMessage());
         }
     }
 
