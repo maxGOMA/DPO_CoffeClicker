@@ -11,6 +11,7 @@ public class CoffeeClickerApp extends JFrame {
     private final JPanel mainPanel;
     private UserManager userManager;
     private GameManager gameManager;
+    private NewGameView newGame;
 
     public CoffeeClickerApp() {
         userManager = new UserManager();
@@ -48,6 +49,13 @@ public class CoffeeClickerApp extends JFrame {
 
         add(mainPanel);
         setVisible(true);
+    }
+
+    public void createNewGameView(String name){
+        newGame = new NewGameView(this, name);
+        ControllerNewGame controller_newgame = new ControllerNewGame(newGame, gameManager);
+        newGame.setController(controller_newgame);
+        mainPanel.add(newGame, "NewGame");
     }
 
     public void createSelectGame() {

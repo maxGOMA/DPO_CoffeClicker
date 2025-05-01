@@ -109,7 +109,7 @@ public class LoginView extends JPanel {
         panel.setMaximumSize(new Dimension(308, 37));
         panel.setOpaque(false);
 
-        JTextField textField = new JTextField(10);
+        JTextField textField = new JTextField(21);
         textField.setOpaque(false);
         textField.setBorder(BorderFactory.createEmptyBorder());
         textField.setForeground(new Color(127, 51, 0));
