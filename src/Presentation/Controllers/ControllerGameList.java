@@ -70,17 +70,22 @@ public class ControllerGameList implements ActionListener {
 
         }else if(command.equals("NEWGAME")){
             //PANTALLA NEW GAME
+            view.getApp().createNewGameView(null);
+            view.getApp().showPanel("NewGame");
             System.out.println(command);
 
         }else if(command.contains("COPY")){
             name = findName(command);
+            EntityGame game = null;
             try {
-                EntityGame game = gameManager.getGameFromPersistance(name);
+                game = gameManager.getGameFromPersistance(name);
             } catch (BusinessException ex) {
                 //TODO mostrar error de persistencia
 
             }
             // PASA AL NEW GAME CON LOS DATOS DE ESTE
+            view.getApp().createNewGameView(game.getName());
+            view.getApp().showPanel("NewGame");
             System.out.println(command);
 
         }else if(command.contains("DELETE")){

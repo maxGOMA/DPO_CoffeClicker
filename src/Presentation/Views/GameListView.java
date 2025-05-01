@@ -57,7 +57,6 @@ public class GameListView extends JPanel{
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setSize(new Dimension(510,398));
 
-//        centerPanel.setBorder(new LineBorder(Color.RED, 5));
 
         Image backgroundImage = new ImageIcon("imgs/back_ground_scroll.png")
                 .getImage().getScaledInstance(100, 115, Image.SCALE_DEFAULT);
