@@ -7,6 +7,8 @@ import Business.Entities.EntityUser;
 
 import Persistance.PersistanceException;
 
+import java.util.ArrayList;
+
 /**
  * Interface that abstracts the persistence of groups from the rest of the code.
  * In particular, it follows the Data Access Object design pattern, which is commonly used to abstract persistence
@@ -54,6 +56,12 @@ public interface UserDAO {
      *  @return Returns true if the username,password are correct.
      */
     boolean verifyPassword(String userIdentifier, String password) throws PersistanceException;
+
+    /**
+     * Method that returns all the usernames registered in the system.
+     * @return Returns a list with the usernames.
+     */
+    ArrayList<String> returnAllUsernamesRegistered()throws PersistanceException ;
 
     /**
      *  Method that returns the user from the database (class User).

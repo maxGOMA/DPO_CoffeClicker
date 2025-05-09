@@ -145,7 +145,6 @@ public interface GameDAO {
      */
     int getUpgradeClicker(int ID_game) throws PersistanceException;
 
-
     String getName(int ID_game) throws PersistanceException;
 
     List<EntityGame> getGamesByUser(String user) throws PersistanceException;

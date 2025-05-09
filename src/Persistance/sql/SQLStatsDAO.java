@@ -6,7 +6,6 @@ import Persistance.StatsDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SQLStatsDAO implements StatsDAO {
 
@@ -18,7 +17,7 @@ public class SQLStatsDAO implements StatsDAO {
         SQLConnector.getInstance().insertQuery(query);
     }
 
-    public List<Double> getAllStatsFromGame(int ID_game, int minutesPlayed) throws PersistanceException {
+    public ArrayList<Double> getAllStatsFromGame(int ID_game, int minutesPlayed) throws PersistanceException {
         try {
             ArrayList<Double> minutesList = new ArrayList<Double>();
 

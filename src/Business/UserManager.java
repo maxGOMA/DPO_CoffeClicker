@@ -4,6 +4,8 @@ import Business.Entities.EntityUser;
 import Persistance.PersistanceException;
 import Persistance.UserDAO;
 import Persistance.sql.SQLUserDAO;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class UserManager {
@@ -68,6 +70,14 @@ public class UserManager {
         userDAO.deleteUser(user.getUsername());
         user = null;
         //TODO supongo que borrar partidas y estadisticas usuario
+    }
+
+    public ArrayList<String> getAllUsernames() throws BusinessException {
+        try {
+            return userDAO.returnAllUsernamesRegistered();
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     public EntityUser getUser() {
