@@ -102,10 +102,9 @@ public class SQLUserDAO implements UserDAO {
         try {
             String query = "SELECT * FROM users";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-            if(!rs.next()){
-                return usernames;
+            while (rs.next()) {
+                usernames.add(rs.getString("username"));
             }
-            usernames.add(rs.getString("username"));
         } catch (SQLException e) {
             throw new PersistanceException("Can't access users information");
         }

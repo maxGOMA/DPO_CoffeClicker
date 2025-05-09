@@ -25,7 +25,7 @@ public class GameManager {
 
     //--------------------------Creación del juego-----------------------------------------------------
     //Modificado respecto santi -> BussinessException
-    public EntityGame getGameFromPersistance(String gameName) throws BusinessException {
+    public EntityGame setGameFromPersistanceForLoggedInUser(String gameName) throws BusinessException {
         try {
             entityGame = gameDAO.loadInfoGame(gameName, userManager.getUser().getUsername());
             return entityGame;
@@ -35,21 +35,37 @@ public class GameManager {
 
     }
 
-    public List<EntityGame> getGamesByUser() throws BusinessException {
-        GameDAO gameDao = new SQLGameDAO();
-        List< EntityGame > games;
+    public List<EntityGame> getGamesOfLoggedInUser() throws BusinessException {
         try{
             try{
-                games = gameDao.getGamesByUser(userManager.getUser().getUsername());
+                return gameDAO.getGamesByUser(userManager.getUser().getUsername());
             }catch (PersistanceException e) {
                 throw new BusinessException(e.getMessage());
             }
         }catch (NullPointerException e){
-            games = new ArrayList<>();
+            return new ArrayList<>();
+        }
+    }
+
+    public EntityGame returnGameFromUser (String gameName, String username) throws BusinessException {
+        try {
+            entityGame = gameDAO.loadInfoGame(gameName, username);
+            return entityGame;
+        } catch (PersistanceException e){
+            throw new BusinessException(e.getMessage());
         }
 
-        return games;
     }
+
+    public ArrayList<String> getUserFinishedGameNames(String username) throws BusinessException {
+        try {
+            return gameDAO.getUserFinishedGameNames(username);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
+
 
     public boolean gameNameAlreadyRegisteredByUser(String gameName) throws BusinessException {
         try {

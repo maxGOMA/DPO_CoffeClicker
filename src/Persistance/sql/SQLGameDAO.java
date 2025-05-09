@@ -324,4 +324,19 @@ public class SQLGameDAO implements GameDAO {
             throw new PersistanceException("Couldn't find games in the database");
         }
     }
+
+    @Override
+    public ArrayList<String> getUserFinishedGameNames(String user) throws PersistanceException {
+        ArrayList<String> games = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM game WHERE username = '" + user + "';";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            while (rs.next()) {
+                games.add(rs.getString("Name_Game"));
+            }
+        } catch (SQLException e) {
+            throw new PersistanceException("Can't access games information");
+        }
+        return games;
+    }
 }

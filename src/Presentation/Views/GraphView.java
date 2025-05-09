@@ -133,7 +133,7 @@ public class GraphView extends JPanel {
     }
 
     public void showNoFinishedGamesForSelectedUserMessage() {
-        errorLabel.setText("No finished games found!");
+        errorLabel.setText("This user does not have finished games!");
         errorLabel.setVisible(true);
         gameSelectionLabel.setVisible(false);
         gameSelectionComboBox.setVisible(false);
