@@ -4,6 +4,8 @@ import Business.Entities.EntityGame;
 import Persistance.PersistanceException;
 import Persistance.StatsDAO;
 import Persistance.sql.SQLStatsDAO;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +20,7 @@ public class StatManager {
         statDAO.saveNewStats(game.getID_Game(), game.getCurrentNumberOfCoffees(), game.getMinutesPlayed());
     }
 
-    public List<Double> getAllStatsFromGame(EntityGame game) throws BusinessException{
+    public ArrayList<Double> getAllStatsFromGame(EntityGame game) throws BusinessException{
         try{
             if(game.getMinutesPlayed() == 0){
                 return null;

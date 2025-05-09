@@ -6,6 +6,7 @@ import Persistance.UserDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
 
@@ -89,6 +90,26 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't verify password");
         }
+    }
+
+    /**
+     * Method that returns all the usernames registered in the system.
+     * @return Returns a list with the usernames.
+     */
+    @Override
+    public ArrayList<String> returnAllUsernamesRegistered() throws PersistanceException {
+        ArrayList<String> usernames = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM users";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            if(!rs.next()){
+                return usernames;
+            }
+            usernames.add(rs.getString("username"));
+        } catch (SQLException e) {
+            throw new PersistanceException("Can't access users information");
+        }
+        return usernames;
     }
 
     /**
