@@ -4,8 +4,11 @@ import Business.Entities.EntityGame;
 import Persistance.GameDAO;
 import Persistance.PersistanceException;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLGameDAO implements GameDAO {
     /**
@@ -23,9 +26,9 @@ public class SQLGameDAO implements GameDAO {
             if(!rs.next()){
                 return null;
             }
-            return new EntityGame(rs.getString("Name_Game"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
-                    , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
-                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("minutesPlayed"));
+            return new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
+                    , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
+                    , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
@@ -47,9 +50,9 @@ public class SQLGameDAO implements GameDAO {
             if(!rs.next()){
                 return null;
             }
-            return new EntityGame(rs.getString("Name_Game"), rs.getInt("Gold"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_Supreme")
-                    , rs.getInt("Upgrade_Deluxe"), rs.getInt("Upgrade_Gold"), rs.getInt("Supreme")
-                    , rs.getInt("Deluxe"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"), rs.getInt("minutesPlayed"));
+            return new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
+                    , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
+                    , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
@@ -63,16 +66,16 @@ public class SQLGameDAO implements GameDAO {
      */
     @Override
     public void setInfoGame(EntityGame game){
-                String query = "INSERT INTO game (Name_Game, username, Num_Coffees, Gold, Deluxe, Supreme, Upgrade_Gold, Upgrade_Deluxe, Upgrade_Supreme, Upgrade_Clicker, minutesPlayed) VALUES ('" +
+        String query = "INSERT INTO game (Name_Game, username, Num_Coffees, Num_Beans_Generators, Num_CoffeeMakers_Generators, Num_TakeAway_Generators, Upgrade_Beans_Generators, Upgrade_CoffeeMakers_Generators, Upgrade_TakeAway_Generators, Upgrade_Clicker, Mins_Played) VALUES ('" +
                 game.getName() + "', '" +
                 game.getUsername()+ "', '" +
                 game.getCurrentNumberOfCoffees() + "', '" +
-                game.getNumGoldGenerators()+ "', '" +
-                game.getNumDeluxeGenerators()+ "', '" +
-                game.getNumSupremeGenerators()+ "', '" +
-                game.getUpgradeGold()+ "', '" +
-                game.getUpgradeDeluxe()+ "', '" +
-                game.getUpgradeSupreme()+ "', '" +
+                game.getNumGenerators("beans") + "', '" +
+                game.getNumGenerators("coffeeMaker") + "', '" +
+                game.getNumGenerators("TakeAway") + "', '" +
+                game.getUpgradeGenerators("beans") + "', '" +
+                game.getUpgradeGenerators("coffeeMaker") + "', '" +
+                game.getUpgradeGenerators("TakeAway") + "', '" +
                 game.getClickerLevelUpgrade() +
                 game.getClickerLevelUpgrade() + "', '" +
                 game.getMinutesPlayed() +
@@ -106,14 +109,15 @@ public class SQLGameDAO implements GameDAO {
     /**
      * Obtiene el identificador de una partida desde la base de datos.
      *
-     * @param ID_game Identificador único de la partida.
+     * @param name El nombre del juego que se desea eliminar.
+     * @param userName El nombre del jugador al que pertenece el juego.
      * @return El identificador de la partida.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public int getIdGame(int ID_game) throws PersistanceException {
+    public int getIdGame(String name, String userName) throws PersistanceException {
         try {
-            String query = "SELECT ID_Game FROM game WHERE ID_game = " + ID_game + ";";
+            String query = "SELECT ID_Game FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
             return rs.getInt("ID_Game");
@@ -161,97 +165,116 @@ public class SQLGameDAO implements GameDAO {
     }
 
     /**
-     * Obtiene la cantidad de mejoras Deluxe en la partida.
+     * Obtiene la cantidad de generadores beans en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Deluxe como un entero.
+     * @return Número de generadores beans como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public int getDeluxe(int ID_game) throws PersistanceException {
+    public int getNumBeansGenerators(int ID_game) throws PersistanceException {
         try {
-            String query = "SELECT Deluxe FROM game WHERE ID_game = " + ID_game + ";";
+            String query = "SELECT Num_Beans_Generators FROM game WHERE ID_game = " + ID_game + ";";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
-            return rs.getInt("Deluxe");
+            return rs.getInt("Num_Beans_Generators");
         } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find game Deluxe in the database");
+            throw new PersistanceException("Couldn't find game Num_Beans_Generators in the database");
         }
     }
 
     /**
-     * Obtiene la cantidad de mejoras Supreme en la partida.
+     * Obtiene la cantidad de generadores CoffeeMakers en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Supreme como un entero.
+     * @return Número de generadores CoffeeMakers como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public int getSupreme(int ID_game) throws PersistanceException {
+    public int getNumCoffeeMakersGenerators(int ID_game) throws PersistanceException {
         try {
-            String query = "SELECT Supreme FROM game WHERE ID_game = " + ID_game + ";";
+            String query = "SELECT Num_CoffeeMakers_Generators FROM game WHERE ID_game = " + ID_game + ";";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
-            return rs.getInt("Supreme");
+            return rs.getInt("Num_CoffeeMakers_Generators");
         } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find game Supreme in the database");
+            throw new PersistanceException("Couldn't find game Num_CoffeeMakers_Generators in the database");
         }
     }
 
     /**
-     * Obtiene la cantidad de mejoras Gold en la partida.
+     * Obtiene la cantidad de generadores takeAway en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Gold como un entero.
+     * @return Número de generadores de TakeAways como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public int getUpgradeGold(int ID_game) throws PersistanceException {
+    public int getNumTakeAwayGenerators(int ID_game) throws PersistanceException {
         try {
-            String query = "SELECT Upgrade_Gold FROM game WHERE ID_game = " + ID_game + ";";
+            String query = "SELECT Num_TakeAway_Generators FROM game WHERE ID_game = " + ID_game + ";";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
-            return rs.getInt("Upgrade_Gold");
+            return rs.getInt("Num_TakeAway_Generators");
         } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find game Upgrade_Gold in the database");
+            throw new PersistanceException("Couldn't find game Num_TakeAway_Generators in the database");
         }
     }
 
     /**
-     * Obtiene la cantidad de mejoras Deluxe en la partida.
+     * Obtiene la cantidad de mejoras del generador Beans en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Deluxe como un entero.
+     * @return Número de mejoras del generador Beans como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public int getUpgradeDeluxe(int ID_game) throws PersistanceException {
+    public int getUpgradeBeans(int ID_game) throws PersistanceException {
         try {
-            String query = "SELECT Upgrade_Deluxe FROM game WHERE ID_game = " + ID_game + ";";
+            String query = "SELECT Upgrade_Beans_Generators FROM game WHERE ID_game = " + ID_game + ";";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
-            return rs.getInt("Upgrade_Deluxe");
+            return rs.getInt("Upgrade_Beans_Generators");
         } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find game Upgrade_Deluxe in the database");
+            throw new PersistanceException("Couldn't find game Upgrade_Beans_Generators in the database");
         }
     }
 
     /**
-     * Obtiene la cantidad de mejoras Supreme en la partida.
+     * Obtiene la cantidad de mejoras del generador coffeeMaker en la partida.
      *
      * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Supreme como un entero.
+     * @return úmero de mejoras del generador coffeMaker como un entero.
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     @Override
-    public int getUpgradeSupreme(int ID_game) throws PersistanceException {
+    public int getUpgradeCoffeeMakers(int ID_game) throws PersistanceException {
         try {
-            String query = "SELECT Upgrade_Supreme FROM game WHERE ID_game = " + ID_game + ";";
+            String query = "SELECT Upgrade_CoffeeMakers_Generators FROM game WHERE ID_game = " + ID_game + ";";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
-            return rs.getInt("Upgrade_Supreme");
+            return rs.getInt("Upgrade_CoffeeMakers_Generators");
         } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find game Upgrade_Supreme in the database");
+            throw new PersistanceException("Couldn't find game Upgrade_CoffeeMakers_Generators in the database");
+        }
+    }
+
+    /**
+     * Obtiene la cantidad de mejoras del generador takeAway en la partida.
+     *
+     * @param ID_game Identificador único de la partida.
+     * @return Número de mejoras del generador takeAway como un entero.
+     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     */
+    @Override
+    public int getUpgradeTakeAway(int ID_game) throws PersistanceException {
+        try {
+            String query = "SELECT Upgrade_TakeAway_Generators FROM game WHERE ID_game = " + ID_game + ";";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            rs.next();
+            return rs.getInt("Upgrade_TakeAway_Generators");
+        } catch (SQLException e) {
+            throw new PersistanceException("Couldn't find game Upgrade_TakeAway_Generators in the database");
         }
     }
 
@@ -274,25 +297,6 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
-    /**
-     * Obtiene la cantidad de oro en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Cantidad de oro como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    @Override
-    public int getGold(int ID_game) throws PersistanceException {
-        try {
-            String query = "SELECT Gold FROM game WHERE ID_game = " + ID_game + ";";
-            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-            rs.next();
-            return rs.getInt("Gold");
-        } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find game Gold in the database");
-        }
-    }
-
     @Override
     public String getName(int ID_game) throws PersistanceException {
         try {
@@ -302,6 +306,22 @@ public class SQLGameDAO implements GameDAO {
             return rs.getString("Name_Game");
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game name in the database");
+        }
+    }
+  
+    public List<EntityGame> getGamesByUser(String user) throws PersistanceException {
+        try {
+            List<EntityGame> games = new ArrayList<>();
+            String query = "SELECT * FROM game WHERE username = '" + user + "';";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            while (rs.next()) {
+                games.add( new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
+                        , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
+                        , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played")));
+            }
+            return games;
+        } catch (SQLException e) {
+            throw new PersistanceException("Couldn't find games in the database");
         }
     }
 }

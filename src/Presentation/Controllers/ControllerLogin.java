@@ -14,8 +14,8 @@ public class ControllerLogin implements ActionListener {
     private final UserManager userManager;
     private final LoginView loginView;
 
-    public ControllerLogin(LoginView loginView) {
-        userManager = new UserManager();
+    public ControllerLogin(LoginView loginView, UserManager userManager) {
+        this.userManager = userManager;
         this.loginView = loginView;
         this.loginView.setController(this);
     }
@@ -67,7 +67,14 @@ public class ControllerLogin implements ActionListener {
                         showError("PASSWORD", "Incorrect password!");
                     } else {
                         System.out.println("LOGIN SUCCESSFUL");
-                        loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
+                        try{
+                            userManager.setUser(userEmail);
+                        }catch(BusinessException e){
+                            //TODO mostrar error de persistencia
+                        }
+                        //loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
+                        loginView.getApp().createSelectGame();
+                        loginView.getApp().showPanel("SelectGame");
                     }
                 }
             } else {
