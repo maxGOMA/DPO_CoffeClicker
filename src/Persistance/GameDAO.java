@@ -9,6 +9,7 @@ import Persistance.sql.SQLConnector;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -148,7 +149,6 @@ public interface GameDAO {
      */
     int getUpgradeClicker(int ID_game) throws PersistanceException;
 
-
     String getName(int ID_game) throws PersistanceException;
 
     int getFinished(String name) throws PersistanceException;
@@ -157,8 +157,10 @@ public interface GameDAO {
 
     List<EntityGame> getGamesByUser(String user) throws PersistanceException;
 
+    ArrayList<String> getUserFinishedGameNames(String user) throws PersistanceException;
+
     void updateGame(EntityGame game);
-}
+
 
 
 
