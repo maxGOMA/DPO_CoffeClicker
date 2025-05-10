@@ -14,6 +14,7 @@ public class GameView extends JPanel {
     public static final String BUY_BEANS_COMMAND = "BUY_BEANS_COMMAND";
     public static final String BUY_MAKER_COMMAND = "BUY_MAKER_COMMAND";
     public static final String BUY_TAKEAWAY_COMMAND = "BUY_TAKEAWAY_COMMAND";
+    public static final String SETTINGS_COMMAND = "SETTINGS_COMMAND";
 
     private final CoffeeClickerApp app;
 
@@ -191,7 +192,7 @@ public class GameView extends JPanel {
 
         // === ICON PANEL ===
         iconPanel = new JPanel();
-        iconPanel.setPreferredSize(new Dimension(100,400));
+        iconPanel.setPreferredSize(new Dimension(150,400));
         iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.Y_AXIS));
         iconPanel.setOpaque(false);
 
@@ -200,6 +201,7 @@ public class GameView extends JPanel {
         settingsButton.setBorderPainted(false);
         settingsButton.setContentAreaFilled(false);
         settingsButton.setFocusPainted(false);
+        settingsButton.setActionCommand(SETTINGS_COMMAND);
 
         stats = new ImageIcon(new ImageIcon("imgs/stats.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
         statsButton = new JButton(stats);
@@ -391,9 +393,14 @@ public class GameView extends JPanel {
     public void setController(ControllerGame controller) {
         //Asocio listener boton cafe
         coffeeButton.addActionListener(controller);
+        settingsButton.addActionListener(controller);
         //Asocio listeners botones comprar generador.
         for (JButton button : generators.values()) {
             button.addActionListener(controller);
         }
+    }
+
+    public CoffeeClickerApp getApp() {
+        return app;
     }
 }

@@ -4,6 +4,7 @@ package Persistance;
 //Guardaremos en estructuras "USER": user_name, password, email
 
 import Business.Entities.EntityGame;
+import Business.Entities.EntityUser;
 import Persistance.sql.SQLConnector;
 
 import java.sql.ResultSet;
@@ -55,6 +56,8 @@ public interface GameDAO {
      * @param userName El nombre del jugador al que pertenece el juego.
      */
     public void deleteGame(String name, String userName);
+
+    void deleteAllGamesByUser(EntityUser user);
 
     /**
      * Obtiene el identificador de una partida desde la base de datos.
@@ -148,10 +151,16 @@ public interface GameDAO {
 
     String getName(int ID_game) throws PersistanceException;
 
+    int getFinished(String name) throws PersistanceException;
+
+    void setFinished(String name);
+
     List<EntityGame> getGamesByUser(String user) throws PersistanceException;
 
     ArrayList<String> getUserFinishedGameNames(String user) throws PersistanceException;
-}
+
+    void updateGame(EntityGame game);
+
 
 
 

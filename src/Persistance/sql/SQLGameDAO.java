@@ -1,6 +1,7 @@
 package Persistance.sql;
 
 import Business.Entities.EntityGame;
+import Business.Entities.EntityUser;
 import Persistance.GameDAO;
 import Persistance.PersistanceException;
 
@@ -28,7 +29,7 @@ public class SQLGameDAO implements GameDAO {
             }
             return new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
                     , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
-                    , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"));
+                    , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"), rs.getInt("Finished"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
@@ -52,7 +53,7 @@ public class SQLGameDAO implements GameDAO {
             }
             return new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
                     , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
-                    , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"));
+                    , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"), rs.getInt("Finished"));
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
@@ -103,6 +104,11 @@ public class SQLGameDAO implements GameDAO {
      */
     public void deleteGame(String name, String userName) {
         String query = "DELETE FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
+        SQLConnector.getInstance().deleteQuery(query);
+    }
+
+    public void deleteAllGamesByUser(EntityUser user){
+        String query = "DELETE FROM game WHERE (username = '" + user.getUsername() + "');";
         SQLConnector.getInstance().deleteQuery(query);
     }
 
@@ -308,7 +314,26 @@ public class SQLGameDAO implements GameDAO {
             throw new PersistanceException("Couldn't find game name in the database");
         }
     }
-  
+
+    @Override
+    public int getFinished(String name) throws PersistanceException {
+        try {
+            String query = "SELECT Finished FROM game WHERE Name_Game = '" + name + "';";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            rs.next();
+            return rs.getInt("Finished");
+        } catch (SQLException e) {
+            throw new PersistanceException("Couldn't find is the game is finished in the database");
+        }
+    }
+
+    @Override
+    public void setFinished(String name){
+        String query = "UPDATE game SET Finished = 1 WHERE Name_Game = '" + name + "';";
+        SQLConnector.getInstance().insertQuery(query);
+    }
+
+    @Override
     public List<EntityGame> getGamesByUser(String user) throws PersistanceException {
         try {
             List<EntityGame> games = new ArrayList<>();
@@ -317,7 +342,7 @@ public class SQLGameDAO implements GameDAO {
             while (rs.next()) {
                 games.add( new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
                         , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
-                        , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played")));
+                        , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"), rs.getInt("Finished")));
             }
             return games;
         } catch (SQLException e) {
@@ -338,5 +363,18 @@ public class SQLGameDAO implements GameDAO {
             throw new PersistanceException("Can't access games information");
         }
         return games;
+  
+    public void updateGame(EntityGame game){
+        String query = "UPDATE game SET Num_Coffees = " + game.getCurrentNumberOfCoffees() +
+                ", Num_Beans_Generators = " + game.getNumGenerators("beans") +
+                ", Num_CoffeeMakers_Generators = " + game.getNumGenerators("coffeeMaker") +
+                ", Num_TakeAway_Generators = " + game.getNumGenerators("TakeAway") +
+                ", Upgrade_Beans_Generators = " + game.getUpgradeGenerators("beans") +
+                ", Upgrade_CoffeeMakers_Generators = " + game.getUpgradeGenerators("coffeeMaker") +
+                ", Upgrade_TakeAway_Generators = " + game.getUpgradeGenerators("TakeAway") +
+                ", Upgrade_Clicker = " + game.getClickerLevelUpgrade() +
+                ", Mins_Played = " + game.getMinutesPlayed() +
+                " WHERE Name_Game = '" + game.getName() + "';";
+        SQLConnector.getInstance().insertQuery(query);
     }
 }
