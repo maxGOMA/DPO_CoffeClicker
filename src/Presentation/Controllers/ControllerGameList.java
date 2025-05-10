@@ -18,12 +18,14 @@ public class ControllerGameList implements ActionListener {
     private GameManager gameManager;
     private GameListView view;
     private static String name;
+    private ControllerConfirmation controllerConfirmation;
 
     //variable de la view
 
-    public ControllerGameList(GameListView gameListView, GameManager gameManager) {
+    public ControllerGameList(GameListView gameListView, GameManager gameManager, ControllerConfirmation controllerConfirmation) {
         this.gameManager = gameManager;
         this.view = gameListView;
+        this.controllerConfirmation = controllerConfirmation;
         //this.view.setController();
         //view CUANDO SE CREE
     }
@@ -97,7 +99,7 @@ public class ControllerGameList implements ActionListener {
             view.paintGameSelected(name);
 
         }else if(command.equals("LOGOUT")){
-
+            ControllerLogOut.ViewBack("SelectGame");
             view.getApp().showPanel("Logout");
             System.out.println("LOGOUT");
 
@@ -110,6 +112,7 @@ public class ControllerGameList implements ActionListener {
                 //TODO mostrar error de persistencia
 
             }
+            controllerConfirmation.setGameName(name);
             view.getApp().createGameScreen();
             view.getApp().showPanel("GameView");
             System.out.println(command);

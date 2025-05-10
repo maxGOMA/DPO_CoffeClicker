@@ -12,10 +12,12 @@ import static Presentation.Views.NewGameView.showError;
 public class ControllerNewGame implements ActionListener {
     private NewGameView view;
     private GameManager gameManager;
+    private Boolean iscopy;
 
-    public ControllerNewGame(NewGameView view, GameManager gameManager) {
+    public ControllerNewGame(NewGameView view, GameManager gameManager, Boolean iscopy) {
         this.view = view;
         this.gameManager = gameManager;
+        this.iscopy = iscopy;
     }
 
     private String findName(String command){
@@ -43,8 +45,13 @@ public class ControllerNewGame implements ActionListener {
                     //error
                     showError("ENTER GAME NAME", "This game name is already in use.");
                 }else{
-                    gameManager.createNewGame(nameGame);
-                    view.getApp().createGameScreen();
+                    if(iscopy){
+                        gameManager.createNewGame(nameGame, iscopy);
+                        view.getApp().createGameScreen();
+                    }else{
+                        gameManager.createNewGame(nameGame, iscopy);
+                        view.getApp().createGameScreen();
+                    }
                     view.getApp().showPanel("GameView");
                 }
             }catch(BusinessException ex){

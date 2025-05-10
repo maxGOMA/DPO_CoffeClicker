@@ -110,6 +110,10 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
 
         }
+        else if(command.equals(GameView.SETTINGS_COMMAND)){
+            gameView.getApp().showPanel("Settings");
+            System.out.println(command);
+        }
 
 //        else if (command.equals("UpgradeteGenerator")) {
 //            String generatorType = ""; // = TODO identificar que generador me estan clicando?

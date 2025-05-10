@@ -23,7 +23,7 @@ public class GameListView extends JPanel{
     private static int height;
     private List<EntityGame> games;
     private final CoffeeClickerApp app;
-    private final HashMap<String, BackgroundPanel> panelsGames = new HashMap<>();
+    private static HashMap<String, BackgroundPanel> panelsGames = new HashMap<>();
     private Image backgroundImage;
 
     private JPanel centerPanel;
@@ -34,7 +34,7 @@ public class GameListView extends JPanel{
     private JPanel panelConfirmation;
     private JButton confirmButton;
     private JButton cancelButton;
-    private JPanel internPanel;
+    private static JPanel internPanel;
 
     public GameListView(CoffeeClickerApp app){
         this.app = app;
@@ -92,10 +92,12 @@ public class GameListView extends JPanel{
         internPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         for(EntityGame e : games){
-            JPanel aux = newButtonGame(e.getName());
-            aux.setAlignmentX(Component.CENTER_ALIGNMENT);
-            internPanel.add(Box.createVerticalStrut(20));
-            internPanel.add(aux);
+            if(e.getFinished() == 0) {
+                JPanel aux = newButtonGame(e.getName());
+                aux.setAlignmentX(Component.CENTER_ALIGNMENT);
+                internPanel.add(Box.createVerticalStrut(20));
+                internPanel.add(aux);
+            }
         }
 
         scrollPane = new JScrollPane(internPanel);
@@ -290,6 +292,11 @@ public class GameListView extends JPanel{
         add(centerPanel, BorderLayout.CENTER);
     }
 
+//    public static void updateCenterPanel() {
+//        internPanel.revalidate();
+//        internPanel.repaint();
+//    }
+
     public CoffeeClickerApp getApp() {
         return app;
     }
@@ -302,7 +309,7 @@ public class GameListView extends JPanel{
         return panelConfirmation;
     }
 
-    public void deleteGameSelectedView(String name) {
+    public static void deleteGameSelectedView(String name) {
         Component aux = internPanel.getComponent(0);
         for(Component c: internPanel.getComponents()){
             if(c instanceof JPanel){
@@ -397,18 +404,24 @@ public class GameListView extends JPanel{
                         if (((JButton) c).getActionCommand().contains(START)){
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/start.png")
                                     .getImage().getScaledInstance(50, 80, Image.SCALE_DEFAULT));
+                            ImageIcon startPressedIcon = new ImageIcon(new ImageIcon("imgs/start_pressed.png")
+                                    .getImage().getScaledInstance(50, 80, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), newIcon, newIcon);
+                            ControllerGameList.MouseListener(((JButton)c), startPressedIcon, newIcon);
                         }else if(((JButton) c).getActionCommand().contains(COPY)){
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/copy.png")
                                     .getImage().getScaledInstance(60, 70, Image.SCALE_DEFAULT));
+                            ImageIcon copyPressedIcon = new ImageIcon(new ImageIcon("imgs/copy_pressed.png")
+                                    .getImage().getScaledInstance(60, 70, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), newIcon, newIcon);
+                            ControllerGameList.MouseListener(((JButton)c), copyPressedIcon, newIcon);
                         }else if(((JButton) c).getActionCommand().contains(DELETE)){
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/delete.png")
                                     .getImage().getScaledInstance(65, 75, Image.SCALE_DEFAULT));
+                            ImageIcon deletePressedIcon = new ImageIcon(new ImageIcon("imgs/delete_pressed.png")
+                                    .getImage().getScaledInstance(65, 75, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), newIcon, newIcon);
+                            ControllerGameList.MouseListener(((JButton)c), deletePressedIcon, newIcon);
                         }
                     }else if(c instanceof JPanel){
                         for (Component component : ((JPanel)c).getComponents()) {

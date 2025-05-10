@@ -13,7 +13,6 @@ import java.util.HashMap;
 public class MainMenuView extends JPanel {
     public static final String VIEW_LOGIN = "VIEW_LOGIN";
     public static final String VIEW_REGISTER = "VIEW_REGISTER";
-    public static final String VIEW_LOGOUT = "VIEW_LOGOUT";
     public static final String VIEW_EXIT = "VIEW_EXIT";
     private final CoffeeClickerApp app;
     private final HashMap<String, JButton> buttons = new HashMap<>();
@@ -43,7 +42,6 @@ public class MainMenuView extends JPanel {
 
         JButton loginButton = newButton("LOGIN", VIEW_LOGIN);
         JButton registerButton = newButton("REGISTER", VIEW_REGISTER);
-        JButton logoutButton = newButton("LOGOUT", VIEW_LOGOUT);
         JButton exitButton = newButton("EXIT", VIEW_EXIT);
 
         ImageIcon headerIcon = new ImageIcon(new ImageIcon("imgs/header3.png")
@@ -57,8 +55,6 @@ public class MainMenuView extends JPanel {
         contentPane.add(loginButton);
         contentPane.add(Box.createVerticalStrut(10)); // Espaciado entre botones
         contentPane.add(registerButton);
-        contentPane.add(Box.createVerticalStrut(10)); // Espaciado entre botones
-        contentPane.add(logoutButton);
         contentPane.add(Box.createVerticalStrut(10)); // Espaciado entre botones
         contentPane.add(exitButton);
 
