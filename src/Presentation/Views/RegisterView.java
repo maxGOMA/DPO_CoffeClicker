@@ -53,11 +53,11 @@ public class RegisterView extends JPanel {
         askEmailPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(askEmailPanel);
         mainPanel.add(Box.createVerticalStrut(10));
-        JPanel askPasswordPanel = askInfo("PASSWORD");
+        JPanel askPasswordPanel = askInfoPassword("PASSWORD");
         askPasswordPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(askPasswordPanel);
         mainPanel.add(Box.createVerticalStrut(10));
-        JPanel askConfirmationPanel = askInfo("CONFIRM PASSWORD");
+        JPanel askConfirmationPanel = askInfoPassword("CONFIRM PASSWORD");
         askConfirmationPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(askConfirmationPanel);
         mainPanel.add(Box.createVerticalStrut(25));
@@ -129,6 +129,81 @@ public class RegisterView extends JPanel {
         textFields.put(text, textField);
 
         panel.add(textField);
+        frame.add(panel);
+        frame.setOpaque(false);
+        frame.setPreferredSize(new Dimension(308, 37));
+
+        frame.setAlignmentX(Component.LEFT_ALIGNMENT);
+        frame.setMaximumSize(new Dimension(308, 43));
+        frame.setMinimumSize(new Dimension(308, 43));
+
+        return frame;
+    }
+
+    public JPanel askInfoPassword(String text) {
+        JPanel infoBox = new JPanel();
+        infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
+        infoBox.setMaximumSize(new Dimension(308, 90));
+        infoBox.setPreferredSize(new Dimension(308, 90));
+        infoBox.setMinimumSize(new Dimension(308, 90));
+        infoBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel label = new JLabel(text + ":");
+        if (coffeeClickerFont != null) {
+            label.setFont(coffeeClickerFont.deriveFont(12f));
+        }
+        label.setForeground(Color.black);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel textBox = addTextboxPassword(text);
+
+        JLabel errorLabel = new JLabel(" ");
+        errorLabel.setForeground(Color.RED);
+        if (coffeeClickerFont != null) {
+            errorLabel.setFont(coffeeClickerFont.deriveFont(8f));
+        }
+        errorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        errorLabel.setVerticalAlignment(SwingConstants.TOP);
+        errorLabel.setMaximumSize(new Dimension(300, 25));
+        errorLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 0));
+
+        errorLabels.put(text, errorLabel);
+
+        infoBox.add(label);
+        infoBox.add(textBox);
+        infoBox.add(errorLabel);
+
+        return infoBox;
+    }
+
+    public JPanel addTextboxPassword(String text) {
+        JPanel frame = new JPanel();
+
+        ImageIcon textbox_img = new ImageIcon(new ImageIcon("imgs/textBox.png")
+                .getImage().getScaledInstance(308, 37, Image.SCALE_DEFAULT));
+
+        BackgroundPanel panel = new BackgroundPanel(textbox_img);
+        panel.setLayout(new GridBagLayout());
+        panel.setPreferredSize(new Dimension(308, 37));
+        panel.setMaximumSize(new Dimension(308, 37));
+        panel.setOpaque(false);
+
+        // Usar JPasswordField en lugar de JTextField
+        JPasswordField passwordField = new JPasswordField(21);
+        passwordField.setOpaque(false);
+        passwordField.setBorder(BorderFactory.createEmptyBorder());
+        passwordField.setForeground(new Color(127, 51, 0));
+
+        // Establecer el caracter a mostrar (por ejemplo, un punto)
+        passwordField.setEchoChar('*');  // Cambiar el carácter a un punto
+        if (coffeeClickerFont != null) {
+            passwordField.setFont(coffeeClickerFont.deriveFont(12f));
+        }
+        passwordField.setPreferredSize(new Dimension(300, 35));
+
+        textFields.put(text, passwordField);
+
+        panel.add(passwordField);
         frame.add(panel);
         frame.setOpaque(false);
         frame.setPreferredSize(new Dimension(308, 37));

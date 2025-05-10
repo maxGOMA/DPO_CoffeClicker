@@ -1,6 +1,7 @@
 package Business;
 
 import Business.Entities.EntityGame;
+import Business.Entities.EntityUser;
 import Persistance.GameDAO;
 import Persistance.GeneratorsDAO;
 import Persistance.PersistanceException;
@@ -62,14 +63,14 @@ public class GameManager {
         }
     }
 
-    public void createNewGame(String name) throws BusinessException{
-            try {
-                entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1);
-                gameDAO.setInfoGame(entityGame);
-                entityGame.setID(gameDAO.getIdGame(entityGame.getName(), userManager.getUser().getUsername()));
-            } catch (PersistanceException e) {
-                throw new BusinessException(e.getMessage());
-            }
+    public void createNewGame(String name, Boolean isCopy) throws BusinessException{
+        if(isCopy){
+            entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1, entityGame);
+            gameDAO.setInfoGame(entityGame);
+        }else{
+            entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1);
+            gameDAO.setInfoGame(entityGame);
+        }
     }
 
     public void endGame() {
@@ -79,6 +80,18 @@ public class GameManager {
 
     public void deleteGame(String name) {
         gameDAO.deleteGame(name, userManager.getUser().getUsername());
+    }
+
+    public void deleteAllGamesByUser() {
+        gameDAO.deleteAllGamesByUser(userManager.getUser());
+    }
+
+    public void setFinished(String name){
+        gameDAO.setFinished(name);
+    }
+
+    public void updateGame(){
+        gameDAO.updateGame(entityGame);
     }
 
 
