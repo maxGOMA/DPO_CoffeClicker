@@ -15,6 +15,7 @@ public class GameView extends JPanel {
     public static final String BUY_MAKER_COMMAND = "BUY_MAKER_COMMAND";
     public static final String BUY_TAKEAWAY_COMMAND = "BUY_TAKEAWAY_COMMAND";
     public static final String SETTINGS_COMMAND = "SETTINGS_COMMAND";
+    public static final String STATS_COMMAND = "STATS_COMMAND";
 
     private final CoffeeClickerApp app;
 
@@ -208,6 +209,7 @@ public class GameView extends JPanel {
         statsButton.setBorderPainted(false);
         statsButton.setContentAreaFilled(false);
         statsButton.setFocusPainted(false);
+        statsButton.setActionCommand(STATS_COMMAND);
 
         // Centrado
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -394,6 +396,7 @@ public class GameView extends JPanel {
         //Asocio listener boton cafe
         coffeeButton.addActionListener(controller);
         settingsButton.addActionListener(controller);
+        statsButton.addActionListener(controller);
         //Asocio listeners botones comprar generador.
         for (JButton button : generators.values()) {
             button.addActionListener(controller);

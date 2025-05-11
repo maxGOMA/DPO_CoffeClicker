@@ -2,12 +2,9 @@ package Presentation.Views;
 
 import Presentation.Controllers.ControllerConfirmation;
 import Presentation.Controllers.ControllerGameList;
-import Presentation.Controllers.ControllerLogOut;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
 public class ConfirmationView extends JPanel {
