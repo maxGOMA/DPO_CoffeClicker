@@ -8,5 +8,7 @@ public interface StatsDAO {
 
     void saveNewStats(int ID_game, double numCoffees, int minutesPlayed);
 
+    void deleteStats(int ID_game);
+
 }
 

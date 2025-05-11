@@ -33,4 +33,9 @@ public class StatManager {
     }
 
 
+    public void deleteStats(EntityGame game) {
+        statDAO.deleteStats(game.getID_Game());
+    }
+
+
 }

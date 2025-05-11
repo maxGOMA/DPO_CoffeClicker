@@ -69,7 +69,6 @@ public class UserManager {
     public void deleteAccount() {
         userDAO.deleteUser(user.getUsername());
         user = null;
-        //TODO supongo que borrar partidas y estadisticas usuario
     }
 
     public ArrayList<String> getAllUsernames() throws BusinessException {
