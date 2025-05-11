@@ -354,7 +354,7 @@ public class SQLGameDAO implements GameDAO {
     public ArrayList<String> getUserFinishedGameNames(String user) throws PersistanceException {
         ArrayList<String> games = new ArrayList<>();
         try {
-            String query = "SELECT * FROM game WHERE username = '" + user + "';";
+            String query = "SELECT * FROM game WHERE username = '" + user + "' AND Finished = 1;";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             while (rs.next()) {
                 games.add(rs.getString("Name_Game"));
@@ -363,8 +363,10 @@ public class SQLGameDAO implements GameDAO {
             throw new PersistanceException("Can't access games information");
         }
         return games;
-  
-    public void updateGame(EntityGame game){
+    }
+
+    @Override
+    public void updateGame(EntityGame game) {
         String query = "UPDATE game SET Num_Coffees = " + game.getCurrentNumberOfCoffees() +
                 ", Num_Beans_Generators = " + game.getNumGenerators("beans") +
                 ", Num_CoffeeMakers_Generators = " + game.getNumGenerators("coffeeMaker") +

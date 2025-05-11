@@ -1,9 +1,7 @@
 package Presentation.Controllers;
 
 import Business.GameManager;
-import Business.UserManager;
 import Presentation.Views.ConfirmationView;
-import Presentation.Views.LogOutView;
 import Presentation.Views.SettingsView;
 
 import java.awt.event.ActionEvent;

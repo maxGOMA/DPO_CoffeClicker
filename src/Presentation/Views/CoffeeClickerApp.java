@@ -1,6 +1,7 @@
 package Presentation.Views;
 
 import Business.GameManager;
+import Business.StatManager;
 import Business.UserManager;
 import Presentation.Controllers.*;
 import javax.swing.*;
@@ -11,12 +12,14 @@ public class CoffeeClickerApp extends JFrame {
     private final JPanel mainPanel;
     private UserManager userManager;
     private GameManager gameManager;
+    private StatManager statManager;
     private NewGameView newGame;
     private ControllerConfirmation controller_confirmation;
 
     public CoffeeClickerApp() {
         userManager = new UserManager();
         gameManager = new GameManager(userManager);
+        statManager = new StatManager();
 
         setTitle("Coffee Clicker G3");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,12 +54,19 @@ public class CoffeeClickerApp extends JFrame {
         ControllerSettings controllerSettings = new ControllerSettings(settingsView, gameManager, confirmationView, controller_confirmation);
         settingsView.setController(controllerSettings);
 
+        GraphView graphView = new GraphView(this);
+        ControllerStatistics controllerStatistics = new ControllerStatistics(statManager, userManager, gameManager, graphView);
+        graphView.setController(controllerStatistics);
+
+
         mainPanel.add(mainMenuView, "MainMenuView");
         mainPanel.add(login, "Login");
         mainPanel.add(register, "Register");
         mainPanel.add(logout, "Logout");
         mainPanel.add(confirmationView, "Confirmation");
         mainPanel.add(settingsView, "Settings");
+        mainPanel.add(graphView, "stats");
+
 
         add(mainPanel);
         setVisible(true);
@@ -86,6 +96,8 @@ public class CoffeeClickerApp extends JFrame {
     public void showPanel(String panelName) {
         cardLayout.show(mainPanel, panelName);
     }
+
+
 
     public static void main(String[] args) {
         new CoffeeClickerApp();

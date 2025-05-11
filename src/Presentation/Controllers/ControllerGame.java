@@ -13,7 +13,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
     private GameManager gameManager;
     private GameView gameView;
 
-    public ControllerGame(GameView gameView, GameManager gameManager) {
+    public ControllerGame (GameView gameView, GameManager gameManager) {
         this.gameManager = gameManager;
         this.gameView = gameView;
 
@@ -112,6 +112,10 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
         }
         else if(command.equals(GameView.SETTINGS_COMMAND)){
             gameView.getApp().showPanel("Settings");
+            System.out.println(command);
+        }
+        else if(command.equals(GameView.STATS_COMMAND)) {
+            gameView.getApp().showPanel("stats");
             System.out.println(command);
         }
 

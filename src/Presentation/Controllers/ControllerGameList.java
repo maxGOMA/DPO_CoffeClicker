@@ -48,6 +48,7 @@ public class ControllerGameList implements ActionListener {
         try {
             return gameManager.getGamesOfLoggedInUser();
         } catch (BusinessException e) {
+            System.out.println(e.getMessage());
             //TODO mostrar error de persistencia
         }
         return null;
@@ -83,7 +84,6 @@ public class ControllerGameList implements ActionListener {
                 game = gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
                 //TODO mostrar error de persistencia
-
             }
             // PASA AL NEW GAME CON LOS DATOS DE ESTE
             view.getApp().createNewGameView(game.getName());
@@ -107,7 +107,7 @@ public class ControllerGameList implements ActionListener {
             // COMIENZA EL JUEGO
             name = findName(command);
             try {
-                EntityGame game = gameManager.setGameFromPersistanceForLoggedInUser(name);
+                gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
                 //TODO mostrar error de persistencia
 
