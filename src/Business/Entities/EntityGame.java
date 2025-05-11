@@ -17,12 +17,13 @@ public class EntityGame {
     private int takeAwayLevelUpgrade;
     private int clickerLevelUpgrade;
     private int minutesPlayed;
+    private int finished;
 
     ArrayList<EntityGenerator> generators;
 
     //-----------Inicialización del juego----------------------------------
     //Si recupero la partida de la persistencia
-    public EntityGame(String name, int beansGenerators, int upgradeClicker, int upgradeTakeAway, int upgradeCoffeMaker, int upgradeBeans, int takeAwayGenerators, int coffeeMakersGenerators, Double num_Coffees, String username, int ID_Game,int minutesPlayed) {
+    public EntityGame(String name, int beansGenerators, int upgradeClicker, int upgradeTakeAway, int upgradeCoffeMaker, int upgradeBeans, int takeAwayGenerators, int coffeeMakersGenerators, Double num_Coffees, String username, int ID_Game,int minutesPlayed, int finished) {
         EntityGenerator generator;
         generators = new ArrayList();
 
@@ -42,6 +43,8 @@ public class EntityGame {
 
         this.numCoffees = num_Coffees;
         this.minutesPlayed = minutesPlayed;
+
+        this.finished = finished;
     }
 
     //Si se trata de una nueva partida.
@@ -63,6 +66,29 @@ public class EntityGame {
         minutesPlayed = 0;
 
         generators = new ArrayList<>();
+        finished = 0;
+    }
+
+    //Para copiar de un game ya creado
+    public EntityGame(String name, String username, int ID_Game, EntityGame copy){
+        this.name = name;
+        this.username = username;
+        this.ID_Game = ID_Game;
+
+        numBeansGenerators = copy.getNumGenerators("beans");
+        numCoffeeMakerGenerators = copy.getNumGenerators("coffeeMaker");
+        numTakeAwayGenerators = copy.getNumGenerators("TakeAway");
+
+        clickerLevelUpgrade = copy.getClickerLevelUpgrade();
+        takeAwayLevelUpgrade = copy.getUpgradeGenerators("TakeAway");
+        coffeMakerLevelUpgrade = copy.getUpgradeGenerators("coffeeMaker");
+        beansLevelUpgrade = copy.getUpgradeGenerators("beans");
+
+        numCoffees = copy.getCurrentNumberOfCoffees();
+        minutesPlayed = copy.getMinutesPlayed();
+
+        generators = copy.getGenerators();
+        finished = copy.getFinished();
     }
 
     public void activateGenerators(CoffeGenerationListener listener, ArrayList<Float> generatorsBaseProduction, ArrayList<Float> generatorsIntervalProduction) {
@@ -214,5 +240,13 @@ public class EntityGame {
 
     public double getCurrentNumberOfCoffees() {
         return numCoffees;
+    }
+
+    public int getFinished() {
+        return finished;
+    }
+
+    public ArrayList< EntityGenerator > getGenerators() {
+        return generators;
     }
 }

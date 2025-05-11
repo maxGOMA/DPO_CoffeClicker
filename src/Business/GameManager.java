@@ -1,6 +1,7 @@
 package Business;
 
 import Business.Entities.EntityGame;
+import Business.Entities.EntityUser;
 import Persistance.GameDAO;
 import Persistance.GeneratorsDAO;
 import Persistance.PersistanceException;
@@ -25,7 +26,7 @@ public class GameManager {
 
     //--------------------------Creación del juego-----------------------------------------------------
     //Modificado respecto santi -> BussinessException
-    public EntityGame getGameFromPersistance(String gameName) throws BusinessException {
+    public EntityGame setGameFromPersistanceForLoggedInUser(String gameName) throws BusinessException {
         try {
             entityGame = gameDAO.loadInfoGame(gameName, userManager.getUser().getUsername());
             return entityGame;
@@ -35,21 +36,37 @@ public class GameManager {
 
     }
 
-    public List<EntityGame> getGamesByUser() throws BusinessException {
-        GameDAO gameDao = new SQLGameDAO();
-        List< EntityGame > games;
+    public List<EntityGame> getGamesOfLoggedInUser() throws BusinessException {
         try{
             try{
-                games = gameDao.getGamesByUser(userManager.getUser().getUsername());
+                return gameDAO.getGamesByUser(userManager.getUser().getUsername());
             }catch (PersistanceException e) {
                 throw new BusinessException(e.getMessage());
             }
         }catch (NullPointerException e){
-            games = new ArrayList<>();
+            return new ArrayList<>();
+        }
+    }
+
+    public EntityGame returnGameFromUser (String gameName, String username) throws BusinessException {
+        try {
+            entityGame = gameDAO.loadInfoGame(gameName, username);
+            return entityGame;
+        } catch (PersistanceException e){
+            throw new BusinessException(e.getMessage());
         }
 
-        return games;
     }
+
+    public ArrayList<String> getUserFinishedGameNames(String username) throws BusinessException {
+        try {
+            return gameDAO.getUserFinishedGameNames(username);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
+
 
     public boolean gameNameAlreadyRegisteredByUser(String gameName) throws BusinessException {
         try {
@@ -62,14 +79,14 @@ public class GameManager {
         }
     }
 
-    public void createNewGame(String name) throws BusinessException{
-            try {
-                entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1);
-                gameDAO.setInfoGame(entityGame);
-                entityGame.setID(gameDAO.getIdGame(entityGame.getName(), userManager.getUser().getUsername()));
-            } catch (PersistanceException e) {
-                throw new BusinessException(e.getMessage());
-            }
+    public void createNewGame(String name, Boolean isCopy) throws BusinessException{
+        if(isCopy){
+            entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1, entityGame);
+            gameDAO.setInfoGame(entityGame);
+        }else{
+            entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1);
+            gameDAO.setInfoGame(entityGame);
+        }
     }
 
     public void endGame() {
@@ -79,6 +96,18 @@ public class GameManager {
 
     public void deleteGame(String name) {
         gameDAO.deleteGame(name, userManager.getUser().getUsername());
+    }
+
+    public void deleteAllGamesByUser() {
+        gameDAO.deleteAllGamesByUser(userManager.getUser());
+    }
+
+    public void setFinished(String name){
+        gameDAO.setFinished(name);
+    }
+
+    public void updateGame(){
+        gameDAO.updateGame(entityGame);
     }
 
 

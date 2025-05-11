@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Presentation.Views.LoginView;
 import Presentation.Views.MainMenuView;
 
 import java.awt.event.ActionEvent;
@@ -7,9 +8,11 @@ import java.awt.event.ActionListener;
 
 public class ControllerMainMenu implements ActionListener {
     private final MainMenuView mainMenuView;
+    private LoginView logInView;
 
-    public ControllerMainMenu(MainMenuView mainMenuView){
+    public ControllerMainMenu(MainMenuView mainMenuView, LoginView logInView){
         this.mainMenuView = mainMenuView;
+        this.logInView = logInView;
     }
 
     @Override
@@ -17,13 +20,12 @@ public class ControllerMainMenu implements ActionListener {
         String command = e.getActionCommand();
 
         if (command.equals(MainMenuView.VIEW_LOGIN)) {
+            logInView.clearFields();
+            logInView.clearErrorMessages();
             mainMenuView.getApp().showPanel("Login");
         }
         if (command.equals(MainMenuView.VIEW_REGISTER)) {
             mainMenuView.getApp().showPanel("Register");
-        }
-        if (command.equals(MainMenuView.VIEW_LOGOUT)) {
-            mainMenuView.getApp().showPanel("Logout");
         }
         if (command.equals(MainMenuView.VIEW_EXIT)) {
             System.exit(0);
