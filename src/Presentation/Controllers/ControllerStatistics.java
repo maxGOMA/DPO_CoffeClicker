@@ -82,20 +82,4 @@ public class ControllerStatistics implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-        GraphView graphView = new GraphView(new CoffeeClickerApp());
-        UserManager um = new UserManager();;
-        ControllerStatistics controllerStatistics = new ControllerStatistics(new StatManager(), um, new GameManager(um), graphView);
-        graphView.setController(controllerStatistics);
-
-        //Esto lo borrare
-        JFrame frame = new JFrame("GraphView Test");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
-        frame.add(graphView);
-        frame.setVisible(true);
-    }
-
-
-
 }

@@ -1,7 +1,6 @@
 package Presentation.Views;
 
 import Presentation.Controllers.ControllerGameList;
-import Presentation.Controllers.ControllerLogOut;
 import Presentation.Controllers.ControllerSettings;
 
 import javax.swing.*;
