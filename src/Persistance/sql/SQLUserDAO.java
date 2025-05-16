@@ -3,7 +3,9 @@ package Persistance.sql;
 import Business.Entities.EntityUser;
 import Persistance.PersistanceException;
 import Persistance.UserDAO;
+import Presentation.Views.PopUpErrorView;
 
+import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -100,10 +102,14 @@ public class SQLUserDAO implements UserDAO {
     public ArrayList<String> returnAllUsernamesRegistered() throws PersistanceException {
         ArrayList<String> usernames = new ArrayList<>();
         try {
-            String query = "SELECT * FROM users";
-            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-            while (rs.next()) {
-                usernames.add(rs.getString("username"));
+            try {
+                String query = "SELECT * FROM users";
+                ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+                while (rs.next()) {
+                    usernames.add(rs.getString("username"));
+                }
+            }catch(NullPointerException e){
+                throw new PersistanceException("Unable to connect to the database.");
             }
         } catch (SQLException e) {
             throw new PersistanceException("Can't access users information");
@@ -120,10 +126,14 @@ public class SQLUserDAO implements UserDAO {
     @Override
     public EntityUser getUserFromusername(String username) throws PersistanceException {
         try {
-            String query = "SELECT * FROM users WHERE username = '" + username + "';";
-            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-            rs.next();
-            return new EntityUser(rs.getString("username"), rs.getString("email"), rs.getString("password"));
+            try{
+                String query = "SELECT * FROM users WHERE username = '" + username + "';";
+                ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+                rs.next();
+                return new EntityUser(rs.getString("username"), rs.getString("email"), rs.getString("password"));
+            }catch(NullPointerException e){
+                throw new PersistanceException("Unable to connect to the database");
+            }
         } catch (SQLException e) {
             throw new PersistanceException("Couldn't find user in the database");
         }

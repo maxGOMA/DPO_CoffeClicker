@@ -3,7 +3,9 @@ package Presentation.Controllers;
 import Business.BusinessException;
 import Business.UserManager;
 import Presentation.Views.LoginView;
+import Presentation.Views.PopUpErrorView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -69,12 +71,11 @@ public class ControllerLogin implements ActionListener {
                         System.out.println("LOGIN SUCCESSFUL");
                         try{
                             userManager.setUser(userEmail);
+                            loginView.getApp().createSelectGame();
+                            loginView.getApp().showPanel("SelectGame");
                         }catch(BusinessException e){
-                            //TODO mostrar error de persistencia
+                            PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
                         }
-                        //loginView.getApp().showPanel("GameScreen"); // Cambia a la pantalla del juego
-                        loginView.getApp().createSelectGame();
-                        loginView.getApp().showPanel("SelectGame");
                     }
                 }
             } else {

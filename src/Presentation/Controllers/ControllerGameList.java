@@ -4,6 +4,7 @@ import Business.BusinessException;
 import Business.Entities.EntityGame;
 import Business.GameManager;
 import Presentation.Views.GameListView;
+import Presentation.Views.PopUpErrorView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -49,7 +50,7 @@ public class ControllerGameList implements ActionListener {
             return gameManager.getGamesOfLoggedInUser();
         } catch (BusinessException e) {
             System.out.println(e.getMessage());
-            //TODO mostrar error de persistencia
+            PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
         }
         return null;
     }
@@ -83,7 +84,7 @@ public class ControllerGameList implements ActionListener {
             try {
                 game = gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
-                //TODO mostrar error de persistencia
+                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
             // PASA AL NEW GAME CON LOS DATOS DE ESTE
             view.getApp().createNewGameView(game.getName());
@@ -109,8 +110,7 @@ public class ControllerGameList implements ActionListener {
             try {
                 gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
-                //TODO mostrar error de persistencia
-
+                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
             controllerConfirmation.setGameName(name);
             view.getApp().createGameScreen();
