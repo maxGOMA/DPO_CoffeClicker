@@ -5,7 +5,9 @@ import Business.CoffeGenerationListener;
 import Business.GameManager;
 import Persistance.PersistanceException;
 import Presentation.Views.GameView;
+import Presentation.Views.PopUpErrorView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,7 +36,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
         } catch (BusinessException e) {
             System.out.println(e.getMessage());
-            //TODO mostrar mensaje de error de persistencia.
+            PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
         }
     }
 
@@ -63,7 +65,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.showErrorMessage("You don't have enough coffees to buy another beans generator.");
                 }
             } catch (BusinessException exception) {
-                //TODO mostrar mensaje de error de persistencia.
+                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
 
         }
@@ -85,7 +87,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.showErrorMessage("You don't have enough coffees to buy another coffe maker generator.");
                 }
             } catch (BusinessException exception) {
-                //TODO mostrar mensaje de error de persistencia.
+                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
         }
 
@@ -106,7 +108,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.showErrorMessage("You don't have enough coffees to buy another coffe takeaway generator.");
                 }
             } catch (BusinessException exception) {
-                //TODO mostrar mensaje de error de persistencia.
+                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
 
         }

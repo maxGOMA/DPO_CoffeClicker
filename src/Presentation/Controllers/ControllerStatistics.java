@@ -5,8 +5,10 @@ import Business.BusinessException;
 import Business.GameManager;
 import Business.StatManager;
 import Business.UserManager;
+import Persistance.PersistanceException;
 import Presentation.Views.CoffeeClickerApp;
 import Presentation.Views.GraphView;
+import Presentation.Views.PopUpErrorView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,17 +23,20 @@ public class ControllerStatistics implements ActionListener {
 
     private String selectedUsername;
 
-    public ControllerStatistics(StatManager statManager, UserManager userManager, GameManager gameManager, GraphView graphView)  {
+    public ControllerStatistics(StatManager statManager, UserManager userManager, GameManager gameManager, GraphView graphView) throws BusinessException {
         this.statManager = statManager;
         this.userManager = userManager;
         this.gameManager = gameManager;
         this.graphView = graphView;
         this.graphView.setController(this);
-
-        initStatsView();
+        try {
+            initStatsView();
+        }catch(BusinessException e){
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public void initStatsView() {
+    public void initStatsView() throws BusinessException{
         ArrayList<String> usernames;
 
         try {
@@ -41,7 +46,7 @@ public class ControllerStatistics implements ActionListener {
                 graphView.showNoUsersRegisteredMessage();
             }
         } catch (BusinessException e) {
-            //Show persistance error
+            throw new BusinessException(e.getMessage());
         }
     }
 
@@ -65,7 +70,7 @@ public class ControllerStatistics implements ActionListener {
                     graphView.showGameSelectionComboBox();
                 }
             } catch (BusinessException excp){
-                //Error en persistencia
+                PopUpErrorView.showErrorPopup(null, excp.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
 
         } else if (command.equals(GraphView.GAME_SELECTED)) {
@@ -78,6 +83,7 @@ public class ControllerStatistics implements ActionListener {
                 }
             } catch (BusinessException excp){
                 //Error en persistencia
+                PopUpErrorView.showErrorPopup(null, excp.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
         }
     }
