@@ -45,13 +45,8 @@ public class ControllerNewGame implements ActionListener {
                     //error
                     showError("ENTER GAME NAME", "This game name is already in use.");
                 }else{
-                    if(iscopy){
-                        gameManager.createNewGame(nameGame, iscopy);
-                        view.getApp().createGameScreen();
-                    }else{
-                        gameManager.createNewGame(nameGame, iscopy);
-                        view.getApp().createGameScreen();
-                    }
+                    gameManager.createNewGame(nameGame, iscopy);
+                    view.getApp().createGameScreen();
                     view.getApp().showPanel("GameView");
                 }
             }catch(BusinessException ex){

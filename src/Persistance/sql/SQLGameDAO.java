@@ -316,20 +316,8 @@ public class SQLGameDAO implements GameDAO {
     }
 
     @Override
-    public int getFinished(String name) throws PersistanceException {
-        try {
-            String query = "SELECT Finished FROM game WHERE Name_Game = '" + name + "';";
-            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-            rs.next();
-            return rs.getInt("Finished");
-        } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find is the game is finished in the database");
-        }
-    }
-
-    @Override
-    public void setFinished(String name){
-        String query = "UPDATE game SET Finished = 1 WHERE Name_Game = '" + name + "';";
+    public void setFinished(String username, String gameName){
+        String query = "UPDATE game SET Finished = 1 WHERE (Name_Game = '" + gameName + "'AND username = '" + username + "');";
         SQLConnector.getInstance().insertQuery(query);
     }
 
@@ -367,6 +355,7 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public void updateGame(EntityGame game) {
+        System.out.println("Juego acabado! nombre: " + game.getName() + " minutes: " + game.getMinutesPlayed());
         String query = "UPDATE game SET Num_Coffees = " + game.getCurrentNumberOfCoffees() +
                 ", Num_Beans_Generators = " + game.getNumGenerators("beans") +
                 ", Num_CoffeeMakers_Generators = " + game.getNumGenerators("coffeeMaker") +

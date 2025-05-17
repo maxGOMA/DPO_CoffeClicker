@@ -22,5 +22,4 @@ public class EntityUser {
     public String getEmail() {
         return email;
     }
-
 }

@@ -151,9 +151,7 @@ public interface GameDAO {
 
     String getName(int ID_game) throws PersistanceException;
 
-    int getFinished(String name) throws PersistanceException;
-
-    void setFinished(String name);
+    void setFinished(String userName, String name);
 
     List<EntityGame> getGamesByUser(String user) throws PersistanceException;
 

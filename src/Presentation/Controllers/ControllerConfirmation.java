@@ -1,6 +1,7 @@
 package Presentation.Controllers;
 
 import Business.GameManager;
+import Business.StatManager;
 import Business.UserManager;
 import Presentation.Views.ConfirmationView;
 import Presentation.Views.GameListView;
@@ -11,21 +12,20 @@ import java.awt.event.ActionListener;
 
 public class ControllerConfirmation implements ActionListener {
     private UserManager userManager;
-    private ConfirmationView view;
     private final GameManager gameManager;
-    private String GameName;
+    private final StatManager statManager;
+
+    private ConfirmationView view;
+
     private String ViewBack;
     private GameListView gameListView;
 
-    public ControllerConfirmation (UserManager userManager, ConfirmationView view, GameManager gameManager){
+    public ControllerConfirmation (UserManager userManager, ConfirmationView view, GameManager gameManager, StatManager statManager){
         this.userManager = userManager;
         this.view = view;
         this.gameManager = gameManager;
+        this.statManager = statManager;
         this.gameListView = gameListView;
-    }
-
-    public void setGameName(String gameName) {
-        GameName = gameName;
     }
 
     public void ViewBack(String ViewBack){
@@ -47,9 +47,10 @@ public class ControllerConfirmation implements ActionListener {
                System.out.println(command + " ACCOUNT");
            }else if(aux.getText().contains("game")){
                //FINALIZAR GAME
-               gameManager.updateGame();
-               gameManager.setFinished(GameName);
-               GameListView.deleteGameSelectedView(GameName);
+               statManager.stopStatsGeneration();
+               gameManager.finishCurrentGame();
+               gameManager.endAndUpdateGame();
+               GameListView.deleteGameSelectedView(gameManager.getCurrentGame().getName());
                view.getApp().showPanel("SelectGame");
                System.out.println(command + " GAME");
            }

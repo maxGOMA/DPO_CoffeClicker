@@ -70,7 +70,7 @@ public class EntityGame {
     }
 
     //Para copiar de un game ya creado
-    public EntityGame(String name, String username, int ID_Game, EntityGame copy){
+    public EntityGame(String name, String username, int ID_Game, EntityGame copy) {
         this.name = name;
         this.username = username;
         this.ID_Game = ID_Game;
@@ -120,6 +120,10 @@ public class EntityGame {
 
     public void setID(int ID) {
         ID_Game = ID;
+    }
+
+    public synchronized void incrementMinutePlayed() {
+        minutesPlayed++;
     }
 
     //-------------Funciones generación de cafes------------------------------

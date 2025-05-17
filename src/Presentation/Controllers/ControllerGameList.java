@@ -18,14 +18,12 @@ public class ControllerGameList implements ActionListener {
     private GameManager gameManager;
     private GameListView view;
     private static String name;
-    private ControllerConfirmation controllerConfirmation;
 
     //variable de la view
 
     public ControllerGameList(GameListView gameListView, GameManager gameManager, ControllerConfirmation controllerConfirmation) {
         this.gameManager = gameManager;
         this.view = gameListView;
-        this.controllerConfirmation = controllerConfirmation;
         //this.view.setController();
         //view CUANDO SE CREE
     }
@@ -90,8 +88,7 @@ public class ControllerGameList implements ActionListener {
             view.getApp().showPanel("NewGame");
             System.out.println(command);
 
-        }else if(command.contains("DELETE")){
-
+        } else if(command.contains("DELETE")) {
             System.out.println(command);
             name = findName(command);
             view.getnewGameButton().setVisible(false);
@@ -107,12 +104,12 @@ public class ControllerGameList implements ActionListener {
             // COMIENZA EL JUEGO
             name = findName(command);
             try {
+                System.out.println("name: " + name);
                 gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
                 //TODO mostrar error de persistencia
 
             }
-            controllerConfirmation.setGameName(name);
             view.getApp().createGameScreen();
             view.getApp().showPanel("GameView");
             System.out.println(command);

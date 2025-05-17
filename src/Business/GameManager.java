@@ -36,6 +36,10 @@ public class GameManager {
 
     }
 
+    public EntityGame getCurrentGame() {
+        return entityGame;
+    }
+
     public List<EntityGame> getGamesOfLoggedInUser() throws BusinessException {
         try{
             try{
@@ -50,8 +54,8 @@ public class GameManager {
 
     public EntityGame returnGameFromUser (String gameName, String username) throws BusinessException {
         try {
-            entityGame = gameDAO.loadInfoGame(gameName, username);
-            return entityGame;
+
+            return gameDAO.loadInfoGame(gameName, username);
         } catch (PersistanceException e){
             throw new BusinessException(e.getMessage());
         }
@@ -80,18 +84,20 @@ public class GameManager {
     }
 
     public void createNewGame(String name, Boolean isCopy) throws BusinessException{
-        if(isCopy){
-            entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1, entityGame);
-            gameDAO.setInfoGame(entityGame);
-        }else{
-            entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1);
-            gameDAO.setInfoGame(entityGame);
+        try {
+            if(isCopy){
+                entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1, entityGame);
+                gameDAO.setInfoGame (entityGame);
+                entityGame.setID (gameDAO.getIdGame(entityGame.getName(), userManager.getUser().getUsername()));
+            }else{
+                entityGame = new EntityGame(name, userManager.getUser().getUsername(), -1);
+                gameDAO.setInfoGame (entityGame);
+                entityGame.setID (gameDAO.getIdGame(entityGame.getName(), userManager.getUser().getUsername()));
+            }
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
         }
-    }
 
-    public void endGame() {
-        entityGame.stopGenerators();
-        //TODO añadir todo lo de guardar en la persistencia los datos.
     }
 
     public void deleteGame(String name) {
@@ -102,11 +108,17 @@ public class GameManager {
         gameDAO.deleteAllGamesByUser(userManager.getUser());
     }
 
-    public void setFinished(String name){
-        gameDAO.setFinished(name);
+    public void finishCurrentGame(){
+        System.out.println("Finish current game " + entityGame.getName());
+        gameDAO.setFinished(userManager.getUser().getUsername(), entityGame.getName());
     }
 
-    public void updateGame(){
+    public void endAndUpdateGame() {
+        entityGame.stopGenerators();
+        gameDAO.updateGame(entityGame);
+    }
+
+    public void updateGame() {
         gameDAO.updateGame(entityGame);
     }
 
