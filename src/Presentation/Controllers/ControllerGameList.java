@@ -74,7 +74,7 @@ public class ControllerGameList implements ActionListener {
 
         }else if(command.equals("NEWGAME")){
             //PANTALLA NEW GAME
-            view.getApp().createNewGameView(null);
+            view.getApp().createNewGameView(null, view);
             view.getApp().showPanel("NewGame");
             System.out.println(command);
 
@@ -87,7 +87,7 @@ public class ControllerGameList implements ActionListener {
                 PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
             // PASA AL NEW GAME CON LOS DATOS DE ESTE
-            view.getApp().createNewGameView(game.getName());
+            view.getApp().createNewGameView(game.getName(), view);
             view.getApp().showPanel("NewGame");
             System.out.println(command);
 

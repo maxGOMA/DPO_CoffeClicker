@@ -77,9 +77,9 @@ public class CoffeeClickerApp extends JFrame {
         }
     }
 
-    public void createNewGameView(String name){
+    public void createNewGameView(String name, GameListView gameListView){
         newGame = new NewGameView(this, name);
-        ControllerNewGame controller_newgame = new ControllerNewGame(newGame, gameManager, (name != null));
+        ControllerNewGame controller_newgame = new ControllerNewGame(newGame, gameManager, (name != null), gameListView, controller_confirmation);
         newGame.setController(controller_newgame);
         mainPanel.add(newGame, "NewGame");
     }

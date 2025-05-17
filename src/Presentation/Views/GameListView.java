@@ -451,4 +451,11 @@ public class GameListView extends JPanel{
             }
         }
     }
+
+    public void setComponentInterPanel(String name){
+        JPanel aux = newButtonGame(name);
+        aux.setAlignmentX(Component.CENTER_ALIGNMENT);
+        internPanel.add(Box.createVerticalStrut(20));
+        internPanel.add(aux);
+    }
 }
