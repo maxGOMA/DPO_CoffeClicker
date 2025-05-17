@@ -79,7 +79,7 @@ public class UserManager {
         }
     }
 
-    public EntityUser getUser() {
-        return user;
+    public String getCurrentUser() {
+        return user.getUsername();
     }
 }

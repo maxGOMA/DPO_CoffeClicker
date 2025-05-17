@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
 import Business.GameManager;
 import Business.StatManager;
 import Business.UserManager;
@@ -41,10 +42,15 @@ public class ControllerConfirmation implements ActionListener {
            JLabel aux = (JLabel) view.getPanel().getComponent(5);
            if(aux.getText().contains("account")){
                 //BORRAR CUENTA
-               gameManager.deleteAllGamesByUser();
-               userManager.deleteAccount();
-               view.getApp().showPanel("MainMenuView");
-               System.out.println(command + " ACCOUNT");
+               try {
+                   gameManager.deleteAllGamesByUser();
+                   statManager.deleteAllStatsFromUser(gameManager.getUserFinishedGameIds(userManager.getCurrentUser()));
+                   userManager.deleteAccount();
+                   view.getApp().showPanel("MainMenuView");
+                   System.out.println(command + " ACCOUNT");
+               } catch (BusinessException ex) {
+                   //TODO MOSTRAR ERROR DE PERSISTENCIA
+               }
            }else if(aux.getText().contains("game")){
                //FINALIZAR GAME
                statManager.stopStatsGeneration();

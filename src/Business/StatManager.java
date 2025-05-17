@@ -45,9 +45,15 @@ public class StatManager {
         }
     }
 
+    public void deleteAllStatsFromUser(ArrayList<Integer> gamesID) {
+        for (Integer gameID: gamesID) {
+            statDAO.deleteStats(gameID);
+        }
+    }
 
-    public void deleteStats(EntityGame game) {
-        statDAO.deleteStats(game.getID_Game());
+
+    public void deleteStatsFromGame(int gameID) {
+        statDAO.deleteStats(gameID);
     }
 
 }

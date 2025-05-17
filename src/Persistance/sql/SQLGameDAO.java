@@ -91,6 +91,7 @@ public class SQLGameDAO implements GameDAO {
      *
      * @param ID_game El identificador único del juego que se desea eliminar de la base de datos.
      */
+    @Override
     public void deleteGame(int ID_game){
         String query = "DELETE FROM game WHERE ID_game = " + ID_game + ";";
         SQLConnector.getInstance().deleteQuery(query);
@@ -102,13 +103,15 @@ public class SQLGameDAO implements GameDAO {
      * @param name El nombre del juego que se desea eliminar.
      * @param userName El nombre del jugador al que pertenece el juego.
      */
+    @Override
     public void deleteGame(String name, String userName) {
         String query = "DELETE FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
         SQLConnector.getInstance().deleteQuery(query);
     }
 
-    public void deleteAllGamesByUser(EntityUser user){
-        String query = "DELETE FROM game WHERE (username = '" + user.getUsername() + "');";
+    @Override
+    public void deleteAllGamesByUser(String username){
+        String query = "DELETE FROM game WHERE (username = '" + username + "');";
         SQLConnector.getInstance().deleteQuery(query);
     }
 
@@ -351,6 +354,21 @@ public class SQLGameDAO implements GameDAO {
             throw new PersistanceException("Can't access games information");
         }
         return games;
+    }
+
+    @Override
+    public ArrayList<Integer> getUserFinishedGameIDs(String user) throws PersistanceException {
+        ArrayList<Integer> gamesIds = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM game WHERE username = '" + user + "' AND Finished = 1;";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            while (rs.next()) {
+                gamesIds.add(rs.getInt("Game_ID"));
+            }
+        } catch (SQLException e) {
+            throw new PersistanceException("Can't access games information");
+        }
+        return gamesIds;
     }
 
     @Override

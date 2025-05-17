@@ -3,6 +3,7 @@ package Presentation.Controllers;
 import Business.BusinessException;
 import Business.Entities.EntityGame;
 import Business.GameManager;
+import Business.StatManager;
 import Presentation.Views.GameListView;
 
 import javax.swing.*;
@@ -16,13 +17,15 @@ import static Presentation.Views.GameListView.NEW_GAME;
 
 public class ControllerGameList implements ActionListener {
     private GameManager gameManager;
+    private StatManager statManager;
     private GameListView view;
     private static String name;
 
     //variable de la view
 
-    public ControllerGameList(GameListView gameListView, GameManager gameManager, ControllerConfirmation controllerConfirmation) {
+    public ControllerGameList(GameListView gameListView, GameManager gameManager, ControllerConfirmation controllerConfirmation, StatManager statManager) {
         this.gameManager = gameManager;
+        this.statManager = statManager;
         this.view = gameListView;
         //this.view.setController();
         //view CUANDO SE CREE
@@ -56,12 +59,16 @@ public class ControllerGameList implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if(command.equals("CONFIRM_DELETE")){
-            System.out.println(command);
-            gameManager.deleteGame(name);
-            view.getPanelConfirmation().setVisible(false);
-            view.getnewGameButton().setVisible(true);
-            view.deleteGameSelectedView(name);
-
+            try {
+                System.out.println(command);
+                statManager.deleteStatsFromGame(gameManager.getIDFromGameName(name));
+                gameManager.deleteGame(name);
+                view.getPanelConfirmation().setVisible(false);
+                view.getnewGameButton().setVisible(true);
+                view.deleteGameSelectedView(name);
+            } catch (BusinessException ex) {
+                //TODO lanzar persistance exception
+            }
         }else if(command.equals("CANCEL")){
 
             System.out.println(command);
