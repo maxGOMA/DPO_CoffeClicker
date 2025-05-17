@@ -4,7 +4,9 @@ import Business.Entities.EntityGame;
 import Business.Entities.EntityUser;
 import Persistance.GameDAO;
 import Persistance.PersistanceException;
+import Presentation.Views.PopUpErrorView;
 
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

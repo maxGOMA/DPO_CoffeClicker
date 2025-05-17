@@ -1,5 +1,6 @@
 package Persistance.sql;
 
+import Business.BusinessException;
 import Persistance.JsonDao;
 import Persistance.impl.JsonConfigDAO;
 
@@ -124,11 +125,15 @@ public class SQLConnector {
      * @param query String representation of the query to execute.
      * @return The results of the selection.
      */
-    public ResultSet selectQuery(String query){
+    public ResultSet selectQuery(String query) throws NullPointerException{
         ResultSet rs = null;
         try {
-            Statement s = conn.createStatement();
-            rs = s.executeQuery(query);
+            try{
+                Statement s = conn.createStatement();
+                rs = s.executeQuery(query);
+            }catch(NullPointerException e){
+                System.err.println("Error in selectQuery -> cant connect with database");
+            }
         } catch (SQLException e) {
             System.err.println(query);
             System.err.println("Problem when selecting data --> " + e.getSQLState() + " (" + e.getMessage() + ")");

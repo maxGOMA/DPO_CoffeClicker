@@ -2,6 +2,7 @@ package Presentation.Controllers;
 
 import Business.BusinessException;
 import Business.GameManager;
+import Presentation.Views.GameListView;
 import Presentation.Views.NewGameView;
 
 import java.awt.event.ActionEvent;
@@ -13,11 +14,15 @@ public class ControllerNewGame implements ActionListener {
     private NewGameView view;
     private GameManager gameManager;
     private Boolean iscopy;
+    private GameListView gameListView;
+    private ControllerConfirmation controllerConfirmation;
 
-    public ControllerNewGame(NewGameView view, GameManager gameManager, Boolean iscopy) {
+    public ControllerNewGame(NewGameView view, GameManager gameManager, Boolean iscopy, GameListView gameListView, ControllerConfirmation controllerConfirmation) {
         this.view = view;
         this.gameManager = gameManager;
         this.iscopy = iscopy;
+        this.gameListView = gameListView;
+        this.controllerConfirmation = controllerConfirmation;
     }
 
     private String findName(String command){
@@ -44,9 +49,11 @@ public class ControllerNewGame implements ActionListener {
                 if(gameManager.gameNameAlreadyRegisteredByUser(nameGame)){
                     //error
                     showError("ENTER GAME NAME", "This game name is already in use.");
-                }else{
+                } else {
+                    controllerConfirmation.setGameName(nameGame);
                     gameManager.createNewGame(nameGame, iscopy);
                     view.getApp().createGameScreen();
+                    gameListView.setComponentInterPanel(nameGame);
                     view.getApp().showPanel("GameView");
                 }
             }catch(BusinessException ex){

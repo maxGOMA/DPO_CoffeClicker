@@ -63,7 +63,6 @@ public class UserManager {
 
     public void logOut() {
         user = null;
-        //TODO supongo borrar y guardar partida
     }
 
     public void deleteAccount() {

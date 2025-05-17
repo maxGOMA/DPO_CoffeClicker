@@ -1,5 +1,6 @@
 package Presentation.Views;
 
+import Business.BusinessException;
 import Business.GameManager;
 import Business.StatManager;
 import Business.UserManager;
@@ -16,59 +17,63 @@ public class CoffeeClickerApp extends JFrame {
     private NewGameView newGame;
     private ControllerConfirmation controller_confirmation;
 
-    public CoffeeClickerApp() {
-        userManager = new UserManager();
-        gameManager = new GameManager(userManager);
-        statManager = new StatManager();
+    public CoffeeClickerApp() throws BusinessException{
+        try {
+            userManager = new UserManager();
+            gameManager = new GameManager(userManager);
+            statManager = new StatManager();
 
-        setTitle("Coffee Clicker G3");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1350, 1080);
-        setLocationRelativeTo(null);
-        setIconImage(new ImageIcon("imgs/cafe.png").getImage());
+            setTitle("Coffee Clicker G3");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(1350, 1080);
+            setLocationRelativeTo(null);
+            setIconImage(new ImageIcon("imgs/cafe.png").getImage());
 
-        cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+            cardLayout = new CardLayout();
+            mainPanel = new JPanel(cardLayout);
 
-        LoginView login = new LoginView(this);
-        ControllerLogin controller_login = new ControllerLogin(login, userManager);
-        login.setController(controller_login);
+            LoginView login = new LoginView(this);
+            ControllerLogin controller_login = new ControllerLogin(login, userManager);
+            login.setController(controller_login);
 
-        MainMenuView mainMenuView = new MainMenuView(this);
-        ControllerMainMenu controller_main_menu = new ControllerMainMenu(mainMenuView, login);
-        mainMenuView.setController(controller_main_menu);
+            MainMenuView mainMenuView = new MainMenuView(this);
+            ControllerMainMenu controller_main_menu = new ControllerMainMenu(mainMenuView, login);
+            mainMenuView.setController(controller_main_menu);
 
-        RegisterView register = new RegisterView(this);
-        ControllerRegister controller_register = new ControllerRegister(register, userManager);
-        register.setController(controller_register);
+            RegisterView register = new RegisterView(this);
+            ControllerRegister controller_register = new ControllerRegister(register, userManager);
+            register.setController(controller_register);
 
-        ConfirmationView confirmationView = new ConfirmationView(this);
-        controller_confirmation = new ControllerConfirmation(userManager, confirmationView, gameManager, statManager);
-        confirmationView.setController(controller_confirmation);
+            ConfirmationView confirmationView = new ConfirmationView(this);
+            controller_confirmation = new ControllerConfirmation(userManager, confirmationView, gameManager, statManager);
+            confirmationView.setController(controller_confirmation);
 
-        LogOutView logout = new LogOutView(this);
-        ControllerLogOut controller_logout = new ControllerLogOut(logout, userManager, confirmationView, controller_confirmation);
-        logout.setController(controller_logout);
-
-        SettingsView settingsView = new SettingsView(this);
-        ControllerSettings controllerSettings = new ControllerSettings(settingsView, gameManager, statManager, confirmationView, controller_confirmation);
-        settingsView.setController(controllerSettings);
+            LogOutView logout = new LogOutView(this);
+            ControllerLogOut controller_logout = new ControllerLogOut(logout, userManager, confirmationView, controller_confirmation);
+            logout.setController(controller_logout);
 
 
-        mainPanel.add(mainMenuView, "MainMenuView");
-        mainPanel.add(login, "Login");
-        mainPanel.add(register, "Register");
-        mainPanel.add(logout, "Logout");
-        mainPanel.add(confirmationView, "Confirmation");
-        mainPanel.add(settingsView, "Settings");
+            SettingsView settingsView = new SettingsView(this);
+            ControllerSettings controllerSettings = new ControllerSettings(settingsView, gameManager, statManager, confirmationView, controller_confirmation);
+            settingsView.setController(controllerSettings);
 
-        add(mainPanel);
-        setVisible(true);
+            mainPanel.add(mainMenuView, "MainMenuView");
+            mainPanel.add(login, "Login");
+            mainPanel.add(register, "Register");
+            mainPanel.add(logout, "Logout");
+            mainPanel.add(confirmationView, "Confirmation");
+            mainPanel.add(settingsView, "Settings");
+
+            add(mainPanel);
+            setVisible(true);
+        }catch(BusinessException e){
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public void createNewGameView(String name){
+    public void createNewGameView(String name, GameListView gameListView){
         newGame = new NewGameView(this, name);
-        ControllerNewGame controller_newgame = new ControllerNewGame(newGame, gameManager, (name != null));
+        ControllerNewGame controller_newgame = new ControllerNewGame(newGame, gameManager, (name != null), gameListView, controller_confirmation);
         newGame.setController(controller_newgame);
         mainPanel.add(newGame, "NewGame");
     }
@@ -93,7 +98,6 @@ public class CoffeeClickerApp extends JFrame {
         graphView.setController(controllerStatistics);
         mainPanel.add(graphView, "stats");
     }
-
 
     public void showPanel(String panelName) { cardLayout.show(mainPanel, panelName);}
 
