@@ -227,9 +227,13 @@ public class GameView extends JPanel {
             generators.put(keys[i], generatorPanel);
             generatorsPanel.add(generatorPanel);
         }
+
+        generatorsContainer.add(generatorsInfoPanel, BorderLayout.NORTH);
+        generatorsContainer.add(generatorsPanel, BorderLayout.CENTER);
+
         gbc.gridy = 5;
         gbc.weighty = 0.46;
-        rightPanel.add(generatorsPanel, gbc);
+        rightPanel.add(generatorsContainer, gbc);
 
         JPanel emptyPanel2 = new JPanel();
         emptyPanel2.setOpaque(false);
