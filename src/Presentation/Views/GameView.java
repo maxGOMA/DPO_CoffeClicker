@@ -232,7 +232,7 @@ public class GameView extends JPanel {
         generatorsContainer.add(generatorsPanel, BorderLayout.CENTER);
 
         gbc.gridy = 5;
-        gbc.weighty = 0.46;
+        gbc.weighty = 0.5;
         rightPanel.add(generatorsContainer, gbc);
 
         JPanel emptyPanel2 = new JPanel();
