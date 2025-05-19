@@ -336,7 +336,7 @@ public class GameView extends JPanel {
         // Generator buttons
         for (GeneratorPanel gen : generators.values()) {
             gen.setPreferredSize(new Dimension((int) (125 * scale), (int) (81 * scale)));
-            gen.resizeFont((float) (16 * scale));
+            gen.resizeFont((float) (14 * scale));
         }
 
         settings = new ImageIcon(new ImageIcon("imgs/cog.png").getImage().getScaledInstance((int) (scale * 100), (int) (scale * 100), Image.SCALE_DEFAULT));

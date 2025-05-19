@@ -72,9 +72,9 @@ public class GeneratorPanel extends JPanel {
         priceCardLabel.setOpaque(false);
 
         overlayTextLabel = new JLabel("400", SwingConstants.CENTER);
-        overlayTextLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 12));
+        overlayTextLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 10));
         overlayTextLabel.setForeground(new Color(102, 51, 0));
-        overlayTextLabel.setAlignmentX(0.7f);
+        overlayTextLabel.setAlignmentX(0.6f);
         overlayTextLabel.setAlignmentY(0.9f); // Subido para centrarse mejor
         overlayTextLabel.setOpaque(false);
 
