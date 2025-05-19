@@ -202,6 +202,9 @@ public class GameView extends JPanel {
             JOptionPane.showMessageDialog(this, "Información sobre generadores.", "Info", JOptionPane.INFORMATION_MESSAGE);
         });
 
+        JPanel generatorsInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        generatorsInfoPanel.setOpaque(false);
+        generatorsInfoPanel.add(generatorsInfoButton);
 
         JPanel generatorsPanel = new JPanel(new GridLayout(1, 3, 10, 0));
         generatorsPanel.setOpaque(false);
@@ -325,7 +328,7 @@ public class GameView extends JPanel {
         cpsLabel.setFont(cpsLabel.getFont().deriveFont((float) (24 * scale)));
 
         // Total coffee label
-        totalCoffeeLabel.setFont(totalCoffeeLabel.getFont().deriveFont((float) (28 * scale)));
+        totalCoffeeLabel.setFont(totalCoffeeLabel.getFont().deriveFont((float) (32 * scale)));
 
         // Upgrade buttons
         for (UpgradePanel upgrade : upgrades.values()) {
