@@ -92,7 +92,7 @@ class UpgradePanel extends JPanel {
         iconLabel.setBorder(BorderFactory.createEmptyBorder(14, 10, 14, 10));
         add(iconLabel, BorderLayout.WEST);
 
-        priceLabel = new JLabel(String.format("%.2f", price));
+        priceLabel = new JLabel(formatPrice(price));
         priceLabel.setForeground(Color.BLACK);
         priceLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 8));
         priceLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -177,6 +177,15 @@ class UpgradePanel extends JPanel {
         return new ImageIcon(path).getImage();
     }
 
+    private String formatPrice(double price) {
+        String[] suffixes = {"", "K", "M", "B", "T"};
+        int index = 0;
+        while (price >= 1000 && index < suffixes.length - 1) {
+            price /= 1000.0;
+            index++;
+        }
+        return String.format("%.2f%s", price, suffixes[index]);
+    }
 
     public void addActionListener(ActionListener listener) {
         listeners.add(listener);

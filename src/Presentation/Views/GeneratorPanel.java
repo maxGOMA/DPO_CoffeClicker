@@ -72,7 +72,7 @@ public class GeneratorPanel extends JPanel {
         priceCardLabel.setOpaque(false);
 
         overlayTextLabel = new JLabel("400", SwingConstants.CENTER);
-        overlayTextLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 14));
+        overlayTextLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 12));
         overlayTextLabel.setForeground(new Color(102, 51, 0));
         overlayTextLabel.setAlignmentX(0.7f);
         overlayTextLabel.setAlignmentY(0.9f); // Subido para centrarse mejor
@@ -127,7 +127,12 @@ public class GeneratorPanel extends JPanel {
     }
 
     public void updatePrice(String text) {
-        overlayTextLabel.setText(text);
+        try {
+            double value = Double.parseDouble(text);
+            overlayTextLabel.setText(formatPrice(value));
+        } catch (NumberFormatException e) {
+            overlayTextLabel.setText(text);
+        }
     }
 
     public void setImageIcon(Icon icon) {
@@ -139,6 +144,17 @@ public class GeneratorPanel extends JPanel {
         levelLabel.setFont(levelLabel.getFont().deriveFont(size));
         overlayTextLabel.setFont(overlayTextLabel.getFont().deriveFont(size));
     }
+
+    private String formatPrice(double price) {
+        String[] suffixes = {"", "K", "M", "B", "T"};
+        int index = 0;
+        while (price >= 1000 && index < suffixes.length - 1) {
+            price /= 1000.0;
+            index++;
+        }
+        return String.format("%.2f%s", price, suffixes[index]);
+    }
+
 
     public void addActionListener(ActionListener listener) {
         listeners.add(listener);
