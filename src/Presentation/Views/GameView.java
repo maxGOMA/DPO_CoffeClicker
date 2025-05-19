@@ -410,7 +410,7 @@ public class GameView extends JPanel {
     }
 
     public void setCoffeesPerSecondValue(double coffeesPerSecond) {
-        cpsLabel.setText(String.format("%.2f cfs/s", coffeesPerSecond));
+        cpsLabel.setText(String.format("%s cfs/s", formatPrice(coffeesPerSecond)));
     }
 
     //TODO MOSTRAR MENSAJE DE ERROR
@@ -421,7 +421,7 @@ public class GameView extends JPanel {
     //TODO RAUL ESTO ES NUEVO
     public void incrementNumCoffees(double numCoffees) {
         totalNumCoffees += numCoffees;
-        totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
+        totalCoffeeLabel.setText(String.format("%s cfs", formatPrice(totalNumCoffees)));
     }
 
     public void setController(ControllerGame controller) {
@@ -436,6 +436,16 @@ public class GameView extends JPanel {
         for(UpgradePanel button : upgrades.values()){
             button.addActionListener(controller);
         }
+    }
+
+    private String formatPrice(double price) {
+        String[] suffixes = {"", "K", "M", "B", "T"};
+        int index = 0;
+        while (price >= 1000 && index < suffixes.length - 1) {
+            price /= 1000.0;
+            index++;
+        }
+        return String.format("%.2f%s", price, suffixes[index]);
     }
 
     public CoffeeClickerApp getApp() {
