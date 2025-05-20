@@ -148,7 +148,6 @@ public class GameManager {
                 generatorsIntervalProduction.add(generatorsDAO.getGeneratorProductionInterval(generatorName));
             }
 
-
             entityGame.activateGenerators(listener, generatorsBaseProd, generatorsIntervalProduction);
         } catch (PersistanceException e) {
             throw new BusinessException(e.getMessage());

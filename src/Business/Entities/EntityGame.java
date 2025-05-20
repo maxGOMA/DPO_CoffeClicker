@@ -40,7 +40,6 @@ public class EntityGame {
         this.coffeMakerLevelUpgrade = upgradeCoffeMaker;
         this.takeAwayLevelUpgrade = upgradeTakeAway;
 
-
         this.numCoffees = num_Coffees;
         this.minutesPlayed = minutesPlayed;
 
@@ -85,33 +84,31 @@ public class EntityGame {
         beansLevelUpgrade = copy.getUpgradeGenerators("beans");
 
         numCoffees = copy.getCurrentNumberOfCoffees();
-        minutesPlayed = copy.getMinutesPlayed();
+        minutesPlayed = 0;
 
-        generators = copy.getGenerators();
+        generators = new ArrayList<>();
         finished = copy.getFinished();
     }
 
     public void activateGenerators(CoffeGenerationListener listener, ArrayList<Float> generatorsBaseProduction, ArrayList<Float> generatorsIntervalProduction) {
-        for (EntityGenerator generator : generators) {
-            generator.activateGenerator(listener);
-        }
-
         EntityGenerator generator;
 
-        for (int i = 0; i < numBeansGenerators; i++) {
-            generator = new EntityGenerator(this,"beans", generatorsBaseProduction.get(0), beansLevelUpgrade, generatorsIntervalProduction.get(0));
+        if (numBeansGenerators > 0) {
+            generator =  new EntityGenerator(this,"beans", generatorsBaseProduction.get(0), beansLevelUpgrade, generatorsIntervalProduction.get(0), numBeansGenerators);
             generator.activateGenerator(listener);
             generator.start();
             generators.add(generator);
         }
-        for (int i = 0; i < numCoffeeMakerGenerators; i++) {
-            generator = new EntityGenerator(this,"coffeeMaker", generatorsBaseProduction.get(1), coffeMakerLevelUpgrade, generatorsIntervalProduction.get(1));
+
+        if (numCoffeeMakerGenerators > 0) {
+            generator = new EntityGenerator(this,"coffeeMaker", generatorsBaseProduction.get(1), coffeMakerLevelUpgrade, generatorsIntervalProduction.get(1), numCoffeeMakerGenerators);
             generator.activateGenerator(listener);
             generator.start();
             generators.add(generator);
         }
-        for (int i = 0; i < numTakeAwayGenerators; i++) {
-            generator = new EntityGenerator(this,"TakeAway", generatorsBaseProduction.get(2), beansLevelUpgrade, generatorsIntervalProduction.get(2));
+
+        if (numTakeAwayGenerators > 0) {
+            generator = new EntityGenerator(this,"TakeAway", generatorsBaseProduction.get(2), beansLevelUpgrade, generatorsIntervalProduction.get(2), numTakeAwayGenerators);
             generator.activateGenerator(listener);
             generator.start();
             generators.add(generator);
@@ -156,13 +153,25 @@ public class EntityGame {
             case "TakeAway":
                 numTakeAwayGenerators++;
                 break;
-
         }
 
-        EntityGenerator newGenerator = new EntityGenerator(this,generatorType, generatorBaseProduction, getUpgradeGenerators(generatorType), timeIntervalProduction);
-        newGenerator.activateGenerator(listener);
-        newGenerator.start();
-        generators.add(newGenerator);
+        boolean flagFound = false;
+
+        for (int i = 0; i < generators.size(); i++) {
+            if (generators.get(i).getType() == generatorType) {
+                generators.get(i).incrementNumGenerators();
+                flagFound = true;
+                break;
+            }
+        }
+
+        if (!flagFound) {
+            EntityGenerator generator = new EntityGenerator(this, generatorType, generatorBaseProduction, 0, timeIntervalProduction, 0);
+            generator.incrementNumGenerators();
+            generator.activateGenerator(listener);
+            generator.start();
+            generators.add(generator);
+        }
     }
 
     //Upgraders
@@ -181,8 +190,10 @@ public class EntityGame {
         }
 
         for (EntityGenerator generator : generators ) {
+            System.out.println("Presente");
             if (generator.getType() == generatorType) {
                 generator.incrementLevel_upgrade();
+                break;
             }
         }
     }
@@ -248,9 +259,5 @@ public class EntityGame {
 
     public int getFinished() {
         return finished;
-    }
-
-    public ArrayList< EntityGenerator > getGenerators() {
-        return generators;
     }
 }
