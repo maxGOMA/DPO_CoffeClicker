@@ -46,21 +46,17 @@ public class CoffeeClickerApp extends JFrame {
             register.setController(controller_register);
 
             ConfirmationView confirmationView = new ConfirmationView(this);
-            controller_confirmation = new ControllerConfirmation(userManager, confirmationView, gameManager);
+            controller_confirmation = new ControllerConfirmation(userManager, confirmationView, gameManager, statManager);
             confirmationView.setController(controller_confirmation);
 
             LogOutView logout = new LogOutView(this);
             ControllerLogOut controller_logout = new ControllerLogOut(logout, userManager, confirmationView, controller_confirmation);
             logout.setController(controller_logout);
 
+
             SettingsView settingsView = new SettingsView(this);
-            ControllerSettings controllerSettings = new ControllerSettings(settingsView, gameManager, confirmationView, controller_confirmation);
+            ControllerSettings controllerSettings = new ControllerSettings(settingsView, gameManager, statManager, confirmationView, controller_confirmation);
             settingsView.setController(controllerSettings);
-
-            GraphView graphView = new GraphView(this);
-            ControllerStatistics controllerStatistics = new ControllerStatistics(statManager, userManager, gameManager, graphView);
-            graphView.setController(controllerStatistics);
-
 
             mainPanel.add(mainMenuView, "MainMenuView");
             mainPanel.add(login, "Login");
@@ -68,8 +64,6 @@ public class CoffeeClickerApp extends JFrame {
             mainPanel.add(logout, "Logout");
             mainPanel.add(confirmationView, "Confirmation");
             mainPanel.add(settingsView, "Settings");
-            mainPanel.add(graphView, "stats");
-
 
             add(mainPanel);
             setVisible(true);
@@ -87,19 +81,28 @@ public class CoffeeClickerApp extends JFrame {
 
     public void createSelectGame() {
         GameListView selectGame = new GameListView(this);
-        ControllerGameList controllerGameList = new ControllerGameList(selectGame, gameManager, controller_confirmation);
+        ControllerGameList controllerGameList = new ControllerGameList(selectGame, gameManager, controller_confirmation, statManager);
         selectGame.setController(controllerGameList);
         mainPanel.add(selectGame, "SelectGame");
     }
 
     public void createGameScreen() {
         GameView gameView = new GameView(this);
-        ControllerGame controllerGame = new ControllerGame(gameView, gameManager);
+        ControllerGame controllerGame = new ControllerGame(gameView, gameManager, statManager);
         gameView.setController(controllerGame);
         mainPanel.add(gameView, "GameView");
     }
 
-    public void showPanel(String panelName) {
-        cardLayout.show(mainPanel, panelName);
+    public void createStatsGraph() {
+        GraphView graphView = new GraphView(this);
+        ControllerStatistics controllerStatistics = new ControllerStatistics(statManager, userManager, gameManager, graphView);
+        graphView.setController(controllerStatistics);
+        mainPanel.add(graphView, "stats");
+    }
+
+    public void showPanel(String panelName) { cardLayout.show(mainPanel, panelName);}
+
+    public static void main(String[] args) {
+        new CoffeeClickerApp();
     }
 }

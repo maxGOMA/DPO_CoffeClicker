@@ -93,6 +93,7 @@ public class SQLGameDAO implements GameDAO {
      *
      * @param ID_game El identificador único del juego que se desea eliminar de la base de datos.
      */
+    @Override
     public void deleteGame(int ID_game){
         String query = "DELETE FROM game WHERE ID_game = " + ID_game + ";";
         SQLConnector.getInstance().deleteQuery(query);
@@ -104,13 +105,15 @@ public class SQLGameDAO implements GameDAO {
      * @param name El nombre del juego que se desea eliminar.
      * @param userName El nombre del jugador al que pertenece el juego.
      */
+    @Override
     public void deleteGame(String name, String userName) {
         String query = "DELETE FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
         SQLConnector.getInstance().deleteQuery(query);
     }
 
-    public void deleteAllGamesByUser(EntityUser user){
-        String query = "DELETE FROM game WHERE (username = '" + user.getUsername() + "');";
+    @Override
+    public void deleteAllGamesByUser(String username){
+        String query = "DELETE FROM game WHERE (username = '" + username + "');";
         SQLConnector.getInstance().deleteQuery(query);
     }
 
@@ -318,20 +321,8 @@ public class SQLGameDAO implements GameDAO {
     }
 
     @Override
-    public int getFinished(String name) throws PersistanceException {
-        try {
-            String query = "SELECT Finished FROM game WHERE Name_Game = '" + name + "';";
-            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-            rs.next();
-            return rs.getInt("Finished");
-        } catch (SQLException e) {
-            throw new PersistanceException("Couldn't find is the game is finished in the database");
-        }
-    }
-
-    @Override
-    public void setFinished(String name){
-        String query = "UPDATE game SET Finished = 1 WHERE Name_Game = '" + name + "';";
+    public void setFinished(String username, String gameName){
+        String query = "UPDATE game SET Finished = 1 WHERE (Name_Game = '" + gameName + "'AND username = '" + username + "');";
         SQLConnector.getInstance().insertQuery(query);
     }
 
@@ -368,7 +359,23 @@ public class SQLGameDAO implements GameDAO {
     }
 
     @Override
+    public ArrayList<Integer> getUserFinishedGameIDs(String user) throws PersistanceException {
+        ArrayList<Integer> gamesIds = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM game WHERE username = '" + user + "' AND Finished = 1;";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            while (rs.next()) {
+                gamesIds.add(rs.getInt("Game_ID"));
+            }
+        } catch (SQLException e) {
+            throw new PersistanceException("Can't access games information");
+        }
+        return gamesIds;
+    }
+
+    @Override
     public void updateGame(EntityGame game) {
+        System.out.println("Juego acabado! nombre: " + game.getName() + " minutes: " + game.getMinutesPlayed());
         String query = "UPDATE game SET Num_Coffees = " + game.getCurrentNumberOfCoffees() +
                 ", Num_Beans_Generators = " + game.getNumGenerators("beans") +
                 ", Num_CoffeeMakers_Generators = " + game.getNumGenerators("coffeeMaker") +

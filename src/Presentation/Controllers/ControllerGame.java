@@ -3,6 +3,7 @@ package Presentation.Controllers;
 import Business.BusinessException;
 import Business.CoffeGenerationListener;
 import Business.GameManager;
+import Business.StatManager;
 import Persistance.PersistanceException;
 import Presentation.Views.GameView;
 import Presentation.Views.PopUpErrorView;
@@ -15,12 +16,14 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
     private GameManager gameManager;
     private GameView gameView;
 
-    public ControllerGame (GameView gameView, GameManager gameManager) {
+    public ControllerGame (GameView gameView, GameManager gameManager, StatManager statManager) {
         this.gameManager = gameManager;
         this.gameView = gameView;
 
         try {
             gameManager.activateGenerators(this, new String[] {"beans", "coffeeMaker", "TakeAway"});
+            statManager.initiateStatsGeneration(gameManager.getCurrentGame());
+
 
             //Incializar num coffees.
             gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
@@ -34,6 +37,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("beans"));
             gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
             gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
+
         } catch (BusinessException e) {
             System.out.println(e.getMessage());
             PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
@@ -113,29 +117,17 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
 
         }
         else if(command.equals(GameView.SETTINGS_COMMAND)){
+            gameManager.updateGame();
             gameView.getApp().showPanel("Settings");
             System.out.println(command);
         }
         else if(command.equals(GameView.STATS_COMMAND)) {
+            gameManager.updateGame();
+            gameView.getApp().createStatsGraph();
             gameView.getApp().showPanel("stats");
             System.out.println(command);
         }
 
-//        else if (command.equals("UpgradeteGenerator")) {
-//            String generatorType = ""; // = TODO identificar que generador me estan clicando?
-//            if (gameManager.hasResourcesToUpgradeGenerator(generatorType)) {
-//                gameManager.upgradeGenerators(generatorType);
-//            } else {
-//                //SHOW ERROR FALTA MONEY!!
-//            }
-//        }
-//        else if (command.equals("UpgradeClicker")) {
-//            if (gameManager.hasResourcesToUpgradeClicker()) {
-//                gameManager.upgradeClicker();
-//            } else {
-//                //SHOW ERROR FALTA MONEY!!
-//            }
-//        }
     }
 
 

@@ -73,18 +73,24 @@ public class ControllerStatistics implements ActionListener {
                 PopUpErrorView.showErrorPopup(null, excp.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
 
+
         } else if (command.equals(GraphView.GAME_SELECTED)) {
             try {
                 JComboBox comboBox = (JComboBox) e.getSource();
                 String selectedGame = (String) comboBox.getSelectedItem();
                 System.out.println(selectedGame + selectedUsername);
                 if (selectedGame != null) {
+                    for (Double stat: statManager.getAllStatsFromGame(gameManager.returnGameFromUser(selectedGame, selectedUsername))) {
+                        System.out.println(stat);
+                    }
                     graphView.updateStats(statManager.getAllStatsFromGame(gameManager.returnGameFromUser(selectedGame, selectedUsername)));
                 }
             } catch (BusinessException excp){
                 //Error en persistencia
                 PopUpErrorView.showErrorPopup(null, excp.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
+        } else if (command.equals(GraphView.BACK_COMMAND)){
+                graphView.getApp().showPanel("GameView");
         }
     }
 

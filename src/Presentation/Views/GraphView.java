@@ -5,6 +5,8 @@ import Presentation.Controllers.ControllerStatistics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
@@ -24,6 +26,8 @@ public class GraphView extends JPanel {
     private JComboBox<String> userSelectionComboBox;
     private JComboBox<String> gameSelectionComboBox;
 
+    private JButton backButton;
+
     private JLabel errorLabel;
     private JLabel gameSelectionLabel;
     private JLabel userSelectionLabel;
@@ -38,6 +42,21 @@ public class GraphView extends JPanel {
         finishedGames = new ArrayList<>();
 
         JPanel backGroundPanel = new JPanel(new BorderLayout());
+        ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
+                .getImage().getScaledInstance(100, 40, Image.SCALE_SMOOTH));
+
+        backButton = new JButton("BACK", buttonIcon);
+        backButton.setHorizontalTextPosition(JButton.CENTER);
+        backButton.setVerticalTextPosition(JButton.CENTER);
+        if (coffeeClickerFont != null) {
+            backButton.setFont(coffeeClickerFont.deriveFont(16f));
+        }
+        backButton.setBorderPainted(false);
+        backButton.setForeground(new Color(107, 41, 0));
+        backButton.setContentAreaFilled(false);
+        backButton.setFocusPainted(false);
+        backButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        backButton.setActionCommand(BACK_COMMAND);
 
         //Panel de las jComboBox
         JPanel selectionPanel = new JPanel();
@@ -73,6 +92,7 @@ public class GraphView extends JPanel {
         gameSelectionComboBox.setMaximumSize(new Dimension(300, 30));
         gameSelectionComboBox.setActionCommand(GAME_SELECTED);
 
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         selectionPanel.add(titleLabel);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         selectionPanel.add(userSelectionLabel);
@@ -85,6 +105,8 @@ public class GraphView extends JPanel {
         gameSelectionLabel.setBorder(BorderFactory.createEmptyBorder(40, 0, 5, 0));
         gameSelectionLabel.setVisible(false);
         selectionPanel.add(gameSelectionComboBox);
+        backButton.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 0)); // Ajusta el margen superior aquí
+        selectionPanel.add(backButton);
         gameSelectionComboBox.setVisible(false);
         backGroundPanel.add(selectionPanel, BorderLayout.WEST);
 
@@ -218,9 +240,9 @@ public class GraphView extends JPanel {
         //Dibujo lineas que unen los puntos
         g2.setColor(new Color(170, 85, 34));
         g2.setStroke(new BasicStroke(3));
-        for (Double stat : stats) {
-            int x = margin + 5 + (int) (((stats.indexOf(stat) + 1)- xMin) * xScale);
-            int y = height - margin - (int) ((stat - yMin) * yScale);
+        for (int i = 0; i < stats.size(); i++) {
+            int x = margin + 5 + (int) (((i + 1)- xMin) * xScale);
+            int y = height - margin - (int) ((stats.get(i) - yMin) * yScale);
 
             if (previousX != -1 && previousY != -1) {
                 g2.drawLine(previousX, previousY, x, y);
@@ -232,9 +254,9 @@ public class GraphView extends JPanel {
 
         //Dibujo puntos
         g2.setColor(new Color(120, 51, 0));
-        for (Double stat : stats) {
-            int x = margin + 5 + (int) (((stats.indexOf(stat) + 1)- xMin) * xScale);
-            int y = height - margin - (int) ((stat - yMin) * yScale);
+        for (int i = 0; i < stats.size(); i++) {
+            int x = margin + 5 + (int) (((i + 1)- xMin) * xScale);
+            int y = height - margin - (int) ((stats.get(i) - yMin) * yScale);
 
             g2.fillOval(x - 3, y - 3, 8, 8);
         }
@@ -243,6 +265,11 @@ public class GraphView extends JPanel {
     public void setController(ControllerStatistics controller) {
         userSelectionComboBox.addActionListener(controller);
         gameSelectionComboBox.addActionListener(controller);
+        backButton.addActionListener(controller);
+    }
+
+    public CoffeeClickerApp getApp() {
+        return app;
     }
 }
 

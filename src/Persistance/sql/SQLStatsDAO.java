@@ -10,10 +10,10 @@ import java.util.ArrayList;
 public class SQLStatsDAO implements StatsDAO {
 
     public void saveNewStats(int ID_game, double numCoffees, int minutesPlayed){
-        String query = "INSERT INTO stats (ID_Game, Num_Coffees, Minute) VALUES ('" +
+        String query = "INSERT INTO stats (ID_Game, Minute, Num_Coffees) VALUES ('" +
                 ID_game +  "', '" +
-                numCoffees +  "', '" +
-                minutesPlayed +  "');";
+                minutesPlayed +  "', '" +
+                numCoffees +  "');";
         SQLConnector.getInstance().insertQuery(query);
     }
 

@@ -3,6 +3,7 @@ package Presentation.Controllers;
 import Business.BusinessException;
 import Business.Entities.EntityGame;
 import Business.GameManager;
+import Business.StatManager;
 import Presentation.Views.GameListView;
 import Presentation.Views.PopUpErrorView;
 
@@ -17,16 +18,16 @@ import static Presentation.Views.GameListView.NEW_GAME;
 
 public class ControllerGameList implements ActionListener {
     private GameManager gameManager;
+    private StatManager statManager;
     private GameListView view;
     private static String name;
-    private ControllerConfirmation controllerConfirmation;
 
     //variable de la view
 
-    public ControllerGameList(GameListView gameListView, GameManager gameManager, ControllerConfirmation controllerConfirmation) {
+    public ControllerGameList(GameListView gameListView, GameManager gameManager, ControllerConfirmation controllerConfirmation, StatManager statManager) {
         this.gameManager = gameManager;
+        this.statManager = statManager;
         this.view = gameListView;
-        this.controllerConfirmation = controllerConfirmation;
         //this.view.setController();
         //view CUANDO SE CREE
     }
@@ -59,12 +60,16 @@ public class ControllerGameList implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if(command.equals("CONFIRM_DELETE")){
-            System.out.println(command);
-            gameManager.deleteGame(name);
-            view.getPanelConfirmation().setVisible(false);
-            view.getnewGameButton().setVisible(true);
-            view.deleteGameSelectedView(name);
-
+            try {
+                System.out.println(command);
+                statManager.deleteStatsFromGame(gameManager.getIDFromGameName(name));
+                gameManager.deleteGame(name);
+                view.getPanelConfirmation().setVisible(false);
+                view.getnewGameButton().setVisible(true);
+                view.deleteGameSelectedView(name);
+            } catch (BusinessException ex) {
+                //TODO lanzar persistance exception
+            }
         }else if(command.equals("CANCEL")){
 
             System.out.println(command);
@@ -91,8 +96,7 @@ public class ControllerGameList implements ActionListener {
             view.getApp().showPanel("NewGame");
             System.out.println(command);
 
-        }else if(command.contains("DELETE")){
-
+        } else if(command.contains("DELETE")) {
             System.out.println(command);
             name = findName(command);
             view.getnewGameButton().setVisible(false);
@@ -108,11 +112,11 @@ public class ControllerGameList implements ActionListener {
             // COMIENZA EL JUEGO
             name = findName(command);
             try {
+                System.out.println("name: " + name);
                 gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
                 PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
-            controllerConfirmation.setGameName(name);
             view.getApp().createGameScreen();
             view.getApp().showPanel("GameView");
             System.out.println(command);

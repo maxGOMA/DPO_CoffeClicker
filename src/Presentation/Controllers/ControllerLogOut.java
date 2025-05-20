@@ -34,7 +34,7 @@ public class ControllerLogOut implements ActionListener {
         } else if (e.getActionCommand().equals(view.DELETE_ACCOUNT_COMMAND)) {
             //view.showConfirmationMessage();
             System.out.println(e.getActionCommand());
-            confirmationView.setMessage("Warning: The account " + userManager.getUser().getUsername() + " will be deleted.");
+            confirmationView.setMessage("Warning: The account " + userManager.getCurrentUser() + " will be deleted.");
             if(ViewBack.equals("Settings")){
                 controllerConfirmation.ViewBack("Settings");
             }else{

@@ -57,7 +57,7 @@ public interface GameDAO {
      */
     public void deleteGame(String name, String userName);
 
-    void deleteAllGamesByUser(EntityUser user);
+    void deleteAllGamesByUser(String username);
 
     /**
      * Obtiene el identificador de una partida desde la base de datos.
@@ -151,13 +151,13 @@ public interface GameDAO {
 
     String getName(int ID_game) throws PersistanceException;
 
-    int getFinished(String name) throws PersistanceException;
-
-    void setFinished(String name);
+    void setFinished(String userName, String name);
 
     List<EntityGame> getGamesByUser(String user) throws PersistanceException;
 
     ArrayList<String> getUserFinishedGameNames(String user) throws PersistanceException;
+
+    ArrayList<Integer> getUserFinishedGameIDs(String user) throws PersistanceException;
 
     void updateGame(EntityGame game);
 }
