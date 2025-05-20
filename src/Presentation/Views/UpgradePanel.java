@@ -124,8 +124,6 @@ class UpgradePanel extends JPanel {
 
             public void mouseClicked(MouseEvent e) {
                 if (unlocked && !bought) {
-                    markAsBought();
-                    repaint();
 
                     ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, command);
                     for (ActionListener listener : listeners) {
@@ -152,6 +150,7 @@ class UpgradePanel extends JPanel {
     }
 
     public void unlock() {
+        System.out.println("unlocking.." + price);
         this.unlocked = true;
         cl.show(centerPanel, "PRICE");
         repaint();

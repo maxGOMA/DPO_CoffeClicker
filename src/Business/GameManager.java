@@ -197,6 +197,7 @@ public class GameManager {
     }
 
     public boolean hasResourcesToUpgradeGenerator(String generatorType) throws BusinessException {
+        System.out.println("current cost: " + getGeneratorUpgradesCosts(generatorType).get(entityGame.getUpgradeGenerators(generatorType)) + "current coffees: " + entityGame.getCurrentNumberOfCoffees());
         return entityGame.getCurrentNumberOfCoffees() >= getGeneratorUpgradesCosts(generatorType).get(entityGame.getUpgradeGenerators(generatorType));
     }
 

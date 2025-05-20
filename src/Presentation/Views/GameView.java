@@ -479,17 +479,18 @@ public class GameView extends JPanel {
         return String.format("%.2f%s", price, suffixes[index]);
     }
 
-    private int getUpgradeGridIndex(int levelUpgrade, String generator) {
+    private String getUpgradeGridIndex(int levelUpgrade, String generator) {
         int numUpgradesPerGenerator = 3;
+        String key = "upgrade";
         switch (generator) {
             case "beans":
-                return levelUpgrade;
+                return key + levelUpgrade;
             case "coffeeMaker":
-                return levelUpgrade + (numUpgradesPerGenerator * 1);
+                return key + (levelUpgrade + (numUpgradesPerGenerator * 1));
             case "TakeAway":
-                return levelUpgrade + (numUpgradesPerGenerator * 2);
+                return key + (levelUpgrade + numUpgradesPerGenerator * 2);
             default:
-                return 0;
+                return "update0";
         }
     }
 

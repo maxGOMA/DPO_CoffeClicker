@@ -172,7 +172,7 @@ public class EntityGame {
             case "beans":
                 beansLevelUpgrade++;
                 break;
-            case "coffeMaker":
+            case "coffeeMaker":
                 coffeMakerLevelUpgrade++;
                 break;
             case "TakeAway":
