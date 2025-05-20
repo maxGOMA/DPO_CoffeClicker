@@ -26,6 +26,7 @@ public class CoffeeClickerApp extends JFrame {
         setSize(1350, 1080);
         setLocationRelativeTo(null);
         setIconImage(new ImageIcon("imgs/cafe.png").getImage());
+        setResizable(false);
 
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
