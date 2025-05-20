@@ -11,5 +11,5 @@ public interface GeneratorsDAO {
 
     float getGeneratorCostIncrease(String generatorName) throws PersistanceException;
 
-    ArrayList<Double> getGeneratorUpgradesCosts(String generatorName) throws PersistanceException;
+    ArrayList<Float> getGeneratorUpgradesCosts(String generatorName) throws PersistanceException;
 }

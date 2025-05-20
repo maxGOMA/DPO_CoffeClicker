@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static Presentation.Views.GameView.UPG_BEANS_COMMAND;
+
 public class ControllerGame implements ActionListener, CoffeGenerationListener {
     private GameManager gameManager;
     private GameView gameView;
@@ -37,7 +39,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
             gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
 
-            gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"));
+            gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
 
         } catch (BusinessException e) {
             System.out.println(e.getMessage());
@@ -67,7 +69,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                    gameView.showErrorMessage("You don't have enough coffees to buy another beans generator.");
+                    //gameView.showErrorMessage("You don't have enough coffees to buy another beans generator.");
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException exception) {
                 PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
@@ -89,7 +92,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                    gameView.showErrorMessage("You don't have enough coffees to buy another coffe maker generator.");
+                    //gameView.showErrorMessage("You don't have enough coffees to buy another coffe maker generator.");
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException exception) {
                 PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
@@ -110,23 +114,53 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                    gameView.showErrorMessage("You don't have enough coffees to buy another coffe takeaway generator.");
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+                    //gameView.showErrorMessage("You don't have enough coffees to buy another coffe takeaway generator.");
                 }
             } catch (BusinessException exception) {
                 PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
         }
 
-        else if (command.equals(GameView.UPG_BEANS_COMMAND)) {
-            System.out.println(GameView.UPG_BEANS_COMMAND);
+        else if (command.equals(UPG_BEANS_COMMAND)) {
+            System.out.println(UPG_BEANS_COMMAND);
+            try {
+                if (gameManager.hasResourcesToUpgradeGenerator("beans")) {
+                    gameManager.upgradeGenerators("beans");
+                } else {
+                    //TODO MENSAJE DE NO SE PUEDE
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+                }
+            } catch (BusinessException ex) {
+                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+            }
         }
 
         else if (command.equals(GameView.UPG_MAKER_COMMAND)) {
             System.out.println(GameView.UPG_MAKER_COMMAND);
+            try {
+                if (gameManager.hasResourcesToUpgradeGenerator("coffeeMaker")) {
+                    gameManager.upgradeGenerators("coffeeMaker");
+                } else {
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+                }
+            } catch (BusinessException ex) {
+                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+            }
         }
 
         else if (command.equals(GameView.UPG_TAKEAWAY_COMMAND)) {
-            System.out.println(GameView.UPG_TAKEAWAY_COMMAND);
+            System.out.println(GameView.UPG_MAKER_COMMAND);
+            try {
+                if (gameManager.hasResourcesToUpgradeGenerator("TakeAway")) {
+                    gameManager.upgradeGenerators("TakeAway");
+                } else {
+                    //TODO MENSAJE DE NO SE PUEDE
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+                }
+            } catch (BusinessException ex) {
+                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+            }
         }
 
         else if(command.equals(GameView.SETTINGS_COMMAND)){

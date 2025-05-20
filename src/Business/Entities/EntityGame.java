@@ -166,8 +166,8 @@ public class EntityGame {
     }
 
     //Upgraders
-    public void upgradeGenerators(String generatorType, Double upgradeCost) {
-        numCoffees = numCoffees - upgradeCost;
+    public void upgradeGenerators(String generatorType, Float upgradeCost) {
+        numCoffees = numCoffees - (double) upgradeCost;
         switch (generatorType) {
             case "beans":
                 beansLevelUpgrade++;

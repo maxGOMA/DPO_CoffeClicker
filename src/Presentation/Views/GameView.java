@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameView extends JPanel {
@@ -492,7 +493,7 @@ public class GameView extends JPanel {
         }
     }
 
-    public void initUpgradeGrid(int beansLevelUpgrade, int makerLevelUpgrade, int takeAwayLevelUpgrade) {
+    public void initUpgradeGrid(int beansLevelUpgrade, int makerLevelUpgrade, int takeAwayLevelUpgrade, ArrayList<Float> beansUpgradeCosts, ArrayList<Float> makerUpgradeCosts, ArrayList<Float> takeAwayUpgradeCosts) {
         int mejorasPorTipo = 3;
 
         // Café (índices 0-2)
@@ -504,6 +505,7 @@ public class GameView extends JPanel {
             } else {
                 upgrades.get("upgrade" + i).lock();
             }
+            upgrades.get("upgrade" + i).setUpgradePrice(beansUpgradeCosts.get(i));
         }
 
         // Máquina (índices 3-5)
@@ -516,6 +518,7 @@ public class GameView extends JPanel {
             } else {
                 upgrades.get("upgrade" + index).lock();
             }
+            upgrades.get("upgrade" + index).setUpgradePrice(makerUpgradeCosts.get(i));
         }
 
         // Para llevar (índices 6-8)
@@ -528,6 +531,7 @@ public class GameView extends JPanel {
             } else {
                 upgrades.get("upgrade" + index).lock();
             }
+            upgrades.get("upgrade" + index).setUpgradePrice(takeAwayUpgradeCosts.get(i));
         }
     }
 

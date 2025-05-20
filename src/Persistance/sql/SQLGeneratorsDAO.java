@@ -59,15 +59,17 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
         }
 
         @Override
-        public ArrayList<Double> getGeneratorUpgradesCosts(String generatorName) throws PersistanceException {
+        public ArrayList<Float> getGeneratorUpgradesCosts(String generatorName) throws PersistanceException {
             try {
-                ArrayList<Double> upgradesCost = new ArrayList<Double>();
+                ArrayList<Float> upgradesCost = new ArrayList<>();
                     String query =  "SELECT * FROM generators WHERE Name_Generator  = '" + generatorName + "';";
                     ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-                    if(!rs.next()){
-                        return null;
-                    }
-                upgradesCost.add(rs.getDouble("Num_Coffees"));
+                if (!rs.next()) {
+                    return null;
+                }
+                upgradesCost.add(rs.getFloat("Silver_Upgrade_Cost"));
+                upgradesCost.add(rs.getFloat("Gold_Upgrade_Cost"));
+                upgradesCost.add(rs.getFloat("Diamond_Upgrade_Cost"));
                 return upgradesCost;
             } catch (SQLException e) {
                 throw new PersistanceException("Couldn't find stats in the database");
