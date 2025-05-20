@@ -6,9 +6,11 @@ import Persistance.PersistanceException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SQLGeneratorsDAO implements GeneratorsDAO {
 
+        @Override
         public int getGeneratorBaseCost(String generatorName) throws PersistanceException {
             try {
                 String query = "SELECT * FROM generators WHERE Name_Generator  = '" + generatorName + "';";
@@ -20,6 +22,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
             }
         }
 
+        @Override
         public float getGeneratorBaseProduction(String generatorName) throws PersistanceException {
             try {
                 String query = "SELECT * FROM generators WHERE Name_Generator  = '" + generatorName + "';";
@@ -31,6 +34,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
             }
         }
 
+    @Override
         public float getGeneratorProductionInterval(String generatorName) throws PersistanceException {
             try {
                 String query = "SELECT * FROM generators WHERE Name_Generator  = '" + generatorName + "';";
@@ -42,6 +46,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
             }
         }
 
+        @Override
         public float getGeneratorCostIncrease(String generatorName) throws PersistanceException {
             try {
                 String query = "SELECT * FROM generators WHERE Name_Generator  = '" + generatorName + "';";
@@ -50,6 +55,22 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
                 return  rs.getFloat("Cost_Increase");
             } catch (SQLException e) {
                 throw new PersistanceException("Couldn't access generators information");
+            }
+        }
+
+        @Override
+        public ArrayList<Double> getGeneratorUpgradesCosts(String generatorName) throws PersistanceException {
+            try {
+                ArrayList<Double> upgradesCost = new ArrayList<Double>();
+                    String query =  "SELECT * FROM generators WHERE Name_Generator  = '" + generatorName + "';";
+                    ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+                    if(!rs.next()){
+                        return null;
+                    }
+                upgradesCost.add(rs.getDouble("Num_Coffees"));
+                return upgradesCost;
+            } catch (SQLException e) {
+                throw new PersistanceException("Couldn't find stats in the database");
             }
         }
 }

@@ -24,7 +24,6 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             gameManager.activateGenerators(this, new String[] {"beans", "coffeeMaker", "TakeAway"});
             statManager.initiateStatsGeneration(gameManager.getCurrentGame());
 
-
             //Incializar num coffees.
             gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
             //Inicializar num coffesPerSecond
@@ -37,6 +36,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("beans"));
             gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
             gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
+
+            gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"));
 
         } catch (BusinessException e) {
             System.out.println(e.getMessage());
@@ -114,18 +115,34 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             } catch (BusinessException exception) {
                 PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
-
         }
+
+        else if (command.equals(GameView.UPG_BEANS_COMMAND)) {
+            System.out.println(GameView.UPG_BEANS_COMMAND);
+        }
+
+        else if (command.equals(GameView.UPG_MAKER_COMMAND)) {
+            System.out.println(GameView.UPG_MAKER_COMMAND);
+        }
+
+        else if (command.equals(GameView.UPG_TAKEAWAY_COMMAND)) {
+            System.out.println(GameView.UPG_TAKEAWAY_COMMAND);
+        }
+
         else if(command.equals(GameView.SETTINGS_COMMAND)){
             gameManager.updateGame();
             gameView.getApp().showPanel("Settings");
             System.out.println(command);
         }
         else if(command.equals(GameView.STATS_COMMAND)) {
-            gameManager.updateGame();
-            gameView.getApp().createStatsGraph();
-            gameView.getApp().showPanel("stats");
-            System.out.println(command);
+            try {
+                gameManager.updateGame();
+                gameView.getApp().createStatsGraph();
+                gameView.getApp().showPanel("stats");
+                System.out.println(command);
+            } catch (BusinessException exception) {
+                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+            }
         }
 
     }

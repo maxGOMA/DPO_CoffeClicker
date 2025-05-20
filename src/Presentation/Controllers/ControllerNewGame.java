@@ -50,7 +50,7 @@ public class ControllerNewGame implements ActionListener {
                     //error
                     showError("ENTER GAME NAME", "This game name is already in use.");
                 } else {
-                    controllerConfirmation.setGameName(nameGame);
+                    //controllerConfirmation.setGameName(nameGame);
                     gameManager.createNewGame(nameGame, iscopy);
                     view.getApp().createGameScreen();
                     gameListView.setComponentInterPanel(nameGame);

@@ -184,10 +184,22 @@ public class GameManager {
 
     }
 
+    public int getGeneratorLevelUpgrade(String generatorType) {
+        return entityGame.getUpgradeGenerators(generatorType);
+    }
+
     //Formula coste del nuevo upgrade = 1/4 coste generador * 2 (level upgrade actual del generador)
-    public double getNextUprgadeGeneratorCost(String generatorType) throws BusinessException {
+//    public double getNextUprgadeGeneratorCost(String generatorType) throws BusinessException {
+//        try {
+//            return generatorsDAO.getGeneratorBaseCost(generatorType)/4 * Math.pow(2, entityGame.getUpgradeGenerators(generatorType));
+//        } catch (PersistanceException e) {
+//            throw new BusinessException(e.getMessage());
+//        }
+//    }
+
+    public ArrayList<Double> getGeneratorUpgradesCosts (String generatorType) throws BusinessException {
         try {
-            return generatorsDAO.getGeneratorBaseCost(generatorType)/4 * Math.pow(2, entityGame.getUpgradeGenerators(generatorType));
+            return generatorsDAO.getGeneratorUpgradesCosts(generatorType);
         } catch (PersistanceException e) {
             throw new BusinessException(e.getMessage());
         }
