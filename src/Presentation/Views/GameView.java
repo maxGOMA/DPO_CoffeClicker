@@ -37,8 +37,8 @@ public class GameView extends JPanel {
 
     private double totalNumCoffees;
 
-    private HashMap<String, JButton> upgrades = new HashMap<>();
-    private HashMap<String, JButton> generators = new HashMap<>();
+    private HashMap<String, UpgradePanel> upgrades = new HashMap<>();
+    private HashMap<String, GeneratorPanel> generators = new HashMap<>();
 
     public GameView(CoffeeClickerApp app) {
         this.app = app;
@@ -122,66 +122,118 @@ public class GameView extends JPanel {
         JPanel emptyPanel3 = new JPanel();
         emptyPanel3.setOpaque(false);
         gbc.gridy = 0;
-        gbc.weighty = 0.17;
+        gbc.weighty = 0.2;
         rightPanel.add(emptyPanel3, gbc);
 
         // 1. Cps (20%)
         cpsLabel = new JLabel("254.32M cfs/s", SwingConstants.CENTER);
-        cpsLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 20));
+        cpsLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 22));
         cpsLabel.setForeground(Color.WHITE);
         gbc.gridy = 1;
-        gbc.weighty = 0.05;
+        gbc.weighty = 0.06;
         rightPanel.add(cpsLabel, gbc);
 
         JPanel emptyPanel4 = new JPanel();
         emptyPanel4.setOpaque(false);
         gbc.gridy = 2;
-        gbc.weighty = 0.05;
+        gbc.weighty = 0.06;
         rightPanel.add(emptyPanel4, gbc);
 
         // 2. 9 upgrade buttons (40%)
+        // Panel contenedor para upgrades + info
+        JPanel upgradesContainer = new JPanel(new BorderLayout());
+        upgradesContainer.setOpaque(false);
+
+        // Botón de información (i) para upgrades
+        ImageIcon infoIcon = new ImageIcon(new ImageIcon("imgs/info.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH));
+        JButton upgradesInfoButton = new JButton(infoIcon);
+        upgradesInfoButton.setBorderPainted(false);
+        upgradesInfoButton.setContentAreaFilled(false);
+        upgradesInfoButton.setFocusPainted(false);
+        upgradesInfoButton.setPreferredSize(new Dimension(24, 24));
+        upgradesInfoButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Información sobre mejoras.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        // Panel para alinear el botón (i) a la izquierda
+        JPanel upgradesInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        upgradesInfoPanel.setOpaque(false);
+        upgradesInfoPanel.add(upgradesInfoButton);
+
+        // Panel real de upgrades
         JPanel upgradesPanel = new JPanel(new GridLayout(3, 3, 5, 5));
         upgradesPanel.setOpaque(false);
         for (int i = 1; i <= 9; i++) {
             String key = "upgrade" + i;
-            JButton upgradeButton = new JButton(" ");
-            upgradeButton.setPreferredSize(new Dimension(40, 30));
+            UpgradePanel upgradeButton = new UpgradePanel(i);
             upgrades.put(key, upgradeButton);
+            if(i > 3){
+                upgradeButton.lock();
+            }
             upgradesPanel.add(upgradeButton);
         }
+
+
+        upgradesContainer.add(upgradesInfoPanel, BorderLayout.NORTH);
+        upgradesContainer.add(upgradesPanel, BorderLayout.CENTER);
+
+        // Añadir al layout principal
         gbc.gridy = 3;
-        gbc.weighty = 0.28;
-        rightPanel.add(upgradesPanel, gbc);
+        gbc.weighty = 0.22;
+        rightPanel.add(upgradesContainer, gbc);
 
         JPanel emptyPanel5 = new JPanel();
         emptyPanel5.setOpaque(false);
         gbc.gridy = 4;
-        gbc.weighty = 0.03;
+        gbc.weighty = 0.01;
         rightPanel.add(emptyPanel5, gbc);
 
         // 3. 3 generator buttons (40%)
+        JPanel generatorsContainer = new JPanel(new BorderLayout());
+        generatorsContainer.setOpaque(false);
+
+        // Botón de información (i) para generadores
+        JButton generatorsInfoButton = new JButton(infoIcon);
+        generatorsInfoButton.setBorderPainted(false);
+        generatorsInfoButton.setContentAreaFilled(false);
+        generatorsInfoButton.setFocusPainted(false);
+        generatorsInfoButton.setPreferredSize(new Dimension(24, 24));
+        generatorsInfoButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Información sobre generadores.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        JPanel generatorsInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        generatorsInfoPanel.setOpaque(false);
+        generatorsInfoPanel.add(generatorsInfoButton);
+
         JPanel generatorsPanel = new JPanel(new GridLayout(1, 3, 10, 0));
         generatorsPanel.setOpaque(false);
         String[] names = {
-                "<html>COFFEE<br>BEANS<br>Lv.3</html>",
-                "<html>COFFEE<br>MAKER<br>Lv.3</html>",
-                "<html>TAKE<br>AWAY<br>Lv.3</html>"
+                "<html><div align='center'>COFFEE<br>BEANS</div></html>",
+                "<html><div align='center'>COFFEE<br>MAKER</div></html>",
+                "<html><div align='center'>TAKE<br>AWAY</div></html>"
         };
         String[] keys = {"beans", "coffeeMaker", "TakeAway"};
         String[] buyGenerators_commands =  {BUY_BEANS_COMMAND, BUY_MAKER_COMMAND, BUY_TAKEAWAY_COMMAND};
+
         for (int i = 0; i < names.length; i++) {
-            JButton generatorButton = new JButton(names[i]);
-            generatorButton.setPreferredSize(new Dimension(100, 80));
+            GeneratorPanel generatorPanel = new GeneratorPanel(keys[i], buyGenerators_commands[i], names[i]);
+            generators.put(keys[i], generatorPanel);
+            generatorsPanel.add(generatorPanel);
 
-            //TODO esto va asi?? AMI ME PARECE BIEN
-            generatorButton.setActionCommand(buyGenerators_commands[i]);
+            // TODO añadir el comando del setActionCommand (lo de abajo no va)
+            // generatorPanel.setActionCommand(buyGenerators_commands[i]);
 
-            generators.put(keys[i], generatorButton);
-            generatorsPanel.add(generatorButton);
+            generators.put(keys[i], generatorPanel);
+            generatorsPanel.add(generatorPanel);
         }
+
+        generatorsContainer.add(generatorsInfoPanel, BorderLayout.NORTH);
+        generatorsContainer.add(generatorsPanel, BorderLayout.CENTER);
+
         gbc.gridy = 5;
-        gbc.weighty = 0.46;
-        rightPanel.add(generatorsPanel, gbc);
+        gbc.weighty = 0.5;
+        rightPanel.add(generatorsContainer, gbc);
 
         JPanel emptyPanel2 = new JPanel();
         emptyPanel2.setOpaque(false);
@@ -280,18 +332,18 @@ public class GameView extends JPanel {
         cpsLabel.setFont(cpsLabel.getFont().deriveFont((float) (24 * scale)));
 
         // Total coffee label
-        totalCoffeeLabel.setFont(totalCoffeeLabel.getFont().deriveFont((float) (28 * scale)));
+        totalCoffeeLabel.setFont(totalCoffeeLabel.getFont().deriveFont((float) (32 * scale)));
 
         // Upgrade buttons
-        for (JButton upgrade : upgrades.values()) {
-            upgrade.setPreferredSize(new Dimension((int) (80 * scale), (int) (50 * scale)));
-            upgrade.setFont(upgrade.getFont().deriveFont((float) (18 * scale)));
+        for (UpgradePanel upgrade : upgrades.values()) {
+            upgrade.setPreferredSize(new Dimension((int) (60 * scale), (int) (40 * scale)));
+            upgrade.setFont(upgrade.getFont().deriveFont((float) (14 * scale)));
         }
 
         // Generator buttons
-        for (JButton gen : generators.values()) {
-            gen.setPreferredSize(new Dimension((int) (180 * scale), (int) (100 * scale)));
-            gen.setFont(gen.getFont().deriveFont((float) (18 * scale)));
+        for (GeneratorPanel gen : generators.values()) {
+            gen.setPreferredSize(new Dimension((int) (125 * scale), (int) (81 * scale)));
+            gen.resizeFont((float) (14 * scale));
         }
 
         settings = new ImageIcon(new ImageIcon("imgs/cog.png").getImage().getScaledInstance((int) (scale * 100), (int) (scale * 100), Image.SCALE_DEFAULT));
@@ -352,33 +404,20 @@ public class GameView extends JPanel {
     //TODO implementar esto en un cartel o algo
     public void setActualPriceGenerator(String generatorType, double priceGenerator) {
         System.out.println("The new price for" + generatorType + ": " + priceGenerator);
-        //TODO RAUL no sabemos donde esta el precio del generador
+        GeneratorPanel generatorPanel = generators.get(generatorType);
+        generatorPanel.updatePrice(String.valueOf(priceGenerator));
     }
 
     public void setTotalNumberGenerators(String generatorType, int numGenerators) {
-        JButton generatorButton = generators.get(generatorType);
-        if (generatorButton != null) {
-            String buttonText = "";
-            switch (generatorType) {
-                case "beans":
-                    System.out.println("beans");
-                    buttonText = "<html>COFFEE<br>BEANS<br>Lv." + numGenerators + "</html>";
-                    break;
-                case "coffeeMaker":
-                    System.out.println("coffeMAker");
-                    buttonText = "<html>COFFEE<br>MAKER<br>Lv." + numGenerators + "</html>";
-                    break;
-                case "TakeAway":
-                    System.out.println("takeaway");
-                    buttonText = "<html>TAKE<br>AWAY<br>Lv." + numGenerators + "</html>";
-                    break;
-            }
-            generatorButton.setText(buttonText);
+        GeneratorPanel generatorPanel = generators.get(generatorType);
+        if (generatorPanel != null) {
+            String text = "Lv." + numGenerators;
+            generatorPanel.setLevel(text);
         }
     }
 
     public void setCoffeesPerSecondValue(double coffeesPerSecond) {
-        cpsLabel.setText(String.format("%.2f cfs/s", coffeesPerSecond));
+        cpsLabel.setText(String.format("%s cfs/s", formatPrice(coffeesPerSecond)));
     }
 
     //TODO MOSTRAR MENSAJE DE ERROR
@@ -389,7 +428,7 @@ public class GameView extends JPanel {
     //TODO RAUL ESTO ES NUEVO
     public void incrementNumCoffees(double numCoffees) {
         totalNumCoffees += numCoffees;
-        totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
+        totalCoffeeLabel.setText(String.format("%s cfs", formatPrice(totalNumCoffees)));
     }
 
     public void setController(ControllerGame controller) {
@@ -398,9 +437,22 @@ public class GameView extends JPanel {
         settingsButton.addActionListener(controller);
         statsButton.addActionListener(controller);
         //Asocio listeners botones comprar generador.
-        for (JButton button : generators.values()) {
+        for (GeneratorPanel button : generators.values()) {
             button.addActionListener(controller);
         }
+        for(UpgradePanel button : upgrades.values()){
+            button.addActionListener(controller);
+        }
+    }
+
+    private String formatPrice(double price) {
+        String[] suffixes = {"", "K", "M", "B", "T"};
+        int index = 0;
+        while (price >= 1000 && index < suffixes.length - 1) {
+            price /= 1000.0;
+            index++;
+        }
+        return String.format("%.2f%s", price, suffixes[index]);
     }
 
     public CoffeeClickerApp getApp() {
