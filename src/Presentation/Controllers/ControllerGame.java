@@ -67,6 +67,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("beans"));
                     //Actualizar cafes por segundo
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+
+                    gameManager.updateGame();
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
                     //gameView.showErrorMessage("You don't have enough coffees to buy another beans generator.");
@@ -90,6 +92,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
                     //Actualizar cafes por segundo
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                    gameManager.updateGame();
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
                     //gameView.showErrorMessage("You don't have enough coffees to buy another coffe maker generator.");
@@ -112,6 +115,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
                     //Actualizar cafes por segundo
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                    gameManager.updateGame();
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
@@ -134,6 +138,9 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("beans"), "beans");
                     //Actualizar num coffes (automatico decrementa)
                     gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                    gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+
+                    gameManager.updateGame();
                 } else {
                     //TODO MENSAJE DE NO SE PUEDE
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
@@ -155,6 +162,9 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("coffeeMaker"), "coffeeMaker");
                     //Actualizar num coffes (automatico decrementa)
                     gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                    gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+
+                    gameManager.updateGame();
                 } else {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
@@ -173,6 +183,9 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("TakeAway"), "TakeAway");
                     //Actualizar num coffes (automatico decrementa)
                     gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                    gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+
+                    gameManager.updateGame();
                 } else {
                     //TODO MENSAJE DE NO SE PUEDE
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));

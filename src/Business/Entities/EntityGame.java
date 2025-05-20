@@ -153,7 +153,7 @@ public class EntityGame {
             case "coffeeMaker":
                 numCoffeeMakerGenerators++;
                 break;
-            case "takeAway":
+            case "TakeAway":
                 numTakeAwayGenerators++;
                 break;
 
