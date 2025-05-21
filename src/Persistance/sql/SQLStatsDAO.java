@@ -37,8 +37,8 @@ public class SQLStatsDAO implements StatsDAO {
     }
 
     public void deleteStats(int ID_game){
-            String query = "DELETE * FROM stats WHERE (ID_Game = '" + ID_game + "');";
-            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            String query = "DELETE FROM stats WHERE (ID_Game = '" + ID_game + "');";
+            SQLConnector.getInstance().deleteQuery(query);
     }
 
 }

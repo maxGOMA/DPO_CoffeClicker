@@ -10,7 +10,7 @@ public class EntityStatisticsGenerator extends Thread {
 
 
     public EntityStatisticsGenerator(StatManager statManager) {
-        sleepRatio = 60000;
+        sleepRatio = 5000;
         active = false;
         this.statManager = statManager;
     }

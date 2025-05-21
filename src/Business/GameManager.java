@@ -148,7 +148,6 @@ public class GameManager {
                 generatorsIntervalProduction.add(generatorsDAO.getGeneratorProductionInterval(generatorName));
             }
 
-
             entityGame.activateGenerators(listener, generatorsBaseProd, generatorsIntervalProduction);
         } catch (PersistanceException e) {
             throw new BusinessException(e.getMessage());
@@ -184,21 +183,25 @@ public class GameManager {
 
     }
 
-    //Formula coste del nuevo upgrade = 1/4 coste generador * 2 (level upgrade actual del generador)
-    public double getNextUprgadeGeneratorCost(String generatorType) throws BusinessException {
+    public int getGeneratorLevelUpgrade(String generatorType) {
+        return entityGame.getUpgradeGenerators(generatorType);
+    }
+
+    public ArrayList<Float> getGeneratorUpgradesCosts (String generatorType) throws BusinessException {
         try {
-            return generatorsDAO.getGeneratorBaseCost(generatorType)/4 * Math.pow(2, entityGame.getUpgradeGenerators(generatorType));
+            return generatorsDAO.getGeneratorUpgradesCosts(generatorType);
         } catch (PersistanceException e) {
             throw new BusinessException(e.getMessage());
         }
     }
 
     public boolean hasResourcesToUpgradeGenerator(String generatorType) throws BusinessException {
-        return entityGame.getCurrentNumberOfCoffees() >= getNextUprgadeGeneratorCost(generatorType);
+        System.out.println("current cost: " + getGeneratorUpgradesCosts(generatorType).get(entityGame.getUpgradeGenerators(generatorType)) + "current coffees: " + entityGame.getCurrentNumberOfCoffees());
+        return entityGame.getCurrentNumberOfCoffees() >= getGeneratorUpgradesCosts(generatorType).get(entityGame.getUpgradeGenerators(generatorType));
     }
 
     public void upgradeGenerators(String generatorType) throws BusinessException {
-        entityGame.upgradeGenerators(generatorType, getNextUprgadeGeneratorCost(generatorType));
+        entityGame.upgradeGenerators(generatorType, getGeneratorUpgradesCosts(generatorType).get(entityGame.getUpgradeGenerators(generatorType)));
     }
 
     public boolean hasResourcesToUpgradeClicker() {

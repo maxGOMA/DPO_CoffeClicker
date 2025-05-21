@@ -2,8 +2,10 @@ package Business;
 
 import Business.Entities.EntityGame;
 import Business.Entities.EntityStatisticsGenerator;
+import Persistance.GameDAO;
 import Persistance.PersistanceException;
 import Persistance.StatsDAO;
+import Persistance.sql.SQLGameDAO;
 import Persistance.sql.SQLStatsDAO;
 
 import java.util.ArrayList;
@@ -12,11 +14,13 @@ import java.util.List;
 
 public class StatManager {
     private final StatsDAO statDAO;
+    private final GameDAO gameDAO;
     private EntityStatisticsGenerator statsGenerator;
 
 
     public StatManager(){
         this.statDAO = new SQLStatsDAO();
+        this.gameDAO = new SQLGameDAO();
     }
 
     public void initiateStatsGeneration(EntityGame game) {
@@ -31,6 +35,7 @@ public class StatManager {
 
     public synchronized void  saveCurrentStats(EntityGame game){
         statDAO.saveNewStats(game.getID_Game(), game.getCurrentNumberOfCoffees(), game.getMinutesPlayed());
+        gameDAO.updateGame(game);
     }
 
     public ArrayList<Double> getAllStatsFromGame(EntityGame game) throws BusinessException{

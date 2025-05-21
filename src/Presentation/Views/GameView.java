@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameView extends JPanel {
@@ -16,6 +17,26 @@ public class GameView extends JPanel {
     public static final String BUY_TAKEAWAY_COMMAND = "BUY_TAKEAWAY_COMMAND";
     public static final String SETTINGS_COMMAND = "SETTINGS_COMMAND";
     public static final String STATS_COMMAND = "STATS_COMMAND";
+
+    public static final String UPG_BEANS_COMMAND = "UPG_BEANS_COMMAND";
+    public static final String UPG_MAKER_COMMAND = "UPG_MAKER_COMMAND";
+    public static final String UPG_TAKEAWAY_COMMAND = "UPG_TAKEAWAY_COMMAND";
+
+//    public static final String UPG_SILVER_BEANS = "UPG_SILVER_BEANS";
+//    public static final String UPG_GOLD_BEANS = "UPG_GOLD_BEANS";
+//    public static final String UPG_DIAMOND_BEANS = "UPG_DIAMOND_BEANS";
+//
+//    public static final String UPG_SILVER_MAKER = "UPG_SILVER_MAKER";
+//    public static final String UPG_GOLD_MAKER = "UPG_GOLD_MAKER";
+//    public static final String UPG_DIAMOND_MAKER = "UPG_DIAMOND_MAKER";
+//
+//    public static final String UPG_SILVER_TAKEAWAY = "UPG_SILVER_TAKEAWAY";
+//    public static final String UPG_GOLD_TAKEAWAY = "UPG_GOLD_TAKEAWAY";
+//    public static final String UPG_DIAMOND_TAKEAWAY = "UPG_DIAMOND_TAKEAWAY";
+
+    //public static final String BEANS_GENERATOR = "beans";
+    //public static final String MAKER_GENERATOR = "coffeeMaker";
+    //public static final String TAKEAWAY_GENERATOR = "TakeAway";
 
     private final CoffeeClickerApp app;
 
@@ -162,6 +183,9 @@ public class GameView extends JPanel {
         upgradesInfoButton.setFocusPainted(false);
         upgradesInfoButton.setPreferredSize(new Dimension(24, 24));
 
+        //String[] upgradeGenerators_Commands =  {UPG_SILVER_BEANS, UPG_GOLD_BEANS, UPG_DIAMOND_BEANS, UPG_SILVER_MAKER, UPG_GOLD_MAKER, UPG_DIAMOND_MAKER, UPG_SILVER_TAKEAWAY, UPG_GOLD_TAKEAWAY, UPG_DIAMOND_TAKEAWAY};
+        String[] upgradeGenerators_Commands =  {UPG_BEANS_COMMAND, UPG_MAKER_COMMAND, UPG_TAKEAWAY_COMMAND};
+
         // Panel para alinear el botón (i) a la izquierda
         JPanel upgradesInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         upgradesInfoPanel.setOpaque(false);
@@ -170,16 +194,16 @@ public class GameView extends JPanel {
         // Panel real de upgrades
         JPanel upgradesPanel = new JPanel(new GridLayout(3, 3, 5, 5));
         upgradesPanel.setOpaque(false);
-        for (int i = 1; i <= 9; i++) {
+
+        int arrayCommandIndex = 0;
+        for (int i = 0; i < 9; i++) {
             String key = "upgrade" + i;
-            UpgradePanel upgradeButton = new UpgradePanel(i);
+            if (i == 3) arrayCommandIndex = 1;
+            if (i == 6 ) arrayCommandIndex = 2;
+            UpgradePanel upgradeButton = new UpgradePanel(i, upgradeGenerators_Commands[arrayCommandIndex]);
             upgrades.put(key, upgradeButton);
-            if(i > 3){
-                upgradeButton.lock();
-            }
             upgradesPanel.add(upgradeButton);
         }
-
 
         upgradesCardPanel = new JPanel();
         upgradesCardPanel.setOpaque(false);
@@ -656,6 +680,71 @@ public class GameView extends JPanel {
             index++;
         }
         return String.format("%.2f%s", price, suffixes[index]);
+    }
+
+    private String getUpgradeGridIndex(int levelUpgrade, String generator) {
+        int numUpgradesPerGenerator = 3;
+        String key = "upgrade";
+        switch (generator) {
+            case "beans":
+                return key + levelUpgrade;
+            case "coffeeMaker":
+                return key + (levelUpgrade + (numUpgradesPerGenerator * 1));
+            case "TakeAway":
+                return key + (levelUpgrade + numUpgradesPerGenerator * 2);
+            default:
+                return "update0";
+        }
+    }
+
+    public void initUpgradeGrid(int beansLevelUpgrade, int makerLevelUpgrade, int takeAwayLevelUpgrade, ArrayList<Float> beansUpgradeCosts, ArrayList<Float> makerUpgradeCosts, ArrayList<Float> takeAwayUpgradeCosts) {
+        int mejorasPorTipo = 3;
+
+        // Café (índices 0-2)
+        for (int i = 0; i < mejorasPorTipo; i++) {
+            if (i < beansLevelUpgrade) {
+                upgrades.get("upgrade" + i).markAsBought();
+            } else if (i == beansLevelUpgrade){
+                upgrades.get("upgrade" + i).unlock();
+            } else {
+                upgrades.get("upgrade" + i).lock();
+            }
+            upgrades.get("upgrade" + i).setUpgradePrice(beansUpgradeCosts.get(i));
+        }
+
+        // Máquina (índices 3-5)
+        for (int i = 0; i < mejorasPorTipo; i++) {
+            int index = i + mejorasPorTipo;
+            if (i < makerLevelUpgrade) {
+                upgrades.get("upgrade" + index).markAsBought();
+            } else if (i == makerLevelUpgrade){
+                upgrades.get("upgrade" + index).unlock();
+            } else {
+                upgrades.get("upgrade" + index).lock();
+            }
+            upgrades.get("upgrade" + index).setUpgradePrice(makerUpgradeCosts.get(i));
+        }
+
+        // Para llevar (índices 6-8)
+        for (int i = 0; i < mejorasPorTipo; i++) {
+            int index = i + 2 * mejorasPorTipo;
+            if (i < takeAwayLevelUpgrade) {
+                upgrades.get("upgrade" + index).markAsBought();
+            } else if (i == takeAwayLevelUpgrade){
+                upgrades.get("upgrade" + index).unlock();
+            } else {
+                upgrades.get("upgrade" + index).lock();
+            }
+            upgrades.get("upgrade" + index).setUpgradePrice(takeAwayUpgradeCosts.get(i));
+        }
+    }
+
+    public void buyUpgrade(int levelUpgrade, String generator) {
+        upgrades.get(getUpgradeGridIndex(levelUpgrade,generator)).markAsBought();
+    }
+
+    public void unlockUpgrade(int levelUpgrade, String generator) {
+        upgrades.get(getUpgradeGridIndex(levelUpgrade,generator)).unlock();
     }
 
     public CoffeeClickerApp getApp() {
