@@ -196,7 +196,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             System.out.println(GameView.UPG_MAKER_COMMAND);
             try {
                 if (gameManager.hasResourcesToUpgradeGenerator("TakeAway")) {
-                    if (gameManager.getTotalNumberOfGenerators("coffeeMaker") > 0) {
+                    if (gameManager.getTotalNumberOfGenerators("TakeAway") > 0) {
                         System.out.println("upgrading takeAway");
                         gameView.buyUpgrade(gameManager.getGeneratorLevelUpgrade("TakeAway"), "TakeAway");
                         gameManager.upgradeGenerators("TakeAway");

@@ -239,12 +239,9 @@ public class GameManager {
     }
 
     public String getGlobalProduction(String generatorType) throws BusinessException {
-        try {
-            Float totalProduction = (generatorsDAO.getGeneratorBaseProduction("beans") * entityGame.getNumGenerators("beans") + generatorsDAO.getGeneratorBaseProduction("coffeeMaker") * entityGame.getNumGenerators("coffeeMaker") + generatorsDAO.getGeneratorBaseProduction("TakeAway") * entityGame.getNumGenerators("TakeAway"));
-            return ((generatorsDAO.getGeneratorBaseProduction(generatorType) * entityGame.getNumGenerators(generatorType)) / totalProduction) * 100 + " %";
-        } catch (PersistanceException e) {
-            throw new BusinessException(e.getMessage());
-        }
+        double totalProduction = getCoffeesGeneratedPerSecond();
+        if(getTotalNumberOfGenerators(generatorType) == 0) return 0 + " %";
+        return (getProductionShare(generatorType) / totalProduction) * 100 + " %";
     }
 
     public double getCoffeesGeneratedPerSecond() throws BusinessException {
