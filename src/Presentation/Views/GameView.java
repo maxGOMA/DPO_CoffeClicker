@@ -40,6 +40,16 @@ public class GameView extends JPanel {
     private HashMap<String, UpgradePanel> upgrades = new HashMap<>();
     private HashMap<String, GeneratorPanel> generators = new HashMap<>();
 
+    private JPanel upgradesPanel;
+    private JPanel upgradesCardPanel;
+    private boolean upgradesShowingCards = false;
+
+    private JPanel generatorsPanel;
+    private JPanel generatorsCardPanel;
+    private boolean generatorsShowingCards = false;
+
+    private MultiplierCellRenderer upgradesRenderer;
+
     public GameView(CoffeeClickerApp app) {
         this.app = app;
 
@@ -151,9 +161,6 @@ public class GameView extends JPanel {
         upgradesInfoButton.setContentAreaFilled(false);
         upgradesInfoButton.setFocusPainted(false);
         upgradesInfoButton.setPreferredSize(new Dimension(24, 24));
-        upgradesInfoButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Información sobre mejoras.", "Info", JOptionPane.INFORMATION_MESSAGE);
-        });
 
         // Panel para alinear el botón (i) a la izquierda
         JPanel upgradesInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -174,8 +181,87 @@ public class GameView extends JPanel {
         }
 
 
+        upgradesCardPanel = new JPanel();
+        upgradesCardPanel.setOpaque(false);
+        upgradesCardPanel.setLayout(new BorderLayout());
+
+        // Panel contenedor para la tabla
+        JPanel upgradesTablesPanel = new JPanel();
+        upgradesTablesPanel.setOpaque(false);
+        upgradesTablesPanel.setLayout(new BorderLayout());
+
+        // Columnas sin "%":
+        String[] upgradeCols = {"Generator", "Price", "Multiplier", "Status"};
+
+        // Datos combinados sin la columna de porcentaje
+        String[][] combinedUpgrades = {
+                {"Coffee Beans", "1000 cfs", "x2", "Bought"},
+                {"Coffee Maker", "1000 cfs", "x2", "Bought"},
+                {"Take Away", "1000 cfs", "x2", "Bought"},
+                {"Coffee Beans", "1000 cfs", "x4", "Bought"},
+                {"Coffee Maker", "1000 cfs", "x4", "Available"},
+                {"Take Away", "1000 cfs", "x4", "Bought"},
+                {"Coffee Beans", "1000 cfs", "x8", "Available"},
+                {"Coffee Maker", "1000 cfs", "x8", "Locked"},
+                {"Take Away", "1000 cfs", "x8", "Available"}
+        };
+
+        Font tableFont = new Font("CoffeeClicker", Font.PLAIN, 8);
+        Color bgColor = Color.decode("#cccccc");
+        Color fgColor = Color.decode("#7c483c");
+
+        // Crear la tabla unificada
+        JTable combinedTable = new NonEditableTable(combinedUpgrades, upgradeCols);
+        combinedTable.setFont(tableFont);
+        combinedTable.setForeground(fgColor);
+        combinedTable.setBackground(bgColor);
+        combinedTable.setShowGrid(false);
+        combinedTable.setRowHeight(20);
+        combinedTable.setIntercellSpacing(new Dimension(0, 0));
+        combinedTable.setFocusable(false);
+
+        // Aplicar el renderer personalizado para los multiplicadores
+        upgradesRenderer = new MultiplierCellRenderer();
+        for (int i = 0; i < combinedTable.getColumnCount(); i++) {
+            combinedTable.getColumnModel().getColumn(i).setCellRenderer(upgradesRenderer);
+        }
+
+        // Header animado
+        combinedTable.getTableHeader().setDefaultRenderer(
+                new AnimatedHeaderRenderer(combinedTable.getTableHeader())
+        );
+
+        // Ajustar ancho primera columna
+        combinedTable.getColumnModel().getColumn(0).setPreferredWidth(120);
+
+        // ScrollPane para la tabla combinada
+        JScrollPane scrollCombined = new JScrollPane(combinedTable);
+        scrollCombined.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollCombined.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollCombined.getViewport().setBackground(bgColor);
+
+        upgradesTablesPanel.add(scrollCombined, BorderLayout.CENTER);
+
+        // Añadir al panel principal
+        upgradesCardPanel.removeAll();
+        upgradesCardPanel.add(upgradesTablesPanel, BorderLayout.CENTER);
+
+
+        // Añadir ambos al contenedor y alternar visibilidad con el botón (i)
+        JPanel upgradesStack = new JPanel(null);
+        upgradesStack.setOpaque(false);
+        upgradesStack.setLayout(new CardLayout());
+        upgradesStack.add(upgradesPanel, "UPGRADES");
+        upgradesStack.add(upgradesCardPanel, "CARDS");
+
         upgradesContainer.add(upgradesInfoPanel, BorderLayout.NORTH);
-        upgradesContainer.add(upgradesPanel, BorderLayout.CENTER);
+        upgradesContainer.add(upgradesStack, BorderLayout.CENTER);
+
+        upgradesInfoButton.addActionListener(e -> {
+            upgradesShowingCards = !upgradesShowingCards;
+            CardLayout cl = (CardLayout)(upgradesStack.getLayout());
+            cl.show(upgradesStack, upgradesShowingCards ? "CARDS" : "UPGRADES");
+        });
 
         // Añadir al layout principal
         gbc.gridy = 3;
@@ -228,8 +314,125 @@ public class GameView extends JPanel {
             generatorsPanel.add(generatorPanel);
         }
 
+        generatorsCardPanel = new JPanel(new BorderLayout());
+        generatorsCardPanel.setOpaque(false);
+        JLabel genInfoText = new JLabel("<html><div style='text-align:center;'>Detailed Generator Info</div></html>", SwingConstants.CENTER);
+
+        JPanel generatorsTablesPanel = new JPanel();
+        generatorsTablesPanel.setOpaque(false);
+        generatorsTablesPanel.setLayout(new GridLayout(2, 1, 5, 5));
+
+        String[] generatorCols = {
+                "Name", "Quantity", "Unit Production", "Total Production", "Global Production %"
+        };
+
+        String[] nextUpgradeCols = {
+                "Name", "Cost", "Unit Production"
+        };
+
+
+        String[][] purchasedGenerators = {
+                {"Coffee Beans", "150", "0.5", "75", "25%"},
+                {"Coffee Maker", "75", "1.2", "90", "30%"},
+                {"Take Away", "20", "5.0", "100", "45%"}
+        };
+
+        String[][] nextGeneratorUpgrades = {
+                {"Coffee Beans", "154 cfs", "0.5"},
+                {"Coffee Maker", "785 cfs", "1.2"},
+                {"Take Away", "1000 cfs", "5.0"}
+        };
+
+        // === Tabla Generadores Comprados ===
+        JTable tablePurchasedGenerators = new NonEditableTable(purchasedGenerators, generatorCols);
+        tablePurchasedGenerators.setFont(tableFont);
+        tablePurchasedGenerators.setForeground(fgColor);
+        tablePurchasedGenerators.setBackground(bgColor);
+        tablePurchasedGenerators.setShowGrid(false);
+        tablePurchasedGenerators.setRowHeight(20);
+        tablePurchasedGenerators.setIntercellSpacing(new Dimension(0, 0));
+        tablePurchasedGenerators.setFocusable(false);
+
+        // Centrar celdas
+        for (int i = 0; i < tablePurchasedGenerators.getColumnCount(); i++) {
+            tablePurchasedGenerators.getColumnModel().getColumn(i).setCellRenderer(upgradesRenderer);
+        }
+
+        // Cabecera
+        tablePurchasedGenerators.getTableHeader().setDefaultRenderer(
+                new AnimatedHeaderRenderer(tablePurchasedGenerators.getTableHeader())
+        );
+
+        // Ancho extra para la columna "Nom"
+        tablePurchasedGenerators.getColumnModel().getColumn(0).setPreferredWidth(140);
+
+        // ScrollPane
+        JScrollPane scrollPurchasedGenerators = new JScrollPane(tablePurchasedGenerators);
+        scrollPurchasedGenerators.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        scrollPurchasedGenerators.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPurchasedGenerators.getViewport().setBackground(bgColor);
+        generatorsTablesPanel.add(scrollPurchasedGenerators);
+
+        // === Tabla Próximas Mejoras ===
+        JTable tableNextUpgrades = new NonEditableTable(nextGeneratorUpgrades, nextUpgradeCols);
+        tableNextUpgrades.setFont(tableFont);
+        tableNextUpgrades.setForeground(fgColor);
+        tableNextUpgrades.setBackground(bgColor);
+        tableNextUpgrades.setShowGrid(false);
+        tableNextUpgrades.setRowHeight(20);
+        tableNextUpgrades.setIntercellSpacing(new Dimension(0, 0));
+        tableNextUpgrades.setFocusable(false);
+
+        // Centrar celdas
+        for (int i = 0; i < tableNextUpgrades.getColumnCount(); i++) {
+            tableNextUpgrades.getColumnModel().getColumn(i).setCellRenderer(upgradesRenderer);
+        }
+
+        int nameWidth = tablePurchasedGenerators.getColumnModel().getColumn(0).getPreferredWidth();
+        int costWidth = tablePurchasedGenerators.getColumnModel().getColumn(1).getPreferredWidth()
+                + tablePurchasedGenerators.getColumnModel().getColumn(2).getPreferredWidth();
+        int unitProdWidth = tablePurchasedGenerators.getColumnModel().getColumn(3).getPreferredWidth()
+                + tablePurchasedGenerators.getColumnModel().getColumn(4).getPreferredWidth();
+
+        tableNextUpgrades.getColumnModel().getColumn(0).setPreferredWidth(nameWidth);
+        tableNextUpgrades.getColumnModel().getColumn(1).setPreferredWidth(costWidth);
+        tableNextUpgrades.getColumnModel().getColumn(2).setPreferredWidth(unitProdWidth);
+
+        // Cabecera
+        tableNextUpgrades.getTableHeader().setDefaultRenderer(
+                new AnimatedHeaderRenderer(tableNextUpgrades.getTableHeader())
+        );
+
+        // Ancho extra para la columna "Nom"
+        tableNextUpgrades.getColumnModel().getColumn(0).setPreferredWidth(140);
+
+        // ScrollPane
+        JScrollPane scrollNextUpgrades = new JScrollPane(tableNextUpgrades);
+        scrollNextUpgrades.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        scrollNextUpgrades.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollNextUpgrades.getViewport().setBackground(bgColor);
+        generatorsTablesPanel.add(scrollNextUpgrades);
+
+        // Agregar a tu panel principal
+        generatorsCardPanel.removeAll();
+        generatorsCardPanel.add(generatorsTablesPanel, BorderLayout.CENTER);
+
+
+        // Añadir ambos al contenedor y alternar visibilidad
+        JPanel generatorsStack = new JPanel(null);
+        generatorsStack.setOpaque(false);
+        generatorsStack.setLayout(new CardLayout());
+        generatorsStack.add(generatorsPanel, "GENERATORS");
+        generatorsStack.add(generatorsCardPanel, "CARDS");
+
         generatorsContainer.add(generatorsInfoPanel, BorderLayout.NORTH);
-        generatorsContainer.add(generatorsPanel, BorderLayout.CENTER);
+        generatorsContainer.add(generatorsStack, BorderLayout.CENTER);
+
+        generatorsInfoButton.addActionListener(e -> {
+            generatorsShowingCards = !generatorsShowingCards;
+            CardLayout cl = (CardLayout)(generatorsStack.getLayout());
+            cl.show(generatorsStack, generatorsShowingCards ? "CARDS" : "GENERATORS");
+        });
 
         gbc.gridy = 5;
         gbc.weighty = 0.5;
