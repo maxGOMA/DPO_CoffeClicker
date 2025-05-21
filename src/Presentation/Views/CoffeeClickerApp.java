@@ -17,8 +17,7 @@ public class CoffeeClickerApp extends JFrame {
     private NewGameView newGame;
     private ControllerConfirmation controller_confirmation;
 
-    public CoffeeClickerApp() throws BusinessException{
-        try {
+    public CoffeeClickerApp() throws BusinessException {
             userManager = new UserManager();
             gameManager = new GameManager(userManager);
             statManager = new StatManager();
@@ -53,7 +52,6 @@ public class CoffeeClickerApp extends JFrame {
             ControllerLogOut controller_logout = new ControllerLogOut(logout, userManager, confirmationView, controller_confirmation);
             logout.setController(controller_logout);
 
-
             SettingsView settingsView = new SettingsView(this);
             ControllerSettings controllerSettings = new ControllerSettings(settingsView, gameManager, statManager, confirmationView, controller_confirmation);
             settingsView.setController(controllerSettings);
@@ -65,11 +63,10 @@ public class CoffeeClickerApp extends JFrame {
             mainPanel.add(confirmationView, "Confirmation");
             mainPanel.add(settingsView, "Settings");
 
+            createStatsGraph();
+
             add(mainPanel);
             setVisible(true);
-        }catch(BusinessException e){
-            throw new BusinessException(e.getMessage());
-        }
     }
 
     public void createNewGameView(String name, GameListView gameListView){
@@ -93,7 +90,7 @@ public class CoffeeClickerApp extends JFrame {
         mainPanel.add(gameView, "GameView");
     }
 
-    public void createStatsGraph() {
+    public void createStatsGraph() throws BusinessException {
         GraphView graphView = new GraphView(this);
         ControllerStatistics controllerStatistics = new ControllerStatistics(statManager, userManager, gameManager, graphView);
         graphView.setController(controllerStatistics);
@@ -101,8 +98,4 @@ public class CoffeeClickerApp extends JFrame {
     }
 
     public void showPanel(String panelName) { cardLayout.show(mainPanel, panelName);}
-
-    public static void main(String[] args) {
-        new CoffeeClickerApp();
-    }
 }

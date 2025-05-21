@@ -13,7 +13,7 @@ class UpgradePanel extends JPanel {
     private String type; // gold, silver, diamond
     private boolean bought = false;
     private boolean unlocked = true;
-    private double price;
+    private Float price;
     private int generatorIndex;
 
     private CardLayout cl;
@@ -30,30 +30,29 @@ class UpgradePanel extends JPanel {
 
     private final List<ActionListener> listeners = new ArrayList<>();
 
-    public UpgradePanel(int i) {
-        i--;
-        switch (i) {
-            case 0:
-                type = "silver"; generatorIndex = 0; price = 100; break;
-            case 3:
-                type = "gold"; generatorIndex = 0; price = 200; break;
-            case 6:
-                type = "diamond"; generatorIndex = 0; price = 300; break;
-            case 1:
-                type = "silver"; generatorIndex = 1; price = 400; break;
-            case 4:
-                type = "gold"; generatorIndex = 1; price = 500; break;
-            case 7:
-                type = "diamond"; generatorIndex = 1; price = 600; break;
-            case 2:
-                type = "silver"; generatorIndex = 2; price = 700; break;
-            case 5:
-                type = "gold"; generatorIndex = 2; price = 800; break;
-            case 8:
-                type = "diamond"; generatorIndex = 2; price = 100.00; break;
-        }
+    public UpgradePanel(int upgradeIndex, String command) {
+        this.command = command;
 
-        command = "UPGRADE" + (i + 1);
+        switch (upgradeIndex) {
+            case 0:
+                type = "silver"; generatorIndex = 0; break;
+            case 1:
+                type = "gold"; generatorIndex = 0; break;
+            case 2:
+                type = "diamond"; generatorIndex = 0; break;
+            case 3:
+                type = "silver"; generatorIndex = 1; break;
+            case 4:
+                type = "gold"; generatorIndex = 1; break;
+            case 5:
+                type = "diamond"; generatorIndex = 1; break;
+            case 6:
+                type = "silver"; generatorIndex = 2; break;
+            case 7:
+                type = "gold"; generatorIndex = 2; break;
+            case 8:
+                type = "diamond"; generatorIndex = 2; break;
+        }
 
         setLayout(new BorderLayout());
         setOpaque(false);
@@ -92,7 +91,7 @@ class UpgradePanel extends JPanel {
         iconLabel.setBorder(BorderFactory.createEmptyBorder(14, 10, 14, 10));
         add(iconLabel, BorderLayout.WEST);
 
-        priceLabel = new JLabel(formatPrice(price));
+        priceLabel = new JLabel(formatPrice(0.0));
         priceLabel.setForeground(Color.BLACK);
         priceLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 8));
         priceLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -125,8 +124,6 @@ class UpgradePanel extends JPanel {
 
             public void mouseClicked(MouseEvent e) {
                 if (unlocked && !bought) {
-                    buy();
-                    repaint();
 
                     ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, command);
                     for (ActionListener listener : listeners) {
@@ -140,7 +137,7 @@ class UpgradePanel extends JPanel {
         setPreferredSize(new Dimension(100, 60));
     }
 
-    public void buy() {
+    public void markAsBought() {
         this.bought = true;
         this.unlocked = true;
         repaint();
@@ -153,9 +150,15 @@ class UpgradePanel extends JPanel {
     }
 
     public void unlock() {
+        System.out.println("unlocking.." + price);
         this.unlocked = true;
         cl.show(centerPanel, "PRICE");
         repaint();
+    }
+
+    public void setUpgradePrice(Float price) {
+        this.price = price;
+        priceLabel.setText(formatPrice(price));
     }
 
     @Override
