@@ -1,10 +1,10 @@
 package Presentation.Views;
 
 import Presentation.Controllers.ControllerGame;
-import Presentation.Controllers.ControllerLogin;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -22,21 +22,9 @@ public class GameView extends JPanel {
     public static final String UPG_MAKER_COMMAND = "UPG_MAKER_COMMAND";
     public static final String UPG_TAKEAWAY_COMMAND = "UPG_TAKEAWAY_COMMAND";
 
-//    public static final String UPG_SILVER_BEANS = "UPG_SILVER_BEANS";
-//    public static final String UPG_GOLD_BEANS = "UPG_GOLD_BEANS";
-//    public static final String UPG_DIAMOND_BEANS = "UPG_DIAMOND_BEANS";
-//
-//    public static final String UPG_SILVER_MAKER = "UPG_SILVER_MAKER";
-//    public static final String UPG_GOLD_MAKER = "UPG_GOLD_MAKER";
-//    public static final String UPG_DIAMOND_MAKER = "UPG_DIAMOND_MAKER";
-//
-//    public static final String UPG_SILVER_TAKEAWAY = "UPG_SILVER_TAKEAWAY";
-//    public static final String UPG_GOLD_TAKEAWAY = "UPG_GOLD_TAKEAWAY";
-//    public static final String UPG_DIAMOND_TAKEAWAY = "UPG_DIAMOND_TAKEAWAY";
-
-    //public static final String BEANS_GENERATOR = "beans";
-    //public static final String MAKER_GENERATOR = "coffeeMaker";
-    //public static final String TAKEAWAY_GENERATOR = "TakeAway";
+    private JTable upgradesTable;
+    private JTable generatorShopTable;
+    private JTable purchasedgeneratorsInfoTable;
 
     private final CoffeeClickerApp app;
 
@@ -69,7 +57,7 @@ public class GameView extends JPanel {
     private JPanel generatorsCardPanel;
     private boolean generatorsShowingCards = false;
 
-    private MultiplierCellRenderer upgradesRenderer;
+    private MultiplierCellRenderer cellRenderer;
 
     public GameView(CoffeeClickerApp app) {
         this.app = app;
@@ -214,52 +202,28 @@ public class GameView extends JPanel {
         upgradesTablesPanel.setOpaque(false);
         upgradesTablesPanel.setLayout(new BorderLayout());
 
+        cellRenderer = new MultiplierCellRenderer();
         // Columnas sin "%":
-        String[] upgradeCols = {"Generator", "Price", "Multiplier", "Status"};
-
+        String[] emptyCols = {""};
         // Datos combinados sin la columna de porcentaje
-        String[][] combinedUpgrades = {
-                {"Coffee Beans", "1000 cfs", "x2", "Bought"},
-                {"Coffee Maker", "1000 cfs", "x2", "Bought"},
-                {"Take Away", "1000 cfs", "x2", "Bought"},
-                {"Coffee Beans", "1000 cfs", "x4", "Bought"},
-                {"Coffee Maker", "1000 cfs", "x4", "Available"},
-                {"Take Away", "1000 cfs", "x4", "Bought"},
-                {"Coffee Beans", "1000 cfs", "x8", "Available"},
-                {"Coffee Maker", "1000 cfs", "x8", "Locked"},
-                {"Take Away", "1000 cfs", "x8", "Available"}
-        };
+        String[][] emptyData = {new String[]{""}};
 
         Font tableFont = new Font("CoffeeClicker", Font.PLAIN, 8);
         Color bgColor = Color.decode("#cccccc");
         Color fgColor = Color.decode("#7c483c");
 
         // Crear la tabla unificada
-        JTable combinedTable = new NonEditableTable(combinedUpgrades, upgradeCols);
-        combinedTable.setFont(tableFont);
-        combinedTable.setForeground(fgColor);
-        combinedTable.setBackground(bgColor);
-        combinedTable.setShowGrid(false);
-        combinedTable.setRowHeight(20);
-        combinedTable.setIntercellSpacing(new Dimension(0, 0));
-        combinedTable.setFocusable(false);
-
-        // Aplicar el renderer personalizado para los multiplicadores
-        upgradesRenderer = new MultiplierCellRenderer();
-        for (int i = 0; i < combinedTable.getColumnCount(); i++) {
-            combinedTable.getColumnModel().getColumn(i).setCellRenderer(upgradesRenderer);
-        }
-
-        // Header animado
-        combinedTable.getTableHeader().setDefaultRenderer(
-                new AnimatedHeaderRenderer(combinedTable.getTableHeader())
-        );
-
-        // Ajustar ancho primera columna
-        combinedTable.getColumnModel().getColumn(0).setPreferredWidth(120);
+        upgradesTable = new NonEditableTable(emptyData, emptyCols);
+        upgradesTable.setFont(tableFont);
+        upgradesTable.setForeground(fgColor);
+        upgradesTable.setBackground(bgColor);
+        upgradesTable.setShowGrid(false);
+        upgradesTable.setRowHeight(20);
+        upgradesTable.setIntercellSpacing(new Dimension(0, 0));
+        upgradesTable.setFocusable(false);
 
         // ScrollPane para la tabla combinada
-        JScrollPane scrollCombined = new JScrollPane(combinedTable);
+        JScrollPane scrollCombined = new JScrollPane(upgradesTable);
         scrollCombined.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollCombined.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollCombined.getViewport().setBackground(bgColor);
@@ -269,7 +233,6 @@ public class GameView extends JPanel {
         // Añadir al panel principal
         upgradesCardPanel.removeAll();
         upgradesCardPanel.add(upgradesTablesPanel, BorderLayout.CENTER);
-
 
         // Añadir ambos al contenedor y alternar visibilidad con el botón (i)
         JPanel upgradesStack = new JPanel(null);
@@ -346,92 +309,36 @@ public class GameView extends JPanel {
         generatorsTablesPanel.setOpaque(false);
         generatorsTablesPanel.setLayout(new GridLayout(2, 1, 5, 5));
 
-        String[] generatorCols = {
-                "Name", "Quantity", "Unit Production", "Total Production", "Global Production %"
-        };
-
-        String[] nextUpgradeCols = {
-                "Name", "Cost", "Unit Production"
-        };
-
-
-        String[][] purchasedGenerators = {
-                {"Coffee Beans", "150", "0.5", "75", "25%"},
-                {"Coffee Maker", "75", "1.2", "90", "30%"},
-                {"Take Away", "20", "5.0", "100", "45%"}
-        };
-
-        String[][] nextGeneratorUpgrades = {
-                {"Coffee Beans", "154 cfs", "0.5"},
-                {"Coffee Maker", "785 cfs", "1.2"},
-                {"Take Away", "1000 cfs", "5.0"}
-        };
 
         // === Tabla Generadores Comprados ===
-        JTable tablePurchasedGenerators = new NonEditableTable(purchasedGenerators, generatorCols);
-        tablePurchasedGenerators.setFont(tableFont);
-        tablePurchasedGenerators.setForeground(fgColor);
-        tablePurchasedGenerators.setBackground(bgColor);
-        tablePurchasedGenerators.setShowGrid(false);
-        tablePurchasedGenerators.setRowHeight(20);
-        tablePurchasedGenerators.setIntercellSpacing(new Dimension(0, 0));
-        tablePurchasedGenerators.setFocusable(false);
-
-        // Centrar celdas
-        for (int i = 0; i < tablePurchasedGenerators.getColumnCount(); i++) {
-            tablePurchasedGenerators.getColumnModel().getColumn(i).setCellRenderer(upgradesRenderer);
-        }
-
-        // Cabecera
-        tablePurchasedGenerators.getTableHeader().setDefaultRenderer(
-                new AnimatedHeaderRenderer(tablePurchasedGenerators.getTableHeader())
-        );
-
-        // Ancho extra para la columna "Nom"
-        tablePurchasedGenerators.getColumnModel().getColumn(0).setPreferredWidth(140);
+        purchasedgeneratorsInfoTable = new NonEditableTable(emptyData, emptyCols);
+        purchasedgeneratorsInfoTable.setFont(tableFont);
+        purchasedgeneratorsInfoTable.setForeground(fgColor);
+        purchasedgeneratorsInfoTable.setBackground(bgColor);
+        purchasedgeneratorsInfoTable.setShowGrid(false);
+        purchasedgeneratorsInfoTable.setRowHeight(20);
+        purchasedgeneratorsInfoTable.setIntercellSpacing(new Dimension(0, 0));
+        purchasedgeneratorsInfoTable.setFocusable(false);
 
         // ScrollPane
-        JScrollPane scrollPurchasedGenerators = new JScrollPane(tablePurchasedGenerators);
+        JScrollPane scrollPurchasedGenerators = new JScrollPane(purchasedgeneratorsInfoTable);
         scrollPurchasedGenerators.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollPurchasedGenerators.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPurchasedGenerators.getViewport().setBackground(bgColor);
         generatorsTablesPanel.add(scrollPurchasedGenerators);
 
-        // === Tabla Próximas Mejoras ===
-        JTable tableNextUpgrades = new NonEditableTable(nextGeneratorUpgrades, nextUpgradeCols);
-        tableNextUpgrades.setFont(tableFont);
-        tableNextUpgrades.setForeground(fgColor);
-        tableNextUpgrades.setBackground(bgColor);
-        tableNextUpgrades.setShowGrid(false);
-        tableNextUpgrades.setRowHeight(20);
-        tableNextUpgrades.setIntercellSpacing(new Dimension(0, 0));
-        tableNextUpgrades.setFocusable(false);
-
-        // Centrar celdas
-        for (int i = 0; i < tableNextUpgrades.getColumnCount(); i++) {
-            tableNextUpgrades.getColumnModel().getColumn(i).setCellRenderer(upgradesRenderer);
-        }
-
-        int nameWidth = tablePurchasedGenerators.getColumnModel().getColumn(0).getPreferredWidth();
-        int costWidth = tablePurchasedGenerators.getColumnModel().getColumn(1).getPreferredWidth()
-                + tablePurchasedGenerators.getColumnModel().getColumn(2).getPreferredWidth();
-        int unitProdWidth = tablePurchasedGenerators.getColumnModel().getColumn(3).getPreferredWidth()
-                + tablePurchasedGenerators.getColumnModel().getColumn(4).getPreferredWidth();
-
-        tableNextUpgrades.getColumnModel().getColumn(0).setPreferredWidth(nameWidth);
-        tableNextUpgrades.getColumnModel().getColumn(1).setPreferredWidth(costWidth);
-        tableNextUpgrades.getColumnModel().getColumn(2).setPreferredWidth(unitProdWidth);
-
-        // Cabecera
-        tableNextUpgrades.getTableHeader().setDefaultRenderer(
-                new AnimatedHeaderRenderer(tableNextUpgrades.getTableHeader())
-        );
-
-        // Ancho extra para la columna "Nom"
-        tableNextUpgrades.getColumnModel().getColumn(0).setPreferredWidth(140);
+        // === Tabla Próximos Costes ===
+        generatorShopTable = new NonEditableTable(emptyData, emptyCols);
+        generatorShopTable.setFont(tableFont);
+        generatorShopTable.setForeground(fgColor);
+        generatorShopTable.setBackground(bgColor);
+        generatorShopTable.setShowGrid(false);
+        generatorShopTable.setRowHeight(20);
+        generatorShopTable.setIntercellSpacing(new Dimension(0, 0));
+        generatorShopTable.setFocusable(false);
 
         // ScrollPane
-        JScrollPane scrollNextUpgrades = new JScrollPane(tableNextUpgrades);
+        JScrollPane scrollNextUpgrades = new JScrollPane(generatorShopTable);
         scrollNextUpgrades.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollNextUpgrades.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollNextUpgrades.getViewport().setBackground(bgColor);
@@ -440,7 +347,6 @@ public class GameView extends JPanel {
         // Agregar a tu panel principal
         generatorsCardPanel.removeAll();
         generatorsCardPanel.add(generatorsTablesPanel, BorderLayout.CENTER);
-
 
         // Añadir ambos al contenedor y alternar visibilidad
         JPanel generatorsStack = new JPanel(null);
@@ -738,6 +644,100 @@ public class GameView extends JPanel {
             upgrades.get("upgrade" + index).setUpgradePrice(takeAwayUpgradeCosts.get(i));
         }
     }
+
+    public void updateUpgradeInfoTable(int beansLevelUpgrade, int makerLevelUpgrade, int takeAwayLevelUpgrade, ArrayList<Float> beansUpgradeCosts, ArrayList<Float> makerUpgradeCosts, ArrayList<Float> takeAwayUpgradeCosts) {
+        String[][] combinedUpgrades = {
+                {"Coffee Beans", beansUpgradeCosts.get(0) + " cfs", "x2", (beansLevelUpgrade >= 1) ? "Bought" : "Available"},
+                {"Coffee Maker", makerUpgradeCosts.get(0) + " cfs", "x2", (makerLevelUpgrade >= 1) ? "Bought" : "Available"},
+                {"Take Away", takeAwayUpgradeCosts.get(0) + " cfs", "x2", (takeAwayLevelUpgrade >= 1) ? "Bought" : "Available"},
+                {"Coffee Beans", beansUpgradeCosts.get(1) + " cfs", "x4", (beansLevelUpgrade >= 2) ? "Bought" : "Available"},
+                {"Coffee Maker", makerUpgradeCosts.get(1) + " cfs", "x4", (makerLevelUpgrade >= 2) ? "Bought" : "Available"},
+                {"Take Away", takeAwayUpgradeCosts.get(1) + " cfs", "x4", (takeAwayLevelUpgrade >= 2) ? "Bought" : "Available"},
+                {"Coffee Beans", beansUpgradeCosts.get(2) + " cfs", "x8", (beansLevelUpgrade >= 3) ? "Bought" : "Available"},
+                {"Coffee Maker", makerUpgradeCosts.get(2) + " cfs", "x8", (makerLevelUpgrade >= 3) ? "Bought" : "Available"},
+                {"Take Away", takeAwayUpgradeCosts.get(2) + " cfs", "x8", (takeAwayLevelUpgrade >= 3) ? "Bought" : "Available"}
+        };
+        String[] upgradeCols = {"Generator", "Price", "Multiplier", "Status"};
+
+        upgradesTable.setModel(new DefaultTableModel(combinedUpgrades, upgradeCols));
+
+        // Aplicar el renderer personalizado para los multiplicadores
+        for (int i = 0; i < upgradesTable.getColumnCount(); i++) {
+            upgradesTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
+
+        // Header animado
+        upgradesTable.getTableHeader().setDefaultRenderer(
+                new AnimatedHeaderRenderer(upgradesTable.getTableHeader())
+        );
+
+        // Ajustar ancho primera columna
+        upgradesTable.getColumnModel().getColumn(0).setPreferredWidth(120);
+    }
+
+    public void updateGeneratorsShopTable (double beansPriceGenerator, String beansUnitProduction, double makerPriceGenerator, String makerUnitProduction, double takeAwayPriceGenerator, String takeAwayUnitProduction) {
+        String[] generatorsShopCols = {
+                "Name", "Cost", "Unit Production"
+        };
+
+        String[][] generatorShopInfo = { new String[]
+                {"Coffee Beans", formatPrice(beansPriceGenerator) + " cfs", beansUnitProduction + ""},
+                {"Coffee Maker", formatPrice(makerPriceGenerator) + " cfs", makerUnitProduction + ""},
+                {"Take Away", formatPrice(takeAwayPriceGenerator) + " cfs", takeAwayUnitProduction + ""},
+        };
+
+        generatorShopTable.setModel(new DefaultTableModel(generatorShopInfo, generatorsShopCols));
+        // Centrar celdas
+        for (int i = 0; i < generatorShopTable.getColumnCount(); i++) {
+            generatorShopTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
+
+        int nameWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(0).getPreferredWidth();
+        int costWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(1).getPreferredWidth()
+                + purchasedgeneratorsInfoTable.getColumnModel().getColumn(2).getPreferredWidth();
+        int unitProdWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(3).getPreferredWidth()
+                + purchasedgeneratorsInfoTable.getColumnModel().getColumn(4).getPreferredWidth();
+
+        generatorShopTable.getColumnModel().getColumn(0).setPreferredWidth(nameWidth);
+        generatorShopTable.getColumnModel().getColumn(1).setPreferredWidth(costWidth);
+        generatorShopTable.getColumnModel().getColumn(2).setPreferredWidth(unitProdWidth);
+
+        // Cabecera
+        generatorShopTable.getTableHeader().setDefaultRenderer(
+                new AnimatedHeaderRenderer(generatorShopTable.getTableHeader())
+        );
+
+        // Ancho extra para la columna "Nom"
+        generatorShopTable.getColumnModel().getColumn(0).setPreferredWidth(140);
+    }
+
+    public void updateGeneratorsInfoTable(int beansQuantity, int makerQuantity, int takeAwayQuantity, String beansUnitProduction, String makerUnitProduction, String takeAwayUnitProduction, String beansTotalProduction, String makerTotalProduction, String takeAwayTotalProduction, String beansGlobalProduction, String makerGlobalProduction, String takeAwayGlobalProduction) {
+
+        String[] generatorInfoTableCols = {
+                "Name", "Quantity", "Unit Production", "Total Production", "Global Production %"
+        };
+
+        String[][] generatorInfoTableData = {
+                {"Coffee Beans", beansQuantity + "", beansUnitProduction, beansTotalProduction, beansGlobalProduction},
+                {"Coffee Maker", makerQuantity + "", makerUnitProduction, makerTotalProduction, makerGlobalProduction},
+                {"Take Away", takeAwayQuantity + "", takeAwayUnitProduction, takeAwayTotalProduction, takeAwayGlobalProduction}
+        };
+        purchasedgeneratorsInfoTable.setModel(new DefaultTableModel(generatorInfoTableData, generatorInfoTableCols));
+        // Centrar celdas
+        for (int i = 0; i < purchasedgeneratorsInfoTable.getColumnCount(); i++) {
+            purchasedgeneratorsInfoTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+        }
+
+        // Cabecera
+        purchasedgeneratorsInfoTable.getTableHeader().setDefaultRenderer(
+                new AnimatedHeaderRenderer(purchasedgeneratorsInfoTable.getTableHeader())
+        );
+
+        // Ancho extra para la columna "Nom"
+        purchasedgeneratorsInfoTable.getColumnModel().getColumn(0).setPreferredWidth(140);
+    }
+
+
 
     public void buyUpgrade(int levelUpgrade, String generator) {
         upgrades.get(getUpgradeGridIndex(levelUpgrade,generator)).markAsBought();

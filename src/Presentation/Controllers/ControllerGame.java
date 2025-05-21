@@ -39,8 +39,11 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
             gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
 
-            gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+            gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
+            gameView.updateGeneratorsShopTable(gameManager.getGeneratorCost("beans"), gameManager.getUnitProduction("beans"), gameManager.getGeneratorCost("coffeeMaker"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getGeneratorCost("TakeAway"), gameManager.getUnitProduction("TakeAway"));
 
+            gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+            gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
         } catch (BusinessException e) {
             System.out.println(e.getMessage());
             PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
@@ -68,7 +71,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("beans"));
                     //Actualizar cafes por segundo
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
-
+                    gameView.updateGeneratorsShopTable(gameManager.getGeneratorCost("beans"), gameManager.getUnitProduction("beans"), gameManager.getGeneratorCost("coffeeMaker"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getGeneratorCost("TakeAway"), gameManager.getUnitProduction("TakeAway"));
+                    gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                     gameManager.updateGame();
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
@@ -93,6 +97,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setActualPriceGenerator("coffeeMaker", gameManager.getGeneratorCost("coffeeMaker"));
                     //Actualizar cafes por segundo
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                    gameView.updateGeneratorsShopTable(gameManager.getGeneratorCost("beans"), gameManager.getUnitProduction("beans"), gameManager.getGeneratorCost("coffeeMaker"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getGeneratorCost("TakeAway"), gameManager.getUnitProduction("TakeAway"));
+                    gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                     gameManager.updateGame();
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
@@ -116,6 +122,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.setActualPriceGenerator("TakeAway", gameManager.getGeneratorCost("TakeAway"));
                     //Actualizar cafes por segundo
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                    gameView.updateGeneratorsShopTable(gameManager.getGeneratorCost("beans"), gameManager.getUnitProduction("beans"), gameManager.getGeneratorCost("coffeeMaker"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getGeneratorCost("TakeAway"), gameManager.getUnitProduction("TakeAway"));
+                    gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                     gameManager.updateGame();
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
@@ -141,6 +149,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                         //Actualizar num coffes (automatico decrementa)
                         gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
                         gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                        gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+                        gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                         gameManager.updateGame();
                     } else {
                         PopUpErrorView.showErrorPopup(null, "Compra un generador primero", new ImageIcon("imgs/standingPerson.png"));
@@ -168,7 +178,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                         //Actualizar num coffes (automatico decrementa)
                         gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
                         gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
-
+                        gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+                        gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                         gameManager.updateGame();
                     } else {
                         PopUpErrorView.showErrorPopup(null, "Compra un generador primero!", new ImageIcon("imgs/standingPerson.png"));
@@ -193,7 +204,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                         //Actualizar num coffes (automatico decrementa)
                         gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
                         gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
-
+                        gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+                        gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                         gameManager.updateGame();
                     } else {
                         PopUpErrorView.showErrorPopup(null, "Compra un generador primero", new ImageIcon("imgs/standingPerson.png"));
