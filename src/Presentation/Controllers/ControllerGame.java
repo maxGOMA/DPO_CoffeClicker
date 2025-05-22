@@ -4,6 +4,7 @@ import Business.BusinessException;
 import Business.CoffeGenerationListener;
 import Business.GameManager;
 import Business.StatManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameView;
 import Presentation.Views.PopUpErrorView;
 
@@ -16,11 +17,12 @@ import static Presentation.Views.GameView.UPG_BEANS_COMMAND;
 public class ControllerGame implements ActionListener, CoffeGenerationListener {
     private GameManager gameManager;
     private GameView gameView;
+    private CoffeeClickerApp app;
 
-    public ControllerGame (GameView gameView, GameManager gameManager, StatManager statManager) {
+    public ControllerGame (GameView gameView, GameManager gameManager, StatManager statManager, CoffeeClickerApp app) {
         this.gameManager = gameManager;
         this.gameView = gameView;
-
+        this.app = app;
         try {
             gameManager.activateGenerators(this, new String[] {"beans", "coffeeMaker", "TakeAway"});
             statManager.initiateStatsGeneration(gameManager.getCurrentGame());
@@ -200,13 +202,13 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
 
         else if(command.equals(GameView.SETTINGS_COMMAND)){
             gameManager.updateGame();
-            gameView.getApp().showPanel("Settings");
+            app.showPanel("Settings");
         }
         else if(command.equals(GameView.STATS_COMMAND)) {
             try {
                 gameManager.updateGame();
-                gameView.getApp().createStatsGraph();
-                gameView.getApp().showPanel("stats");
+                app.createStatsGraph();
+                app.showPanel("stats");
             } catch (BusinessException exception) {
                 PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
             }

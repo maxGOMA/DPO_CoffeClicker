@@ -2,6 +2,7 @@ package Presentation.Controllers;
 
 import Business.BusinessException;
 import Business.UserManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.RegisterView;
 
 import java.awt.event.ActionEvent;
@@ -11,12 +12,14 @@ import java.util.regex.Pattern;
 import static Presentation.Views.RegisterView.showError;
 
 public class ControllerRegister implements ActionListener {
-    UserManager userManager;
-    private final RegisterView registerView;
+    private UserManager userManager;
+    private RegisterView registerView;
+    private CoffeeClickerApp app;
 
-    public ControllerRegister(RegisterView registerView, UserManager userManager) {
+    public ControllerRegister(RegisterView registerView, UserManager userManager, CoffeeClickerApp app) {
         this.registerView = registerView;
         this.userManager = userManager;
+        this.app = app;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class ControllerRegister implements ActionListener {
         if(command.equals(RegisterView.BACK_COMMAND)){
             registerView.clearFields();
             registerView.clearErrorMessages();
-            registerView.getApp().showPanel("MainMenuView");
+            app.showPanel("MainMenuView");
         }
 
     }
@@ -92,7 +95,7 @@ public class ControllerRegister implements ActionListener {
                 userManager.setUser(user);
                 registerView.clearFields();
                 registerView.clearErrorMessages();
-                registerView.getApp().showPanel("MainMenuView");
+                app.showPanel("MainMenuView");
             } catch (BusinessException e){
                 showError("USER", "Could not acces the database!");
             }

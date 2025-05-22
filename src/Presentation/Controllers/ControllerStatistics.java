@@ -5,6 +5,7 @@ import Business.BusinessException;
 import Business.GameManager;
 import Business.StatManager;
 import Business.UserManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.GraphView;
 import Presentation.Views.PopUpErrorView;
 
@@ -14,18 +15,19 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ControllerStatistics implements ActionListener {
-    private final StatManager statManager;
-    private final UserManager userManager;
-    private final GameManager gameManager;
-    private final GraphView graphView;
-
+    private StatManager statManager;
+    private UserManager userManager;
+    private GameManager gameManager;
+    private GraphView graphView;
+    private CoffeeClickerApp app;
     private String selectedUsername;
 
-    public ControllerStatistics(StatManager statManager, UserManager userManager, GameManager gameManager, GraphView graphView) throws BusinessException {
+    public ControllerStatistics(StatManager statManager, UserManager userManager, GameManager gameManager, GraphView graphView, CoffeeClickerApp app) throws BusinessException {
         this.statManager = statManager;
         this.userManager = userManager;
         this.gameManager = gameManager;
         this.graphView = graphView;
+        this.app = app;
         this.graphView.setController(this);
         try {
             initStatsView();
@@ -82,7 +84,7 @@ public class ControllerStatistics implements ActionListener {
                 PopUpErrorView.showErrorPopup(null, excp.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
         } else if (command.equals(GraphView.BACK_COMMAND)){
-                graphView.getApp().showPanel("GameView");
+                app.showPanel("GameView");
         }
     }
 

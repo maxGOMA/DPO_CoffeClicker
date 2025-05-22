@@ -2,6 +2,7 @@ package Presentation.Controllers;
 
 import Business.BusinessException;
 import Business.UserManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.LoginView;
 import Presentation.Views.PopUpErrorView;
 
@@ -12,13 +13,15 @@ import java.awt.event.ActionListener;
 import static Presentation.Views.LoginView.showError;
 
 public class ControllerLogin implements ActionListener {
-    private final UserManager userManager;
-    private final LoginView loginView;
+    private UserManager userManager;
+    private LoginView loginView;
+    private CoffeeClickerApp app;
 
-    public ControllerLogin(LoginView loginView, UserManager userManager) {
+    public ControllerLogin(LoginView loginView, UserManager userManager, CoffeeClickerApp app) {
         this.userManager = userManager;
         this.loginView = loginView;
         this.loginView.setController(this);
+        this.app = app;
     }
 
     private void validateAndLogin() {
@@ -69,8 +72,8 @@ public class ControllerLogin implements ActionListener {
                     } else {
                         try{
                             userManager.setUser(userEmail);
-                            loginView.getApp().createSelectGame();
-                            loginView.getApp().showPanel("SelectGame");
+                            app.createSelectGame();
+                            app.showPanel("SelectGame");
                         }catch(BusinessException e){
                             PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
                         }
@@ -92,7 +95,7 @@ public class ControllerLogin implements ActionListener {
         } else if (command.equals(LoginView.BACK_COMMAND)) {
             loginView.clearFields();
             loginView.clearErrorMessages();
-            loginView.getApp().showPanel("MainMenuView");
+            app.showPanel("MainMenuView");
         }
     }
 }

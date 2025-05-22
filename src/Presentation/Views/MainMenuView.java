@@ -14,12 +14,10 @@ public class MainMenuView extends JPanel {
     public static final String VIEW_LOGIN = "VIEW_LOGIN";
     public static final String VIEW_REGISTER = "VIEW_REGISTER";
     public static final String VIEW_EXIT = "VIEW_EXIT";
-    private final CoffeeClickerApp app;
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private static Font coffeeClickerFont;
 
-    public MainMenuView(CoffeeClickerApp app) {
-        this.app = app;
+    public MainMenuView() {
         setLayout(new BorderLayout());
 
         loadCustomFont();
@@ -127,7 +125,4 @@ public class MainMenuView extends JPanel {
         }
     }
 
-    public CoffeeClickerApp getApp(){
-        return app;
-    }
 }

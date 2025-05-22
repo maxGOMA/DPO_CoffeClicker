@@ -12,12 +12,10 @@ public class LogOutView extends JPanel {
     public static final String LOGOUT_COMMAND = "LOGOUT_COMMAND";
     public static final String DELETE_ACCOUNT_COMMAND = "DELETE_ACCOUNT_COMMAND";
     public static final String CONFIRMATION_COMMAND = "CONFIRMATION_COMMAND";
-    private final CoffeeClickerApp app;
     private Font coffeeClickerFont;
     private final HashMap<String, JButton> buttons = new HashMap<>();
 
-    public LogOutView(CoffeeClickerApp app) {
-        this.app = app;
+    public LogOutView() {
         setLayout(new BorderLayout());
 
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -87,9 +85,6 @@ public class LogOutView extends JPanel {
         return button;
     }
 
-    public CoffeeClickerApp getApp(){
-        return app;
-    }
 
     public void setController(ControllerLogOut controller_logOut){
         for (JButton button : buttons.values()) {

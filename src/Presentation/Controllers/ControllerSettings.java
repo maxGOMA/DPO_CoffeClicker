@@ -2,6 +2,7 @@ package Presentation.Controllers;
 
 import Business.GameManager;
 import Business.StatManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.ConfirmationView;
 import Presentation.Views.SettingsView;
 
@@ -9,18 +10,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControllerSettings implements ActionListener {
-    private final SettingsView view;
-    private final GameManager gameManager;
-    private final StatManager statManager;
+    private SettingsView view;
+    private GameManager gameManager;
+    private StatManager statManager;
     private ConfirmationView confirmationView;
     private ControllerConfirmation controllerConfirmation;
+    private CoffeeClickerApp app;
 
-    public ControllerSettings(SettingsView view, GameManager gameManager, StatManager statManager, ConfirmationView confirmationView, ControllerConfirmation controllerConfirmation) {
+    public ControllerSettings(SettingsView view, GameManager gameManager, StatManager statManager, ConfirmationView confirmationView, ControllerConfirmation controllerConfirmation, CoffeeClickerApp app) {
         this.view = view;
         this.gameManager = gameManager;
         this.statManager = statManager;
         this.confirmationView = confirmationView;
         this.controllerConfirmation = controllerConfirmation;
+        this.app = app;
     }
 
     @Override
@@ -29,18 +32,18 @@ public class ControllerSettings implements ActionListener {
             ControllerLogOut.ViewBack("Settings");
             statManager.stopStatsGeneration();
             gameManager.endAndUpdateGame();
-            view.getApp().showPanel("Logout");
+            app.showPanel("Logout");
         } else if (e.getActionCommand().equals(view.BACK_COMMAND)) {
-            view.getApp().showPanel("GameView");
+            app.showPanel("GameView");
         } else if (e.getActionCommand().equals(view.FINISH_COMMAND)){
             confirmationView.setMessage("Warning: Once the game is finished, you will no longer be able to access it.");
             controllerConfirmation.ViewBack("Settings");
-            view.getApp().showPanel("Confirmation");
+            app.showPanel("Confirmation");
         } else if (e.getActionCommand().equals(view.SAVE_COMMAND)) {
             statManager.stopStatsGeneration();
             gameManager.endAndUpdateGame();
-            view.getApp().createSelectGame();
-            view.getApp().showPanel("SelectGame");
+            app.createSelectGame();
+            app.showPanel("SelectGame");
         }
     }
 }

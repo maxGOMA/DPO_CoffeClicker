@@ -1,17 +1,20 @@
 package Presentation.Controllers;
 
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.LoginView;
 import Presentation.Views.MainMenuView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControllerMainMenu implements ActionListener {
-    private final MainMenuView mainMenuView;
+    private MainMenuView mainMenuView;
     private LoginView logInView;
+    private CoffeeClickerApp app;
 
-    public ControllerMainMenu(MainMenuView mainMenuView, LoginView logInView){
+    public ControllerMainMenu(MainMenuView mainMenuView, LoginView logInView, CoffeeClickerApp app) {
         this.mainMenuView = mainMenuView;
         this.logInView = logInView;
+        this.app = app;
     }
 
     @Override
@@ -21,10 +24,10 @@ public class ControllerMainMenu implements ActionListener {
         if (command.equals(MainMenuView.VIEW_LOGIN)) {
             logInView.clearFields();
             logInView.clearErrorMessages();
-            mainMenuView.getApp().showPanel("Login");
+            app.showPanel("Login");
         }
         if (command.equals(MainMenuView.VIEW_REGISTER)) {
-            mainMenuView.getApp().showPanel("Register");
+            app.showPanel("Register");
         }
         if (command.equals(MainMenuView.VIEW_EXIT)) {
             System.exit(0);

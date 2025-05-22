@@ -1,5 +1,6 @@
 package Presentation.Views;
 
+import Presentation.CoffeeClickerApp;
 import Presentation.Controllers.ControllerGame;
 
 import javax.swing.*;

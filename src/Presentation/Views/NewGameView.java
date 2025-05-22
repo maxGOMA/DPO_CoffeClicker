@@ -12,7 +12,6 @@ public class NewGameView extends JPanel {
     public static final String START = "START";
     public static final String LOG_OUT = "LOGOUT";
 
-    private final CoffeeClickerApp app;
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private static Font coffeeClickerFont;
     private static final HashMap<String, JLabel> errorLabels = new HashMap<>();
@@ -25,8 +24,7 @@ public class NewGameView extends JPanel {
     private JPanel buttonPanel;
     private String name;
 
-    public NewGameView(CoffeeClickerApp app, String name){
-        this.app = app;
+    public NewGameView(String name){
         this.name = name;
         coffeeClickerFont = MainMenuView.loadCustomFont();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -215,10 +213,6 @@ public class NewGameView extends JPanel {
         for (JButton button : buttons.values()) {
             button.addActionListener(controller_newGame);
         }
-    }
-
-    public CoffeeClickerApp getApp() {
-        return app;
     }
 
     public void setGameName(String name) {

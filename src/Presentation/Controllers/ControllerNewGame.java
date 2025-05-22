@@ -2,6 +2,7 @@ package Presentation.Controllers;
 
 import Business.BusinessException;
 import Business.GameManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameListView;
 import Presentation.Views.NewGameView;
 
@@ -16,13 +17,15 @@ public class ControllerNewGame implements ActionListener {
     private Boolean iscopy;
     private GameListView gameListView;
     private ControllerConfirmation controllerConfirmation;
+    private CoffeeClickerApp app;
 
-    public ControllerNewGame(NewGameView view, GameManager gameManager, Boolean iscopy, GameListView gameListView, ControllerConfirmation controllerConfirmation) {
+    public ControllerNewGame(NewGameView view, GameManager gameManager, Boolean iscopy, GameListView gameListView, ControllerConfirmation controllerConfirmation, CoffeeClickerApp app) {
         this.view = view;
         this.gameManager = gameManager;
         this.iscopy = iscopy;
         this.gameListView = gameListView;
         this.controllerConfirmation = controllerConfirmation;
+        this.app = app;
     }
 
     @Override
@@ -36,9 +39,9 @@ public class ControllerNewGame implements ActionListener {
                     showError("ENTER GAME NAME", "This game name is already in use.");
                 } else {
                     gameManager.createNewGame(nameGame, iscopy);
-                    view.getApp().createGameScreen();
+                    app.createGameScreen();
                     gameListView.setComponentInterPanel(nameGame);
-                    view.getApp().showPanel("GameView");
+                    app.showPanel("GameView");
                 }
             }catch(BusinessException ex){
 
@@ -46,9 +49,9 @@ public class ControllerNewGame implements ActionListener {
         }else if(command.equals("CANCEL")){
             view.clearFields();
             view.clearErrorMessages();
-            view.getApp().showPanel("SelectGame");
+            app.showPanel("SelectGame");
         }else if(command.equals("LOGOUT")){
-            view.getApp().showPanel("Logout");
+            app.showPanel("Logout");
         }
     }
 }

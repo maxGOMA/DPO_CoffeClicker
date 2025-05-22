@@ -4,6 +4,7 @@ import Business.BusinessException;
 import Business.Entities.EntityGame;
 import Business.GameManager;
 import Business.StatManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameListView;
 import Presentation.Views.PopUpErrorView;
 
@@ -21,11 +22,13 @@ public class ControllerGameList implements ActionListener {
     private StatManager statManager;
     private GameListView view;
     private static String name;
+    private CoffeeClickerApp app;
 
-    public ControllerGameList(GameListView gameListView, GameManager gameManager, StatManager statManager) {
+    public ControllerGameList(GameListView gameListView, GameManager gameManager, StatManager statManager, CoffeeClickerApp app) {
         this.gameManager = gameManager;
         this.statManager = statManager;
         this.view = gameListView;
+        this.app = app;
     }
 
     private String findName(String command){
@@ -70,8 +73,8 @@ public class ControllerGameList implements ActionListener {
             view.clearGameSelected();
 
         }else if(command.equals("NEWGAME")){
-            view.getApp().createNewGameView(null, view);
-            view.getApp().showPanel("NewGame");
+            app.createNewGameView(null, view);
+            app.showPanel("NewGame");
 
         }else if(command.contains("COPY")){
             name = findName(command);
@@ -81,8 +84,8 @@ public class ControllerGameList implements ActionListener {
             } catch (BusinessException ex) {
                 PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
-            view.getApp().createNewGameView(game.getName(), view);
-            view.getApp().showPanel("NewGame");
+            app.createNewGameView(game.getName(), view);
+            app.showPanel("NewGame");
 
         } else if(command.contains("DELETE")) {
             name = findName(command);
@@ -92,7 +95,7 @@ public class ControllerGameList implements ActionListener {
 
         }else if(command.equals("LOGOUT")){
             ControllerLogOut.ViewBack("SelectGame");
-            view.getApp().showPanel("Logout");
+            app.showPanel("Logout");
 
         }else if(command.contains("START")){
             name = findName(command);
@@ -101,8 +104,8 @@ public class ControllerGameList implements ActionListener {
             } catch (BusinessException ex) {
                 PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
-            view.getApp().createGameScreen();
-            view.getApp().showPanel("GameView");
+            app.createGameScreen();
+            app.showPanel("GameView");
         }
     }
 

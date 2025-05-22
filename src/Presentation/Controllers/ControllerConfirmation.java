@@ -4,6 +4,7 @@ import Business.BusinessException;
 import Business.GameManager;
 import Business.StatManager;
 import Business.UserManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.ConfirmationView;
 import Presentation.Views.GameListView;
 
@@ -13,16 +14,18 @@ import java.awt.event.ActionListener;
 
 public class ControllerConfirmation implements ActionListener {
     private UserManager userManager;
-    private final GameManager gameManager;
-    private final StatManager statManager;
+    private GameManager gameManager;
+    private StatManager statManager;
     private ConfirmationView view;
     private String ViewBack;
+    private CoffeeClickerApp app;
 
-    public ControllerConfirmation (UserManager userManager, ConfirmationView view, GameManager gameManager, StatManager statManager){
+    public ControllerConfirmation (UserManager userManager, ConfirmationView view, GameManager gameManager, StatManager statManager, CoffeeClickerApp app) {
         this.userManager = userManager;
         this.view = view;
         this.gameManager = gameManager;
         this.statManager = statManager;
+        this.app = app;
     }
 
     public void ViewBack(String ViewBack){
@@ -41,7 +44,7 @@ public class ControllerConfirmation implements ActionListener {
                    gameManager.deleteAllGamesByUser();
                    statManager.deleteAllStatsFromUser(gameManager.getUserFinishedGameIds(userManager.getCurrentUser()));
                    userManager.deleteAccount();
-                   view.getApp().showPanel("MainMenuView");
+                   app.showPanel("MainMenuView");
                } catch (BusinessException ex) {
                    //TODO MOSTRAR ERROR DE PERSISTENCIA
                }
@@ -51,10 +54,10 @@ public class ControllerConfirmation implements ActionListener {
                gameManager.finishCurrentGame();
                gameManager.endAndUpdateGame();
                GameListView.deleteGameSelectedView(gameManager.getCurrentGame().getName());
-               view.getApp().showPanel("SelectGame");
+               app.showPanel("SelectGame");
            }
         }else if(command.equals(view.CANCEL)){
-            view.getApp().showPanel(ViewBack);
+            app.showPanel(ViewBack);
         }
     }
 }
