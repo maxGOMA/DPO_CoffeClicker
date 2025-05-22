@@ -66,10 +66,10 @@ public interface UserDAO {
     /**
      *  Method that returns the user from the database (class User).
      *
-     *  @param username username form the user to access.
+     *  @param usernameOrEmail username form the user to access.
      *  @return User from the database with user_name introduced.
      */
-    EntityUser getUserFromusername(String username) throws PersistanceException;;
+    EntityUser getUserFromIdentifier(String usernameOrEmail) throws PersistanceException;
 }
 
 

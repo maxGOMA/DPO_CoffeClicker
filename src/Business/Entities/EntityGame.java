@@ -1,11 +1,10 @@
 package Business.Entities;
 
 import Business.CoffeGenerationListener;
-
 import java.util.ArrayList;
 
 public class EntityGame {
-    private int ID_Game;
+    private int IDGame;
     private String username ;
     private String name;
     private double numCoffees;
@@ -23,13 +22,12 @@ public class EntityGame {
 
     //-----------Inicialización del juego----------------------------------
     //Si recupero la partida de la persistencia
-    public EntityGame(String name, int beansGenerators, int upgradeClicker, int upgradeTakeAway, int upgradeCoffeMaker, int upgradeBeans, int takeAwayGenerators, int coffeeMakersGenerators, Double num_Coffees, String username, int ID_Game,int minutesPlayed, int finished) {
-        EntityGenerator generator;
+    public EntityGame(String name, int beansGenerators, int upgradeClicker, int upgradeTakeAway, int upgradeCoffeeMaker, int upgradeBeans, int takeAwayGenerators, int coffeeMakersGenerators, Double numCoffees, String username, int IDGame,int minutesPlayed, int finished) {
         generators = new ArrayList();
 
         this.name = name;
         this.username = username;
-        this.ID_Game = ID_Game;
+        this.IDGame = IDGame;
 
         this.numBeansGenerators = beansGenerators;
         this.numCoffeeMakerGenerators = coffeeMakersGenerators;
@@ -37,20 +35,20 @@ public class EntityGame {
 
         this.clickerLevelUpgrade = upgradeClicker;
         this.beansLevelUpgrade = upgradeBeans;
-        this.coffeMakerLevelUpgrade = upgradeCoffeMaker;
+        this.coffeMakerLevelUpgrade = upgradeCoffeeMaker;
         this.takeAwayLevelUpgrade = upgradeTakeAway;
 
-        this.numCoffees = num_Coffees;
+        this.numCoffees = numCoffees;
         this.minutesPlayed = minutesPlayed;
 
         this.finished = finished;
     }
 
     //Si se trata de una nueva partida.
-    public EntityGame(String name, String username, int ID_Game) {
+    public EntityGame(String name, String username, int IDGame) {
         this.name = name;
         this.username = username;
-        this.ID_Game = ID_Game;
+        this.IDGame = IDGame;
 
         numBeansGenerators = 0;
         numCoffeeMakerGenerators = 0;
@@ -69,10 +67,10 @@ public class EntityGame {
     }
 
     //Para copiar de un game ya creado
-    public EntityGame(String name, String username, int ID_Game, EntityGame copy) {
+    public EntityGame(String name, String username, int IDGame, EntityGame copy) {
         this.name = name;
         this.username = username;
-        this.ID_Game = ID_Game;
+        this.IDGame = IDGame;
 
         numBeansGenerators = copy.getNumGenerators("beans");
         numCoffeeMakerGenerators = copy.getNumGenerators("coffeeMaker");
@@ -116,7 +114,7 @@ public class EntityGame {
     }
 
     public void setID(int ID) {
-        ID_Game = ID;
+        IDGame = ID;
     }
 
     public synchronized void incrementMinutePlayed() {
@@ -190,7 +188,6 @@ public class EntityGame {
         }
 
         for (EntityGenerator generator : generators ) {
-            System.out.println("Presente");
             if (generator.getType() == generatorType) {
                 generator.incrementLevel_upgrade();
                 break;
@@ -213,8 +210,8 @@ public class EntityGame {
         return name;
     }
 
-    public int getID_Game() {
-        return ID_Game;
+    public int getIDGame() {
+        return IDGame;
     }
 
     public String getUsername() {

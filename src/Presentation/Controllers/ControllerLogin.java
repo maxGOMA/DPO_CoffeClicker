@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import static Presentation.Views.LoginView.showError;
 
 public class ControllerLogin implements ActionListener {
-    //TODO changeView();
     private final UserManager userManager;
     private final LoginView loginView;
 
@@ -68,7 +67,6 @@ public class ControllerLogin implements ActionListener {
                     if (!passwordCorrect) {
                         showError("PASSWORD", "Incorrect password!");
                     } else {
-                        System.out.println("LOGIN SUCCESSFUL");
                         try{
                             userManager.setUser(userEmail);
                             loginView.getApp().createSelectGame();

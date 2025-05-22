@@ -9,14 +9,12 @@ import Persistance.sql.SQLGameDAO;
 import Persistance.sql.SQLStatsDAO;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class StatManager {
     private final StatsDAO statDAO;
     private final GameDAO gameDAO;
     private EntityStatisticsGenerator statsGenerator;
-
 
     public StatManager(){
         this.statDAO = new SQLStatsDAO();
@@ -33,8 +31,8 @@ public class StatManager {
         statsGenerator.desactivateStaticsGenerator();
     }
 
-    public synchronized void  saveCurrentStats(EntityGame game){
-        statDAO.saveNewStats(game.getID_Game(), game.getCurrentNumberOfCoffees(), game.getMinutesPlayed());
+    public synchronized void saveCurrentStats (EntityGame game) {
+        statDAO.saveNewStats(game.getIDGame(), game.getCurrentNumberOfCoffees(), game.getMinutesPlayed());
         gameDAO.updateGame(game);
     }
 
@@ -43,7 +41,7 @@ public class StatManager {
             if(game.getMinutesPlayed() == 0){
                 return null;
             }
-            return statDAO.getAllStatsFromGame(game.getID_Game(), game.getMinutesPlayed());
+            return statDAO.getAllStatsFromGame(game.getIDGame(), game.getMinutesPlayed());
         }
         catch (PersistanceException e){
             throw new BusinessException(e.getMessage());

@@ -1,6 +1,5 @@
 package Persistance.sql;
 
-import Business.Entities.EntityUser;
 import Persistance.GeneratorsDAO;
 import Persistance.PersistanceException;
 
@@ -9,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SQLGeneratorsDAO implements GeneratorsDAO {
+        public SQLGeneratorsDAO() {};
 
         @Override
         public int getGeneratorBaseCost(String generatorName) throws PersistanceException {

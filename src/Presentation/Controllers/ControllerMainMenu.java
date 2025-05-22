@@ -2,9 +2,6 @@ package Presentation.Controllers;
 
 import Presentation.Views.LoginView;
 import Presentation.Views.MainMenuView;
-import Presentation.Views.PopUpErrorView;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

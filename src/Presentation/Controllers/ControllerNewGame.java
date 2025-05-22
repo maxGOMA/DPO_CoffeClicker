@@ -25,20 +25,6 @@ public class ControllerNewGame implements ActionListener {
         this.controllerConfirmation = controllerConfirmation;
     }
 
-    private String findName(String command){
-        String name = "";
-        Boolean guardar = false;
-        for(int i = 0; i < command.length(); i++){
-            if(guardar){
-                name += command.charAt(i);
-            }
-            if(command.charAt(i) == '_'){
-                guardar = true;
-            }
-        }
-        return name;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -47,10 +33,8 @@ public class ControllerNewGame implements ActionListener {
 
             try{
                 if(gameManager.gameNameAlreadyRegisteredByUser(nameGame)){
-                    //error
                     showError("ENTER GAME NAME", "This game name is already in use.");
                 } else {
-                    //controllerConfirmation.setGameName(nameGame);
                     gameManager.createNewGame(nameGame, iscopy);
                     view.getApp().createGameScreen();
                     gameListView.setComponentInterPanel(nameGame);

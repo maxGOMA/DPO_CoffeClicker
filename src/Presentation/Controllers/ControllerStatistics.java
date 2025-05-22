@@ -5,8 +5,6 @@ import Business.BusinessException;
 import Business.GameManager;
 import Business.StatManager;
 import Business.UserManager;
-import Persistance.PersistanceException;
-import Presentation.Views.CoffeeClickerApp;
 import Presentation.Views.GraphView;
 import Presentation.Views.PopUpErrorView;
 
@@ -36,7 +34,7 @@ public class ControllerStatistics implements ActionListener {
         }
     }
 
-    public void initStatsView() throws BusinessException{
+    public void initStatsView() throws BusinessException {
         ArrayList<String> usernames;
 
         try {
@@ -59,8 +57,6 @@ public class ControllerStatistics implements ActionListener {
 
                 JComboBox comboBox = (JComboBox) e.getSource();
                 selectedUsername = (String) comboBox.getSelectedItem();
-
-
                 ArrayList<String> finishedGamesNames = gameManager.getUserFinishedGameNames(selectedUsername);
 
                 if (finishedGamesNames.isEmpty()) {
@@ -78,11 +74,7 @@ public class ControllerStatistics implements ActionListener {
             try {
                 JComboBox comboBox = (JComboBox) e.getSource();
                 String selectedGame = (String) comboBox.getSelectedItem();
-                System.out.println(selectedGame + selectedUsername);
                 if (selectedGame != null) {
-                    for (Double stat: statManager.getAllStatsFromGame(gameManager.returnGameFromUser(selectedGame, selectedUsername))) {
-                        System.out.println(stat);
-                    }
                     graphView.updateStats(statManager.getAllStatsFromGame(gameManager.returnGameFromUser(selectedGame, selectedUsername)));
                 }
             } catch (BusinessException excp){

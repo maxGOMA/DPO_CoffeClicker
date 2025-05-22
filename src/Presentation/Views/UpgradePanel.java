@@ -150,7 +150,6 @@ class UpgradePanel extends JPanel {
     }
 
     public void unlock() {
-        System.out.println("unlocking.." + price);
         this.unlocked = true;
         cl.show(centerPanel, "PRICE");
         repaint();

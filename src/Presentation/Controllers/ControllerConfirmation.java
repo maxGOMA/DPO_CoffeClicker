@@ -15,24 +15,19 @@ public class ControllerConfirmation implements ActionListener {
     private UserManager userManager;
     private final GameManager gameManager;
     private final StatManager statManager;
-
     private ConfirmationView view;
-
     private String ViewBack;
-    private GameListView gameListView;
 
     public ControllerConfirmation (UserManager userManager, ConfirmationView view, GameManager gameManager, StatManager statManager){
         this.userManager = userManager;
         this.view = view;
         this.gameManager = gameManager;
         this.statManager = statManager;
-        this.gameListView = gameListView;
     }
 
     public void ViewBack(String ViewBack){
         this.ViewBack = ViewBack;
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -47,7 +42,6 @@ public class ControllerConfirmation implements ActionListener {
                    statManager.deleteAllStatsFromUser(gameManager.getUserFinishedGameIds(userManager.getCurrentUser()));
                    userManager.deleteAccount();
                    view.getApp().showPanel("MainMenuView");
-                   System.out.println(command + " ACCOUNT");
                } catch (BusinessException ex) {
                    //TODO MOSTRAR ERROR DE PERSISTENCIA
                }
@@ -58,11 +52,9 @@ public class ControllerConfirmation implements ActionListener {
                gameManager.endAndUpdateGame();
                GameListView.deleteGameSelectedView(gameManager.getCurrentGame().getName());
                view.getApp().showPanel("SelectGame");
-               System.out.println(command + " GAME");
            }
         }else if(command.equals(view.CANCEL)){
             view.getApp().showPanel(ViewBack);
-            System.out.println(command);
         }
     }
 }

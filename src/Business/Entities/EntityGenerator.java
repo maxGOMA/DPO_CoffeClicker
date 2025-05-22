@@ -8,12 +8,11 @@ public class EntityGenerator extends Thread {
     private float baseProduction;
 
     private int levelUpgrade;
-    boolean active;
+    private boolean active;
     private long sleepRatio;
     private double coffeRatio;
 
     private int numGeneratorsMultiplicator;
-
     private CoffeGenerationListener coffGenlistener;
 
     public EntityGenerator (EntityGame entityGame, String type, float baseProduction, int levelUpgrade,  float timeIntervalProduction, int numGeneratorsMultiplicator) {
@@ -40,14 +39,8 @@ public class EntityGenerator extends Thread {
         active = false;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
     public void incrementLevel_upgrade() {
         levelUpgrade++;
-
-
         coffeRatio = baseProduction * Math.pow(2, levelUpgrade);
     }
 
@@ -67,7 +60,6 @@ public class EntityGenerator extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("num generators: " + numGeneratorsMultiplicator + " sleep ratio: " + sleepRatio + " cofes q afegeixo: " + coffeRatio * numGeneratorsMultiplicator);
             entityGame.incrementCoffeeByGenerator(coffeRatio * numGeneratorsMultiplicator);
             coffGenlistener.newCoffeesGenerated(coffeRatio * numGeneratorsMultiplicator);
         }
