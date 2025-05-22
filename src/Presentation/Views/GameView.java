@@ -136,12 +136,14 @@ public class GameView extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 50, 5, 55);
+
 
         JPanel emptyPanel3 = new JPanel();
         emptyPanel3.setOpaque(false);
         gbc.gridy = 0;
-        gbc.weighty = 0.2;
+        gbc.weighty = 0.5;
         rightPanel.add(emptyPanel3, gbc);
 
         // 1. Cps (20%)
@@ -149,13 +151,13 @@ public class GameView extends JPanel {
         cpsLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 22));
         cpsLabel.setForeground(Color.WHITE);
         gbc.gridy = 1;
-        gbc.weighty = 0.06;
+        gbc.weighty = 0.1;
         rightPanel.add(cpsLabel, gbc);
 
         JPanel emptyPanel4 = new JPanel();
         emptyPanel4.setOpaque(false);
         gbc.gridy = 2;
-        gbc.weighty = 0.06;
+        gbc.weighty = 0.01;
         rightPanel.add(emptyPanel4, gbc);
 
         // 2. 9 upgrade buttons (40%)
@@ -218,7 +220,7 @@ public class GameView extends JPanel {
         upgradesTable.setForeground(fgColor);
         upgradesTable.setBackground(bgColor);
         upgradesTable.setShowGrid(false);
-        upgradesTable.setRowHeight(20);
+        upgradesTable.setRowHeight(25);
         upgradesTable.setIntercellSpacing(new Dimension(0, 0));
         upgradesTable.setFocusable(false);
 
@@ -252,7 +254,7 @@ public class GameView extends JPanel {
 
         // Añadir al layout principal
         gbc.gridy = 3;
-        gbc.weighty = 0.22;
+        gbc.weighty = 0.001;
         rightPanel.add(upgradesContainer, gbc);
 
         JPanel emptyPanel5 = new JPanel();
@@ -300,7 +302,6 @@ public class GameView extends JPanel {
 
         generatorsCardPanel = new JPanel(new BorderLayout());
         generatorsCardPanel.setOpaque(false);
-        JLabel genInfoText = new JLabel("<html><div style='text-align:center;'>Detailed Generator Info</div></html>", SwingConstants.CENTER);
 
         JPanel generatorsTablesPanel = new JPanel();
         generatorsTablesPanel.setOpaque(false);
@@ -313,7 +314,7 @@ public class GameView extends JPanel {
         purchasedgeneratorsInfoTable.setForeground(fgColor);
         purchasedgeneratorsInfoTable.setBackground(bgColor);
         purchasedgeneratorsInfoTable.setShowGrid(false);
-        purchasedgeneratorsInfoTable.setRowHeight(20);
+        purchasedgeneratorsInfoTable.setRowHeight(25);
         purchasedgeneratorsInfoTable.setIntercellSpacing(new Dimension(0, 0));
         purchasedgeneratorsInfoTable.setFocusable(false);
 
@@ -330,7 +331,7 @@ public class GameView extends JPanel {
         generatorShopTable.setForeground(fgColor);
         generatorShopTable.setBackground(bgColor);
         generatorShopTable.setShowGrid(false);
-        generatorShopTable.setRowHeight(20);
+        generatorShopTable.setRowHeight(25);
         generatorShopTable.setIntercellSpacing(new Dimension(0, 0));
         generatorShopTable.setFocusable(false);
 
@@ -362,7 +363,7 @@ public class GameView extends JPanel {
         });
 
         gbc.gridy = 5;
-        gbc.weighty = 0.5;
+        gbc.weighty = 0.4;
         rightPanel.add(generatorsContainer, gbc);
 
         JPanel emptyPanel2 = new JPanel();
@@ -465,16 +466,16 @@ public class GameView extends JPanel {
         totalCoffeeLabel.setFont(totalCoffeeLabel.getFont().deriveFont((float) (32 * scale)));
 
         // Upgrade buttons
-        for (UpgradePanel upgrade : upgrades.values()) {
-            upgrade.setPreferredSize(new Dimension((int) (60 * scale), (int) (40 * scale)));
-            upgrade.setFont(upgrade.getFont().deriveFont((float) (14 * scale)));
-        }
-
-        // Generator buttons
-        for (GeneratorPanel gen : generators.values()) {
-            gen.setPreferredSize(new Dimension((int) (125 * scale), (int) (81 * scale)));
-            gen.resizeFont((float) (14 * scale));
-        }
+//        for (UpgradePanel upgrade : upgrades.values()) {
+//            upgrade.setPreferredSize(new Dimension((int) (60 * scale * 2), (int) (40 * scale)));
+//            upgrade.setFont(upgrade.getFont().deriveFont((float) (14 * scale)));
+//        }
+//
+//        // Generator buttons
+//        for (GeneratorPanel gen : generators.values()) {
+//            gen.setPreferredSize(new Dimension((int) (125 * scale * 2), (int) (81 * scale)));
+//            gen.resizeFont((float) (14 * scale));
+//        }
 
         settings = new ImageIcon(new ImageIcon("imgs/cog.png").getImage().getScaledInstance((int) (scale * 100), (int) (scale * 100), Image.SCALE_DEFAULT));
         settingsButton.setIcon(settings);
@@ -689,16 +690,6 @@ public class GameView extends JPanel {
             generatorShopTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
         }
 
-        int nameWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(0).getPreferredWidth();
-        int costWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(1).getPreferredWidth()
-                + purchasedgeneratorsInfoTable.getColumnModel().getColumn(2).getPreferredWidth();
-        int unitProdWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(3).getPreferredWidth()
-                + purchasedgeneratorsInfoTable.getColumnModel().getColumn(4).getPreferredWidth();
-
-        generatorShopTable.getColumnModel().getColumn(0).setPreferredWidth(nameWidth);
-        generatorShopTable.getColumnModel().getColumn(1).setPreferredWidth(costWidth);
-        generatorShopTable.getColumnModel().getColumn(2).setPreferredWidth(unitProdWidth);
-
         // Cabecera
         generatorShopTable.getTableHeader().setDefaultRenderer(
                 new AnimatedHeaderRenderer(generatorShopTable.getTableHeader())
@@ -731,7 +722,7 @@ public class GameView extends JPanel {
         );
 
         // Ancho extra para la columna "Nom"
-        purchasedgeneratorsInfoTable.getColumnModel().getColumn(0).setPreferredWidth(140);
+        purchasedgeneratorsInfoTable.getColumnModel().getColumn(0).setPreferredWidth(100);
     }
 
 
