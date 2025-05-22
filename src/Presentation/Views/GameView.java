@@ -271,9 +271,6 @@ public class GameView extends JPanel {
         generatorsInfoButton.setContentAreaFilled(false);
         generatorsInfoButton.setFocusPainted(false);
         generatorsInfoButton.setPreferredSize(new Dimension(24, 24));
-        generatorsInfoButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Información sobre generadores.", "Info", JOptionPane.INFORMATION_MESSAGE);
-        });
 
         JPanel generatorsInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         generatorsInfoPanel.setOpaque(false);
