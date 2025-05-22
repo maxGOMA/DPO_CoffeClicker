@@ -48,7 +48,7 @@ public class EntityGenerator extends Thread {
         levelUpgrade++;
 
 
-        coffeRatio = baseProduction * (levelUpgrade + 1);
+        coffeRatio = baseProduction * Math.pow(2, levelUpgrade);
     }
 
     public void incrementNumGenerators() {

@@ -232,19 +232,16 @@ public class GameManager {
 
     public String getTotalProduction(String generatorType) throws BusinessException {
         try {
-            return generatorsDAO.getGeneratorBaseProduction(generatorType) * entityGame.getNumGenerators(generatorType) + "c/" + generatorsDAO.getGeneratorProductionInterval(generatorType) + "s";
+            return generatorsDAO.getGeneratorBaseProduction(generatorType) * entityGame.getNumGenerators(generatorType) * Math.pow(2, entityGame.getUpgradeGenerators(generatorType)) + "c/" + generatorsDAO.getGeneratorProductionInterval(generatorType) + "s";
         } catch (PersistanceException e) {
             throw new BusinessException(e.getMessage());
         }
     }
 
     public String getGlobalProduction(String generatorType) throws BusinessException {
-        try {
-            Float totalProduction = (generatorsDAO.getGeneratorBaseProduction("beans") * entityGame.getNumGenerators("beans") + generatorsDAO.getGeneratorBaseProduction("coffeeMaker") * entityGame.getNumGenerators("coffeeMaker") + generatorsDAO.getGeneratorBaseProduction("TakeAway") * entityGame.getNumGenerators("TakeAway"));
-            return (generatorsDAO.getGeneratorBaseProduction(generatorType) * entityGame.getNumGenerators(generatorType)) / totalProduction + " %";
-        } catch (PersistanceException e) {
-            throw new BusinessException(e.getMessage());
-        }
+        double totalProduction = getCoffeesGeneratedPerSecond();
+        if(getTotalNumberOfGenerators(generatorType) == 0) return 0 + " %";
+        return (getProductionShare(generatorType) / totalProduction) * 100 + " %";
     }
 
     public double getCoffeesGeneratedPerSecond() throws BusinessException {
@@ -254,7 +251,7 @@ public class GameManager {
 
     public double getProductionShare(String generatorType) throws BusinessException {
         try {
-            return entityGame.getNumGenerators(generatorType) * (generatorsDAO.getGeneratorBaseProduction(generatorType)/generatorsDAO.getGeneratorProductionInterval(generatorType)) * (entityGame.getUpgradeGenerators(generatorType) + 1);
+            return entityGame.getNumGenerators(generatorType) * (generatorsDAO.getGeneratorBaseProduction(generatorType)/generatorsDAO.getGeneratorProductionInterval(generatorType)) * Math.pow(2, entityGame.getUpgradeGenerators(generatorType));
         } catch (PersistanceException e) {
             throw new BusinessException(e.getMessage());
         }
