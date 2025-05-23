@@ -4,6 +4,7 @@ import Business.BusinessException;
 import Business.Entities.EntityGame;
 import Business.GameManager;
 import Business.StatManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameListView;
 import Presentation.Views.PopUpErrorView;
 
@@ -21,15 +22,13 @@ public class ControllerGameList implements ActionListener {
     private StatManager statManager;
     private GameListView view;
     private static String name;
+    private CoffeeClickerApp app;
 
-    //variable de la view
-
-    public ControllerGameList(GameListView gameListView, GameManager gameManager, ControllerConfirmation controllerConfirmation, StatManager statManager) {
+    public ControllerGameList(GameListView gameListView, GameManager gameManager, StatManager statManager, CoffeeClickerApp app) {
         this.gameManager = gameManager;
         this.statManager = statManager;
         this.view = gameListView;
-        //this.view.setController();
-        //view CUANDO SE CREE
+        this.app = app;
     }
 
     private String findName(String command){
@@ -50,7 +49,6 @@ public class ControllerGameList implements ActionListener {
         try {
             return gameManager.getGamesOfLoggedInUser();
         } catch (BusinessException e) {
-            System.out.println(e.getMessage());
             PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
         }
         return null;
@@ -61,7 +59,6 @@ public class ControllerGameList implements ActionListener {
         String command = e.getActionCommand();
         if(command.equals("CONFIRM_DELETE")){
             try {
-                System.out.println(command);
                 statManager.deleteStatsFromGame(gameManager.getIDFromGameName(name));
                 gameManager.deleteGame(name);
                 view.getPanelConfirmation().setVisible(false);
@@ -71,17 +68,13 @@ public class ControllerGameList implements ActionListener {
                 //TODO lanzar persistance exception
             }
         }else if(command.equals("CANCEL")){
-
-            System.out.println(command);
             view.getPanelConfirmation().setVisible(false);
             view.getnewGameButton().setVisible(true);
             view.clearGameSelected();
 
         }else if(command.equals("NEWGAME")){
-            //PANTALLA NEW GAME
-            view.getApp().createNewGameView(null, view);
-            view.getApp().showPanel("NewGame");
-            System.out.println(command);
+            app.createNewGameView(null, view);
+            app.showPanel("NewGame");
 
         }else if(command.contains("COPY")){
             name = findName(command);
@@ -91,13 +84,10 @@ public class ControllerGameList implements ActionListener {
             } catch (BusinessException ex) {
                 PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
-            // PASA AL NEW GAME CON LOS DATOS DE ESTE
-            view.getApp().createNewGameView(game.getName(), view);
-            view.getApp().showPanel("NewGame");
-            System.out.println(command);
+            app.createNewGameView(game.getName(), view);
+            app.showPanel("NewGame");
 
         } else if(command.contains("DELETE")) {
-            System.out.println(command);
             name = findName(command);
             view.getnewGameButton().setVisible(false);
             view.getPanelConfirmation().setVisible(true);
@@ -105,22 +95,17 @@ public class ControllerGameList implements ActionListener {
 
         }else if(command.equals("LOGOUT")){
             ControllerLogOut.ViewBack("SelectGame");
-            view.getApp().showPanel("Logout");
-            System.out.println("LOGOUT");
+            app.showPanel("Logout");
 
         }else if(command.contains("START")){
-            // COMIENZA EL JUEGO
             name = findName(command);
             try {
-                System.out.println("name: " + name);
                 gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
                 PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
             }
-            view.getApp().createGameScreen();
-            view.getApp().showPanel("GameView");
-            System.out.println(command);
-
+            app.createGameScreen();
+            app.showPanel("GameView");
         }
     }
 
@@ -153,16 +138,16 @@ public class ControllerGameList implements ActionListener {
         });
     }
 
-    public static void  MouseListener(JButton button, ImageIcon Iconentered, ImageIcon Iconexited){
+    public static void  MouseListener(JButton button, ImageIcon iconentered, ImageIcon iconexited){
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setIcon(Iconentered);
+                button.setIcon(iconentered);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setIcon(Iconexited);
+                button.setIcon(iconexited);
             }
         });
     }

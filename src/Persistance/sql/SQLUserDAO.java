@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
+    public SQLUserDAO() {};
 
     /**
      * Method that saves a user in the system, persisting it.
@@ -120,14 +121,14 @@ public class SQLUserDAO implements UserDAO {
     /**
      *  Method that returns the user from the database (class User).
      *
-     *  @param username username form the user to access.
+     *  @param usernameOrEmail username form the user to access.
      *  @return User from the database with user_name introduced.
      */
     @Override
-    public EntityUser getUserFromusername(String username) throws PersistanceException {
+    public EntityUser getUserFromIdentifier(String usernameOrEmail) throws PersistanceException {
         try {
             try{
-                String query = "SELECT * FROM users WHERE username = '" + username + "';";
+                String query = "SELECT * FROM users WHERE (username = '" + usernameOrEmail + "' OR email = '" + usernameOrEmail + "');";
                 ResultSet rs = SQLConnector.getInstance().selectQuery(query);
                 rs.next();
                 return new EntityUser(rs.getString("username"), rs.getString("email"), rs.getString("password"));

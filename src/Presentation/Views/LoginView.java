@@ -1,5 +1,4 @@
 package Presentation.Views;
-
 import Presentation.Controllers.ControllerLogin;
 
 import javax.swing.*;
@@ -15,11 +14,9 @@ public class LoginView extends JPanel {
     private final HashMap<String, JTextField> textFields= new HashMap<>();
     private static final HashMap<String, JLabel> errorLabels = new HashMap<>();
     private final HashMap<String, JButton> buttons = new HashMap<>();
-    private final CoffeeClickerApp app;
     private Font coffeeClickerFont;
 
-    public LoginView (CoffeeClickerApp app) {
-        this.app = app;
+    public LoginView () {
         setLayout(new BorderLayout());
 
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -275,7 +272,4 @@ public class LoginView extends JPanel {
         return textFields;
     }
 
-    public CoffeeClickerApp getApp() {
-        return app;
-    }
 }

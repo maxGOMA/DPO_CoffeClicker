@@ -1,12 +1,9 @@
 package Presentation.Views;
 
-import Presentation.Controllers.ControllerLogin;
 import Presentation.Controllers.ControllerStatistics;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
@@ -15,7 +12,6 @@ public class GraphView extends JPanel {
     public static final String GAME_SELECTED = "GAME_SELECTED";
     public static final String USER_SELECTED = "USER_SELECTED";
 
-    private final CoffeeClickerApp app;
     private Font coffeeClickerFont;
     private ArrayList<Double> stats;
 
@@ -32,8 +28,7 @@ public class GraphView extends JPanel {
     private JLabel gameSelectionLabel;
     private JLabel userSelectionLabel;
 
-    public GraphView (CoffeeClickerApp app) {
-        this.app = app;
+    public GraphView () {
         setLayout(new BorderLayout());
         coffeeClickerFont = MainMenuView.loadCustomFont();
         stats = new ArrayList<>();
@@ -268,8 +263,6 @@ public class GraphView extends JPanel {
         backButton.addActionListener(controller);
     }
 
-    public CoffeeClickerApp getApp() {
-        return app;
-    }
+
 }
 

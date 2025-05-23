@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SQLStatsDAO implements StatsDAO {
+    public SQLStatsDAO() {};
 
     public void saveNewStats(int ID_game, double numCoffees, int minutesPlayed){
         String query = "INSERT INTO stats (ID_Game, Minute, Num_Coffees) VALUES ('" +

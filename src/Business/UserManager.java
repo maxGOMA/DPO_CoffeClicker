@@ -34,7 +34,7 @@ public class UserManager {
 
     public void setUser(String userName) throws BusinessException {
         try {
-            user = userDAO.getUserFromusername(userName);
+            user = userDAO.getUserFromIdentifier(userName);
         }catch(PersistanceException e){
            throw new BusinessException(e.getMessage());
         }
@@ -51,14 +51,6 @@ public class UserManager {
         catch (PersistanceException e){
             throw new BusinessException(e.getMessage());
         }
-    }
-
-    public boolean verifyEmailFormat(String email){
-        return email.contains("@gmail.com");
-    }
-
-    public boolean verifyConfirmationPassword(String confirmationPassword,String password){
-        return Objects.equals(confirmationPassword, password);
     }
 
     public void logOut() {

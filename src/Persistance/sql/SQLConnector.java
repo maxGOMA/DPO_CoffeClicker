@@ -21,7 +21,6 @@ public class SQLConnector {
     // The static attribute to implement the singleton design pattern.
     private static SQLConnector instance = null;
 
-
     /**
      * Static method that returns the shared instance managed by the singleton.
      *

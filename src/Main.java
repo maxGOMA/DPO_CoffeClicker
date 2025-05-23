@@ -1,6 +1,5 @@
 import Business.BusinessException;
-import Presentation.Views.CoffeeClickerApp;
-import Presentation.Views.NewGameView;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.PopUpErrorView;
 
 import javax.swing.*;

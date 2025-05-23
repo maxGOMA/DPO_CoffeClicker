@@ -1,5 +1,6 @@
 package Presentation.Views;
 
+import Presentation.CoffeeClickerApp;
 import Presentation.Controllers.ControllerGame;
 
 import javax.swing.*;
@@ -121,29 +122,12 @@ public class GameView extends JPanel {
         //TODO: RAUL HEMOS Añadido comand a coffeeButton!
         coffeeButton.setActionCommand(CLICKED_COFFEE_COMMAND);
 
-        JPanel coffeeButtonPanel = new JPanel(new BorderLayout());
+        JPanel coffeeButtonPanel = new JPanel(new GridBagLayout());
         coffeeButtonPanel.setOpaque(false);
-        coffeeButtonPanel.add(coffeeButton, BorderLayout.SOUTH);
+        coffeeButtonPanel.add(coffeeButton);
         gbcLeft.gridy = 1;
-        gbcLeft.weighty = 0.6;
+        gbcLeft.weighty = 0.8;
         leftPanel.add(coffeeButtonPanel, gbcLeft);
-
-        // 3. Extra styled button
-        StyledButton clickButton = new StyledButton(
-                "imgs/click_icon.png",       // icono izquierdo
-                "imgs/click_upgrade_box.png",           // fondo normal
-                "imgs/click_upgrade_box_hover.png",     // fondo hover
-                "125.00 | 2x",                          // texto del botón
-                "CLICK_UPGRADE"                         // comando
-        );
-
-        // Añadir al panel
-        gbcLeft.gridy = 2;
-        gbcLeft.weighty = 0.05;
-        gbcLeft.insets = new Insets(0, 5, 50, 5);  // Margen inferior más grande
-        leftPanel.add(clickButton, gbcLeft);
-
-
 
         centralPanel.add(leftPanel);
 
@@ -319,6 +303,7 @@ public class GameView extends JPanel {
 
         generatorsCardPanel = new JPanel(new BorderLayout());
         generatorsCardPanel.setOpaque(false);
+        JLabel genInfoText = new JLabel("<html><div style='text-align:center;'>Detailed Generator Info</div></html>", SwingConstants.CENTER);
 
         JPanel generatorsTablesPanel = new JPanel();
         generatorsTablesPanel.setOpaque(false);
@@ -482,6 +467,18 @@ public class GameView extends JPanel {
         // Total coffee label
         totalCoffeeLabel.setFont(totalCoffeeLabel.getFont().deriveFont((float) (32 * scale)));
 
+        // Upgrade buttons
+//        for (UpgradePanel upgrade : upgrades.values()) {
+//            upgrade.setPreferredSize(new Dimension((int) (60 * scale), (int) (40 * scale)));
+//            upgrade.setFont(upgrade.getFont().deriveFont((float) (14 * scale)));
+//        }
+//
+//        // Generator buttons
+//        for (GeneratorPanel gen : generators.values()) {
+//            gen.setPreferredSize(new Dimension((int) (125 * scale), (int) (81 * scale)));
+//            gen.resizeFont((float) (14 * scale));
+//        }
+
         settings = new ImageIcon(new ImageIcon("imgs/cog.png").getImage().getScaledInstance((int) (scale * 100), (int) (scale * 100), Image.SCALE_DEFAULT));
         settingsButton.setIcon(settings);
         stats = new ImageIcon(new ImageIcon("imgs/stats.png").getImage().getScaledInstance((int) (scale * 100), (int) (scale * 100), Image.SCALE_DEFAULT));
@@ -537,9 +534,7 @@ public class GameView extends JPanel {
         totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
     }
 
-    //TODO implementar esto en un cartel o algo
     public void setActualPriceGenerator(String generatorType, double priceGenerator) {
-        System.out.println("The new price for" + generatorType + ": " + priceGenerator);
         GeneratorPanel generatorPanel = generators.get(generatorType);
         generatorPanel.updatePrice(String.valueOf(priceGenerator));
     }
@@ -556,12 +551,6 @@ public class GameView extends JPanel {
         cpsLabel.setText(String.format("%s cfs/s", formatPrice(coffeesPerSecond)));
     }
 
-    //TODO MOSTRAR MENSAJE DE ERROR
-    public void showErrorMessage(String text) {
-        System.out.println(text);
-    }
-
-    //TODO RAUL ESTO ES NUEVO
     public void incrementNumCoffees(double numCoffees) {
         totalNumCoffees += numCoffees;
         totalCoffeeLabel.setText(String.format("%s cfs", formatPrice(totalNumCoffees)));
@@ -694,6 +683,16 @@ public class GameView extends JPanel {
         for (int i = 0; i < generatorShopTable.getColumnCount(); i++) {
             generatorShopTable.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
         }
+
+//        int nameWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(0).getPreferredWidth();
+//        int costWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(1).getPreferredWidth()
+//                + purchasedgeneratorsInfoTable.getColumnModel().getColumn(2).getPreferredWidth();
+//        int unitProdWidth = purchasedgeneratorsInfoTable.getColumnModel().getColumn(3).getPreferredWidth()
+//                + purchasedgeneratorsInfoTable.getColumnModel().getColumn(4).getPreferredWidth();
+//
+//        generatorShopTable.getColumnModel().getColumn(0).setPreferredWidth(nameWidth);
+//        generatorShopTable.getColumnModel().getColumn(1).setPreferredWidth(costWidth);
+//        generatorShopTable.getColumnModel().getColumn(2).setPreferredWidth(unitProdWidth);
 
         // Cabecera
         generatorShopTable.getTableHeader().setDefaultRenderer(

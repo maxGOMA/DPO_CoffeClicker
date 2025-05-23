@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.ConfirmationView;
 import Presentation.Views.LogOutView;
 import java.awt.event.ActionEvent;
@@ -7,17 +8,19 @@ import java.awt.event.ActionListener;
 import Business.UserManager;
 
 public class ControllerLogOut implements ActionListener {
-    private final LogOutView view;
-    private final UserManager userManager;
+    private LogOutView view;
+    private UserManager userManager;
     private ConfirmationView confirmationView;
     private ControllerConfirmation controllerConfirmation;
     private static String ViewBack;
+    private CoffeeClickerApp app;
 
-    public ControllerLogOut(LogOutView view, UserManager userManager, ConfirmationView confirmationView, ControllerConfirmation controllerConfirmation) {
+    public ControllerLogOut(LogOutView view, UserManager userManager, ConfirmationView confirmationView, ControllerConfirmation controllerConfirmation, CoffeeClickerApp app) {
         this.view = view;
         this.userManager = userManager;
         this.confirmationView = confirmationView;
         this.controllerConfirmation = controllerConfirmation;
+        this.app = app;
     }
 
     public static void ViewBack(String viewBack) {
@@ -27,20 +30,16 @@ public class ControllerLogOut implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(view.LOGOUT_COMMAND)) {
-            //view.showLogOutMessage();
-            view.getApp().showPanel("MainMenuView");
+            app.showPanel("MainMenuView");
             userManager.logOut();
-            System.out.println(e.getActionCommand());
         } else if (e.getActionCommand().equals(view.DELETE_ACCOUNT_COMMAND)) {
-            //view.showConfirmationMessage();
-            System.out.println(e.getActionCommand());
             confirmationView.setMessage("Warning: The account " + userManager.getCurrentUser() + " will be deleted.");
             if(ViewBack.equals("Settings")){
                 controllerConfirmation.ViewBack("Settings");
             }else{
                 controllerConfirmation.ViewBack("SelectGame");
             }
-            view.getApp().showPanel("Confirmation");
+            app.showPanel("Confirmation");
         }
     }
 }

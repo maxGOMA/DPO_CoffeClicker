@@ -10,7 +10,6 @@ import java.util.HashMap;
 public class ConfirmationView extends JPanel {
     public static final String CONFIRM = "CONFIRM_DELETE";
     public static final String CANCEL = "CANCEL";
-    private final CoffeeClickerApp app;
     private Font coffeeClickerFont;
     private final HashMap<String, JButton> buttons = new HashMap<>();
 
@@ -20,8 +19,7 @@ public class ConfirmationView extends JPanel {
     private JLabel text;
     private JLabel label;
 
-    public ConfirmationView(CoffeeClickerApp app) {
-        this.app = app;
+    public ConfirmationView() {
         setLayout(new BorderLayout());
 
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -139,9 +137,6 @@ public class ConfirmationView extends JPanel {
         return button;
     }
 
-    public CoffeeClickerApp getApp(){
-        return app;
-    }
 
     public void setController(ControllerConfirmation controller_confirmation){
         for (JButton button : buttons.values()) {
