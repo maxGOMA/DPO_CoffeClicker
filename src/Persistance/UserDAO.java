@@ -23,14 +23,14 @@ public interface UserDAO {
      * @param password The password from the user to save.
      * @param email The email from the user to save.
      */
-    void registerUser(String username, String password, String email);
+    void registerUser(String username, String password, String email) throws PersistanceException;
 
     /**
      * Method that reads the persisted information, returning all stored courses.
      *
      * @param username user_name from the user to delete.
      */
-    void deleteUser(String username);
+    void deleteUser(String username) throws PersistanceException;
 
     /**
      *  Method that returns if the user_name is registrated.
@@ -61,7 +61,7 @@ public interface UserDAO {
      * Method that returns all the usernames registered in the system.
      * @return Returns a list with the usernames.
      */
-    ArrayList<String> returnAllUsernamesRegistered()throws PersistanceException ;
+    ArrayList<String> returnAllUsernamesRegistered() throws PersistanceException ;
 
     /**
      *  Method that returns the user from the database (class User).

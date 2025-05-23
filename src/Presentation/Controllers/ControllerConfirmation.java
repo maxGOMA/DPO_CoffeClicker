@@ -7,6 +7,7 @@ import Business.UserManager;
 import Presentation.CoffeeClickerApp;
 import Presentation.Views.ConfirmationView;
 import Presentation.Views.GameListView;
+import Presentation.Views.PopUpErrorView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -46,15 +47,19 @@ public class ControllerConfirmation implements ActionListener {
                    userManager.deleteAccount();
                    app.showPanel("MainMenuView");
                } catch (BusinessException ex) {
-                   //TODO MOSTRAR ERROR DE PERSISTENCIA
+                   app.finishProgramDueToPersistanceException(ex.getMessage());
                }
            }else if(aux.getText().contains("game")){
-               //FINALIZAR GAME
-               statManager.stopStatsGeneration();
-               gameManager.finishCurrentGame();
-               gameManager.endAndUpdateGame();
-               GameListView.deleteGameSelectedView(gameManager.getCurrentGame().getName());
-               app.showPanel("SelectGame");
+               try {
+                   //FINALIZAR GAME
+                   statManager.stopStatsGeneration();
+                   gameManager.finishCurrentGame();
+                   gameManager.endAndUpdateGame();
+                   GameListView.deleteGameSelectedView(gameManager.getCurrentGame().getName());
+                   app.showPanel("SelectGame");
+               } catch (BusinessException ex) {
+                   app.finishProgramDueToPersistanceException(ex.getMessage());
+               }
            }
         }else if(command.equals(view.CANCEL)){
             app.showPanel(ViewBack);

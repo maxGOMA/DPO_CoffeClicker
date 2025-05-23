@@ -11,15 +11,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CoffeeClickerApp extends JFrame {
-    private final CardLayout cardLayout;
-    private final JPanel mainPanel;
+    private CardLayout cardLayout;
+    private JPanel mainPanel;
     private UserManager userManager;
     private GameManager gameManager;
     private StatManager statManager;
     private NewGameView newGame;
     private ControllerConfirmation controller_confirmation;
 
-    public CoffeeClickerApp() throws BusinessException {
+    public CoffeeClickerApp() {
+        try {
             userManager = new UserManager();
             gameManager = new GameManager(userManager);
             statManager = new StatManager();
@@ -69,6 +70,9 @@ public class CoffeeClickerApp extends JFrame {
 
             add(mainPanel);
             setVisible(true);
+        } catch (BusinessException e) {
+            finishProgramDueToPersistanceException(e.getMessage());
+        }
     }
 
     public void createNewGameView(String name, GameListView gameListView){
@@ -100,4 +104,11 @@ public class CoffeeClickerApp extends JFrame {
     }
 
     public void showPanel(String panelName) { cardLayout.show(mainPanel, panelName);}
+
+    public void finishProgramDueToPersistanceException(String exceptionMessage) {
+        this.setVisible(false);
+        this.dispose();
+        PopUpErrorView.showErrorPopup(null, exceptionMessage, new ImageIcon("imgs/imageError.png"));
+        System.exit(0);
+    }
 }

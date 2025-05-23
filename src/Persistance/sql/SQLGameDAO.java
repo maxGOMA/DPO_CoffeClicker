@@ -30,7 +30,7 @@ public class SQLGameDAO implements GameDAO {
             return new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
                     , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
                     , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"), rs.getInt("Finished"));
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
     }
@@ -54,7 +54,7 @@ public class SQLGameDAO implements GameDAO {
             return new EntityGame(rs.getString("Name_Game"), rs.getInt("Num_Beans_Generators"), rs.getInt("Upgrade_Clicker"), rs.getInt("Upgrade_TakeAway_Generators")
                     , rs.getInt("Upgrade_CoffeeMakers_Generators"), rs.getInt("Upgrade_Beans_Generators"), rs.getInt("Num_TakeAway_Generators")
                     , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"), rs.getInt("Finished"));
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't find game in the database");
         }
     }
@@ -66,22 +66,26 @@ public class SQLGameDAO implements GameDAO {
      * @throws PersistanceException Si ocurre un error al ejecutar la consulta en la base de datos.
      */
     @Override
-    public void setInfoGame(EntityGame game){
-        String query = "INSERT INTO game (Name_Game, username, Num_Coffees, Num_Beans_Generators, Num_CoffeeMakers_Generators, Num_TakeAway_Generators, Upgrade_Beans_Generators, Upgrade_CoffeeMakers_Generators, Upgrade_TakeAway_Generators, Upgrade_Clicker, Mins_Played) VALUES ('" +
-                game.getName() + "', '" +
-                game.getUsername()+ "', '" +
-                game.getCurrentNumberOfCoffees() + "', '" +
-                game.getNumGenerators("beans") + "', '" +
-                game.getNumGenerators("coffeeMaker") + "', '" +
-                game.getNumGenerators("TakeAway") + "', '" +
-                game.getUpgradeGenerators("beans") + "', '" +
-                game.getUpgradeGenerators("coffeeMaker") + "', '" +
-                game.getUpgradeGenerators("TakeAway") + "', '" +
-                game.getClickerLevelUpgrade() +
-                game.getClickerLevelUpgrade() + "', '" +
-                game.getMinutesPlayed() +
-                "');";
-        SQLConnector.getInstance().insertQuery(query);
+    public void setInfoGame(EntityGame game) throws PersistanceException {
+        try {
+            String query = "INSERT INTO game (Name_Game, username, Num_Coffees, Num_Beans_Generators, Num_CoffeeMakers_Generators, Num_TakeAway_Generators, Upgrade_Beans_Generators, Upgrade_CoffeeMakers_Generators, Upgrade_TakeAway_Generators, Upgrade_Clicker, Mins_Played) VALUES ('" +
+                    game.getName() + "', '" +
+                    game.getUsername()+ "', '" +
+                    game.getCurrentNumberOfCoffees() + "', '" +
+                    game.getNumGenerators("beans") + "', '" +
+                    game.getNumGenerators("coffeeMaker") + "', '" +
+                    game.getNumGenerators("TakeAway") + "', '" +
+                    game.getUpgradeGenerators("beans") + "', '" +
+                    game.getUpgradeGenerators("coffeeMaker") + "', '" +
+                    game.getUpgradeGenerators("TakeAway") + "', '" +
+                    game.getClickerLevelUpgrade() +
+                    game.getClickerLevelUpgrade() + "', '" +
+                    game.getMinutesPlayed() +
+                    "');";
+            SQLConnector.getInstance().insertQuery(query);
+        } catch (PersistanceException e) {
+            throw new PersistanceException("Couldn't find game in the database");
+        }
     }
 
     /**
@@ -92,9 +96,14 @@ public class SQLGameDAO implements GameDAO {
      * @param IDgame El identificador único del juego que se desea eliminar de la base de datos.
      */
     @Override
-    public void deleteGame(int IDgame){
-        String query = "DELETE FROM game WHERE ID_game = " + IDgame + ";";
-        SQLConnector.getInstance().deleteQuery(query);
+    public void deleteGame(int IDgame) throws PersistanceException {
+        try {
+            String query = "DELETE FROM game WHERE ID_game = " + IDgame + ";";
+            SQLConnector.getInstance().deleteQuery(query);
+        } catch (PersistanceException ex) {
+            throw new PersistanceException("Couldn't find game in the database");
+        }
+
     }
 
     /**
@@ -104,15 +113,23 @@ public class SQLGameDAO implements GameDAO {
      * @param userName El nombre del jugador al que pertenece el juego.
      */
     @Override
-    public void deleteGame(String name, String userName) {
-        String query = "DELETE FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
-        SQLConnector.getInstance().deleteQuery(query);
+    public void deleteGame(String name, String userName) throws PersistanceException {
+        try {
+            String query = "DELETE FROM game WHERE (Name_Game = '" + name + "'AND username = '" + userName + "');";
+            SQLConnector.getInstance().deleteQuery(query);
+        } catch (PersistanceException e) {
+            throw new PersistanceException("Couldn't find game in the database");
+        }
     }
 
     @Override
-    public void deleteAllGamesByUser(String username){
-        String query = "DELETE FROM game WHERE (username = '" + username + "');";
-        SQLConnector.getInstance().deleteQuery(query);
+    public void deleteAllGamesByUser(String username) throws PersistanceException {
+        try {
+            String query = "DELETE FROM game WHERE (username = '" + username + "');";
+            SQLConnector.getInstance().deleteQuery(query);
+        } catch (PersistanceException e) {
+            throw new PersistanceException("Couldn't find game in the database");
+        }
     }
 
     /**
@@ -130,7 +147,7 @@ public class SQLGameDAO implements GameDAO {
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
             return rs.getInt("ID_Game");
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't find game id in the database");
         }
     }
@@ -161,15 +178,20 @@ public class SQLGameDAO implements GameDAO {
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             rs.next();
             return rs.getString("Name_Game");
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't find game name in the database");
         }
     }
 
     @Override
-    public void setFinished(String username, String gameName){
-        String query = "UPDATE game SET Finished = 1 WHERE (Name_Game = '" + gameName + "'AND username = '" + username + "');";
-        SQLConnector.getInstance().insertQuery(query);
+    public void setFinished(String username, String gameName) throws PersistanceException {
+        try {
+            String query = "UPDATE game SET Finished = 1 WHERE (Name_Game = '" + gameName + "'AND username = '" + username + "');";
+            SQLConnector.getInstance().insertQuery(query);
+        } catch (PersistanceException e) {
+            throw new PersistanceException("Couldn't find game name in the database");
+        }
+
     }
 
     @Override
@@ -184,7 +206,7 @@ public class SQLGameDAO implements GameDAO {
                         , rs.getInt("Num_CoffeeMakers_Generators"), rs.getDouble("Num_Coffees"), rs.getString("username"), rs.getInt("ID_Game"),rs.getInt("Mins_Played"), rs.getInt("Finished")));
             }
             return games;
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't find games in the database");
         }
     }
@@ -198,7 +220,7 @@ public class SQLGameDAO implements GameDAO {
             while (rs.next()) {
                 games.add(rs.getString("Name_Game"));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Can't access games information");
         }
         return games;
@@ -213,24 +235,29 @@ public class SQLGameDAO implements GameDAO {
             while (rs.next()) {
                 gamesIds.add(rs.getInt("Game_ID"));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Can't access games information");
         }
         return gamesIds;
     }
 
     @Override
-    public void updateGame(EntityGame game) {
-        String query = "UPDATE game SET Num_Coffees = " + game.getCurrentNumberOfCoffees() +
-                ", Num_Beans_Generators = " + game.getNumGenerators("beans") +
-                ", Num_CoffeeMakers_Generators = " + game.getNumGenerators("coffeeMaker") +
-                ", Num_TakeAway_Generators = " + game.getNumGenerators("TakeAway") +
-                ", Upgrade_Beans_Generators = " + game.getUpgradeGenerators("beans") +
-                ", Upgrade_CoffeeMakers_Generators = " + game.getUpgradeGenerators("coffeeMaker") +
-                ", Upgrade_TakeAway_Generators = " + game.getUpgradeGenerators("TakeAway") +
-                ", Upgrade_Clicker = " + game.getClickerLevelUpgrade() +
-                ", Mins_Played = " + game.getMinutesPlayed() +
-                " WHERE Name_Game = '" + game.getName() + "';";
-        SQLConnector.getInstance().insertQuery(query);
+    public void updateGame(EntityGame game) throws PersistanceException {
+        try {
+            String query = "UPDATE game SET Num_Coffees = " + game.getCurrentNumberOfCoffees() +
+                    ", Num_Beans_Generators = " + game.getNumGenerators("beans") +
+                    ", Num_CoffeeMakers_Generators = " + game.getNumGenerators("coffeeMaker") +
+                    ", Num_TakeAway_Generators = " + game.getNumGenerators("TakeAway") +
+                    ", Upgrade_Beans_Generators = " + game.getUpgradeGenerators("beans") +
+                    ", Upgrade_CoffeeMakers_Generators = " + game.getUpgradeGenerators("coffeeMaker") +
+                    ", Upgrade_TakeAway_Generators = " + game.getUpgradeGenerators("TakeAway") +
+                    ", Upgrade_Clicker = " + game.getClickerLevelUpgrade() +
+                    ", Mins_Played = " + game.getMinutesPlayed() +
+                    " WHERE Name_Game = '" + game.getName() + "';";
+            SQLConnector.getInstance().insertQuery(query);
+        } catch (PersistanceException e) {
+            throw new PersistanceException("Can't access games information");
+        }
+
     }
 }

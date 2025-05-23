@@ -45,7 +45,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
             gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
         } catch (BusinessException e) {
-            PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
+            app.finishProgramDueToPersistanceException(e.getMessage());
         }
     }
 
@@ -77,7 +77,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(exception.getMessage());
             }
 
         }
@@ -101,7 +101,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(exception.getMessage());
             }
         }
 
@@ -124,7 +124,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(exception.getMessage());
             }
         }
 
@@ -148,7 +148,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
 
@@ -172,7 +172,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
 
@@ -196,13 +196,17 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
 
         else if(command.equals(GameView.SETTINGS_COMMAND)){
-            gameManager.updateGame();
-            app.showPanel("Settings");
+            try {
+                gameManager.updateGame();
+                app.showPanel("Settings");
+            } catch (BusinessException ex) {
+                app.finishProgramDueToPersistanceException(ex.getMessage());
+            }
         }
         else if(command.equals(GameView.STATS_COMMAND)) {
             try {
@@ -210,7 +214,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                 app.createStatsGraph();
                 app.showPanel("stats");
             } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(exception.getMessage());
             }
         }
 

@@ -17,7 +17,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
                 ResultSet rs = SQLConnector.getInstance().selectQuery(query);
                 rs.next();
                 return  rs.getInt("Base_Cost");
-            } catch (SQLException e) {
+            } catch (SQLException | PersistanceException  e) {
                 throw new PersistanceException("Couldn't access generators information");
             }
         }
@@ -29,7 +29,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
                 ResultSet rs = SQLConnector.getInstance().selectQuery(query);
                 rs.next();
                 return  rs.getFloat("Base_Production");
-            } catch (SQLException e) {
+            } catch (SQLException | PersistanceException e) {
                 throw new PersistanceException("Couldn't access generators information");
             }
         }
@@ -41,7 +41,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
                 ResultSet rs = SQLConnector.getInstance().selectQuery(query);
                 rs.next();
                 return  rs.getFloat("Production_Interval");
-            } catch (SQLException e) {
+            } catch (SQLException | PersistanceException e) {
                 throw new PersistanceException("Couldn't access generators information");
             }
         }
@@ -53,7 +53,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
                 ResultSet rs = SQLConnector.getInstance().selectQuery(query);
                 rs.next();
                 return  rs.getFloat("Cost_Increase");
-            } catch (SQLException e) {
+            } catch (SQLException | PersistanceException e) {
                 throw new PersistanceException("Couldn't access generators information");
             }
         }
@@ -71,7 +71,7 @@ public class SQLGeneratorsDAO implements GeneratorsDAO {
                 upgradesCost.add(rs.getFloat("Gold_Upgrade_Cost"));
                 upgradesCost.add(rs.getFloat("Diamond_Upgrade_Cost"));
                 return upgradesCost;
-            } catch (SQLException e) {
+            } catch (SQLException | PersistanceException e) {
                 throw new PersistanceException("Couldn't find stats in the database");
             }
         }

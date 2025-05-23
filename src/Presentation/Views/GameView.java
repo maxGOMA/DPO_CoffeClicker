@@ -114,7 +114,7 @@ public class GameView extends JPanel {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 animatePop();
             }
         });

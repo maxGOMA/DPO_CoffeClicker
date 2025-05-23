@@ -5,7 +5,9 @@ import Business.GameManager;
 import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameListView;
 import Presentation.Views.NewGameView;
+import Presentation.Views.PopUpErrorView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,8 +45,8 @@ public class ControllerNewGame implements ActionListener {
                     gameListView.setComponentInterPanel(nameGame);
                     app.showPanel("GameView");
                 }
-            }catch(BusinessException ex){
-
+            }catch (BusinessException ex){
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }else if(command.equals("CANCEL")){
             view.clearFields();

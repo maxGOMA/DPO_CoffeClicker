@@ -6,9 +6,9 @@ public interface StatsDAO {
 
     ArrayList<Double> getAllStatsFromGame(int ID_game, int minutesPlayed)  throws PersistanceException;
 
-    void saveNewStats(int ID_game, double numCoffees, int minutesPlayed);
+    void saveNewStats(int ID_game, double numCoffees, int minutesPlayed) throws PersistanceException;
 
-    void deleteStats(int ID_game);
+    void deleteStats(int ID_game) throws PersistanceException;
 
 }
 

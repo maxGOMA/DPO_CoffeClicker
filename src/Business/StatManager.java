@@ -31,9 +31,13 @@ public class StatManager {
         statsGenerator.desactivateStaticsGenerator();
     }
 
-    public synchronized void saveCurrentStats (EntityGame game) {
-        statDAO.saveNewStats(game.getIDGame(), game.getCurrentNumberOfCoffees(), game.getMinutesPlayed());
-        gameDAO.updateGame(game);
+    public synchronized void saveCurrentStats (EntityGame game) throws BusinessException {
+        try {
+            statDAO.saveNewStats(game.getIDGame(), game.getCurrentNumberOfCoffees(), game.getMinutesPlayed());
+            gameDAO.updateGame(game);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     public ArrayList<Double> getAllStatsFromGame(EntityGame game) throws BusinessException{
@@ -48,15 +52,23 @@ public class StatManager {
         }
     }
 
-    public void deleteAllStatsFromUser(ArrayList<Integer> gamesID) {
-        for (Integer gameID: gamesID) {
-            statDAO.deleteStats(gameID);
+    public void deleteAllStatsFromUser(ArrayList<Integer> gamesID) throws BusinessException{
+        try {
+            for (Integer gameID : gamesID) {
+                statDAO.deleteStats(gameID);
+            }
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
         }
     }
 
 
-    public void deleteStatsFromGame(int gameID) {
-        statDAO.deleteStats(gameID);
+    public void deleteStatsFromGame(int gameID) throws BusinessException{
+        try {
+            statDAO.deleteStats(gameID);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
 }

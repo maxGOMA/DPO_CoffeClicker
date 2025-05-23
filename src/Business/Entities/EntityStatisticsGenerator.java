@@ -1,5 +1,6 @@
 package Business.Entities;
 
+import Business.BusinessException;
 import Business.StatManager;
 
 public class EntityStatisticsGenerator extends Thread {
@@ -35,7 +36,10 @@ public class EntityStatisticsGenerator extends Thread {
 
             if (!active) break;
             entityGame.incrementMinutePlayed();
-            statManager.saveCurrentStats(entityGame);
+            try {
+                statManager.saveCurrentStats(entityGame);
+            } catch (BusinessException e) {
+            }
         }
     }
 }

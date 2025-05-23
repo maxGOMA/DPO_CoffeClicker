@@ -75,7 +75,7 @@ public class ControllerLogin implements ActionListener {
                             app.createSelectGame();
                             app.showPanel("SelectGame");
                         }catch(BusinessException e){
-                            PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
+                            app.finishProgramDueToPersistanceException(e.getMessage());
                         }
                     }
                 }

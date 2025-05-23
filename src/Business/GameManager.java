@@ -105,25 +105,45 @@ public class GameManager {
 
     }
 
-    public void deleteGame(String name) {
-        gameDAO.deleteGame(name, userManager.getCurrentUser());
+    public void deleteGame(String name) throws BusinessException {
+        try {
+            gameDAO.deleteGame(name, userManager.getCurrentUser());
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public void deleteAllGamesByUser() {
-        gameDAO.deleteAllGamesByUser(userManager.getCurrentUser());
+    public void deleteAllGamesByUser() throws BusinessException {
+        try {
+            gameDAO.deleteAllGamesByUser(userManager.getCurrentUser());
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public void finishCurrentGame(){
-        gameDAO.setFinished(userManager.getCurrentUser(), entityGame.getName());
+    public void finishCurrentGame() throws BusinessException {
+        try {
+            gameDAO.setFinished(userManager.getCurrentUser(), entityGame.getName());
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public void endAndUpdateGame() {
-        entityGame.stopGenerators();
-        gameDAO.updateGame(entityGame);
+    public void endAndUpdateGame() throws BusinessException {
+        try {
+            entityGame.stopGenerators();
+            gameDAO.updateGame(entityGame);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
-    public void updateGame() {
-        gameDAO.updateGame(entityGame);
+    public void updateGame() throws BusinessException {
+        try {
+            gameDAO.updateGame(entityGame);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     public int getIDFromGameName(String gameName) throws BusinessException {

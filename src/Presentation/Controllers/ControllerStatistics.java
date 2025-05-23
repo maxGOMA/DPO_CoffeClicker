@@ -29,16 +29,11 @@ public class ControllerStatistics implements ActionListener {
         this.graphView = graphView;
         this.app = app;
         this.graphView.setController(this);
-        try {
-            initStatsView();
-        }catch(BusinessException e){
-            throw new BusinessException(e.getMessage());
-        }
+        initStatsView();
     }
 
-    public void initStatsView() throws BusinessException {
+    public void initStatsView() {
         ArrayList<String> usernames;
-
         try {
             usernames = userManager.getAllUsernames();
             graphView.setUsernames(usernames);
@@ -46,7 +41,7 @@ public class ControllerStatistics implements ActionListener {
                 graphView.showNoUsersRegisteredMessage();
             }
         } catch (BusinessException e) {
-            throw new BusinessException(e.getMessage());
+            app.finishProgramDueToPersistanceException(e.getMessage());
         }
     }
 
@@ -68,7 +63,7 @@ public class ControllerStatistics implements ActionListener {
                     graphView.showGameSelectionComboBox();
                 }
             } catch (BusinessException excp){
-                PopUpErrorView.showErrorPopup(null, excp.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(excp.getMessage());
             }
 
 
@@ -80,8 +75,7 @@ public class ControllerStatistics implements ActionListener {
                     graphView.updateStats(statManager.getAllStatsFromGame(gameManager.returnGameFromUser(selectedGame, selectedUsername)));
                 }
             } catch (BusinessException excp){
-                //Error en persistencia
-                PopUpErrorView.showErrorPopup(null, excp.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(excp.getMessage());
             }
         } else if (command.equals(GraphView.BACK_COMMAND)){
                 app.showPanel("GameView");

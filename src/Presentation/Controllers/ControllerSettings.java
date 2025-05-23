@@ -1,5 +1,6 @@
 package Presentation.Controllers;
 
+import Business.BusinessException;
 import Business.GameManager;
 import Business.StatManager;
 import Presentation.CoffeeClickerApp;
@@ -29,10 +30,14 @@ public class ControllerSettings implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(view.LOGOUT_COMMAND)) {
-            ControllerLogOut.ViewBack("Settings");
-            statManager.stopStatsGeneration();
-            gameManager.endAndUpdateGame();
-            app.showPanel("Logout");
+            try {
+                ControllerLogOut.ViewBack("Settings");
+                statManager.stopStatsGeneration();
+                gameManager.endAndUpdateGame();
+                app.showPanel("Logout");
+            } catch (BusinessException ex) {
+                app.finishProgramDueToPersistanceException(ex.getMessage());
+            }
         } else if (e.getActionCommand().equals(view.BACK_COMMAND)) {
             app.showPanel("GameView");
         } else if (e.getActionCommand().equals(view.FINISH_COMMAND)){
@@ -40,10 +45,14 @@ public class ControllerSettings implements ActionListener {
             controllerConfirmation.ViewBack("Settings");
             app.showPanel("Confirmation");
         } else if (e.getActionCommand().equals(view.SAVE_COMMAND)) {
-            statManager.stopStatsGeneration();
-            gameManager.endAndUpdateGame();
-            app.createSelectGame();
-            app.showPanel("SelectGame");
+            try {
+                statManager.stopStatsGeneration();
+                gameManager.endAndUpdateGame();
+                app.createSelectGame();
+                app.showPanel("SelectGame");
+            } catch (BusinessException ex) {
+                app.finishProgramDueToPersistanceException(ex.getMessage());
+            }
         }
     }
 }

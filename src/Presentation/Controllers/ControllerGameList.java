@@ -49,7 +49,7 @@ public class ControllerGameList implements ActionListener {
         try {
             return gameManager.getGamesOfLoggedInUser();
         } catch (BusinessException e) {
-            PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
+            app.finishProgramDueToPersistanceException(e.getMessage());
         }
         return null;
     }
@@ -65,7 +65,7 @@ public class ControllerGameList implements ActionListener {
                 view.getnewGameButton().setVisible(true);
                 view.deleteGameSelectedView(name);
             } catch (BusinessException ex) {
-                //TODO lanzar persistance exception
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }else if(command.equals("CANCEL")){
             view.getPanelConfirmation().setVisible(false);
@@ -82,7 +82,7 @@ public class ControllerGameList implements ActionListener {
             try {
                 game = gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
             app.createNewGameView(game.getName(), view);
             app.showPanel("NewGame");
@@ -102,7 +102,7 @@ public class ControllerGameList implements ActionListener {
             try {
                 gameManager.setGameFromPersistanceForLoggedInUser(name);
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
             app.createGameScreen();
             app.showPanel("GameView");

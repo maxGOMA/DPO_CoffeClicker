@@ -2,6 +2,7 @@ package Persistance.sql;
 
 import Business.BusinessException;
 import Persistance.JsonDao;
+import Persistance.PersistanceException;
 import Persistance.impl.JsonConfigDAO;
 
 import java.io.FileNotFoundException;
@@ -26,7 +27,7 @@ public class SQLConnector {
      *
      * @return The shared SQLConnector instance.
      */
-    public static SQLConnector getInstance(){
+    public static SQLConnector getInstance() throws PersistanceException {
         if (instance == null ){
             JsonDao jsDao = null;
             try{
@@ -60,11 +61,12 @@ public class SQLConnector {
      * Method that starts the inner connection to the database. Ideally, users would disconnect after
      * using the shared instance.
      */
-    public void connect() {
+    public void connect() throws PersistanceException {
         try {
             conn = DriverManager.getConnection(url, username, password);
         } catch(SQLException e) {
-            System.err.println("Couldn't connect to --> " + url + " (" + e.getMessage() + ")");
+            throw new PersistanceException("Couldln't connect to the database");
+            //System.err.println("Couldn't connect to --> " + url + " (" + e.getMessage() + ")");
         }
     }
 
@@ -74,13 +76,14 @@ public class SQLConnector {
      *
      * @param query String representation of the query to execute.
      */
-    public void insertQuery(String query){
+    public void insertQuery(String query) throws PersistanceException {
         try {
             Statement s = conn.createStatement();
             s.executeUpdate(query);
         } catch (SQLException e) {
-            System.err.println(query);
-            System.err.println("Problem when inserting --> " + e.getSQLState() + " (" + e.getMessage() + ")");
+            throw new PersistanceException("Couldln't connect to the database");
+            //System.err.println(query);
+            //System.err.println("Problem when inserting --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
     }
 
@@ -90,13 +93,14 @@ public class SQLConnector {
      *
      * @param query String representation of the query to execute.
      */
-    public void updateQuery(String query){
+    public void updateQuery(String query) throws PersistanceException {
         try {
             Statement s = conn.createStatement();
             s.executeUpdate(query);
         } catch (SQLException e) {
-            System.err.println(query);
-            System.err.println("Problema when updating --> " + e.getSQLState() + " (" + e.getMessage() + ")");
+            throw new PersistanceException("Couldln't connect to the database");
+            //System.err.println(query);
+            //System.err.println("Problema when updating --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
     }
 
@@ -106,13 +110,14 @@ public class SQLConnector {
      *
      * @param query String representation of the query to execute.
      */
-    public void deleteQuery(String query){
+    public void deleteQuery(String query) throws PersistanceException {
         try {
             Statement s = conn.createStatement();
             s.executeUpdate(query);
         } catch (SQLException e) {
-            System.err.println(query);
-            System.err.println("Problem when deleting --> " + e.getSQLState() + " (" + e.getMessage() + ")");
+            throw new PersistanceException("Couldln't connect to the database");
+            //System.err.println(query);
+            //System.err.println("Problem when deleting --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
 
     }
@@ -124,18 +129,20 @@ public class SQLConnector {
      * @param query String representation of the query to execute.
      * @return The results of the selection.
      */
-    public ResultSet selectQuery(String query) throws NullPointerException{
+    public ResultSet selectQuery(String query) throws PersistanceException {
         ResultSet rs = null;
         try {
             try{
                 Statement s = conn.createStatement();
                 rs = s.executeQuery(query);
-            }catch(NullPointerException e){
-                System.err.println("Error in selectQuery -> cant connect with database");
+            }catch(NullPointerException e) {
+                throw new PersistanceException("Couldln't connect to the database");
+                //System.err.println("Error in selectQuery -> cant connect with database");
             }
         } catch (SQLException e) {
-            System.err.println(query);
-            System.err.println("Problem when selecting data --> " + e.getSQLState() + " (" + e.getMessage() + ")");
+            throw new PersistanceException("Couldln't connect to the database");
+            //System.err.println(query);
+            //System.err.println("Problem when selecting data --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
         return rs;
     }
@@ -145,11 +152,12 @@ public class SQLConnector {
      * Method that closes the inner connection to the database. Ideally, users would disconnect after
      * using the shared instance.
      */
-    public void disconnect(){
+    public void disconnect() throws PersistanceException {
         try {
             conn.close();
         } catch (SQLException e) {
-            System.err.println("Problem when closing the connection --> " + e.getSQLState() + " (" + e.getMessage() + ")");
+            throw new PersistanceException("Couldln't connect to the database");
+            //System.err.println("Problem when closing the connection --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
     }
 }

@@ -97,7 +97,7 @@ public class ControllerRegister implements ActionListener {
                 registerView.clearErrorMessages();
                 app.showPanel("MainMenuView");
             } catch (BusinessException e){
-                showError("USER", "Could not acces the database!");
+                app.finishProgramDueToPersistanceException(e.getMessage());
             }
 
         }
