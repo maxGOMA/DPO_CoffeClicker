@@ -122,12 +122,28 @@ public class GameView extends JPanel {
         //TODO: RAUL HEMOS Añadido comand a coffeeButton!
         coffeeButton.setActionCommand(CLICKED_COFFEE_COMMAND);
 
-        JPanel coffeeButtonPanel = new JPanel(new GridBagLayout());
+        JPanel coffeeButtonPanel = new JPanel(new BorderLayout());
         coffeeButtonPanel.setOpaque(false);
-        coffeeButtonPanel.add(coffeeButton);
+        coffeeButtonPanel.add(coffeeButton, BorderLayout.SOUTH);
+
         gbcLeft.gridy = 1;
-        gbcLeft.weighty = 0.8;
+        gbcLeft.weighty = 0.6;
         leftPanel.add(coffeeButtonPanel, gbcLeft);
+
+        // 3. Extra styled button
+        StyledButton clickButton = new StyledButton(
+                "imgs/click_icon.png",       // icono izquierdo
+                "imgs/click_upgrade_box.png",           // fondo normal
+                "imgs/click_upgrade_box_hover.png",     // fondo hover
+                "125.00 | 2x",                          // texto del botón
+                "CLICK_UPGRADE"                         // comando
+        );
+
+        // Añadir al panel
+        gbcLeft.gridy = 2;
+        gbcLeft.weighty = 0.05;
+        gbcLeft.insets = new Insets(0, 5, 50, 5);  // Margen inferior más grande
+        leftPanel.add(clickButton, gbcLeft);
 
         centralPanel.add(leftPanel);
 
