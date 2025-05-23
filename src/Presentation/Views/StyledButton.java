@@ -34,7 +34,7 @@ public class StyledButton extends JPanel {
         // Text
         textLabel = new JLabel(text);
         textLabel.setForeground(Color.BLACK);
-        textLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 16));
+        textLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 12));
         textLabel.setHorizontalAlignment(SwingConstants.CENTER);
         textLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 
@@ -59,6 +59,11 @@ public class StyledButton extends JPanel {
         Point p = getMousePosition();
         Image bg = (p != null && contains(p)) ? bgHover : bgNormal;
         g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+    }
+
+    public void setText(String newText) {
+        textLabel.setText(newText);
+        repaint();
     }
 
     private Image loadImage(String path) {

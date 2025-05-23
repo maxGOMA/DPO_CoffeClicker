@@ -221,6 +221,14 @@ public class GameManager {
         entityGame.upgradeGenerators(generatorType, getGeneratorUpgradesCosts(generatorType).get(entityGame.getUpgradeGenerators(generatorType)));
     }
 
+    public double getNexClickerUpgradeCost() {
+        return entityGame.getNextClickerUpgradeCost();
+    }
+
+    public double getNextClickerMultiplicator() {
+        return Math.pow(2, entityGame.getClickerLevelUpgrade() + 1);
+    }
+
     public boolean hasResourcesToUpgradeClicker() {
         return entityGame.getCurrentNumberOfCoffees() >= entityGame.getNextClickerUpgradeCost();
     }

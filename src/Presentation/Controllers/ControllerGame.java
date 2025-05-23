@@ -44,6 +44,8 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
 
             gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
             gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+
+            gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());
         } catch (BusinessException e) {
             app.finishProgramDueToPersistanceException(e.getMessage());
         }
@@ -208,6 +210,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                 app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
+
         else if(command.equals(GameView.STATS_COMMAND)) {
             try {
                 gameManager.updateGame();
@@ -218,6 +221,16 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
+        else if (command.equals(GameView.CLICK_UPGRADE_COMMAND)) {
+            if (gameManager.hasResourcesToUpgradeClicker()) {
+                gameManager.upgradeClicker();
+                gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());
+                gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+            } else {
+                PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+            }
+
+        }
     }
 
 
