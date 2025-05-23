@@ -121,12 +121,29 @@ public class GameView extends JPanel {
         //TODO: RAUL HEMOS Añadido comand a coffeeButton!
         coffeeButton.setActionCommand(CLICKED_COFFEE_COMMAND);
 
-        JPanel coffeeButtonPanel = new JPanel(new GridBagLayout());
+        JPanel coffeeButtonPanel = new JPanel(new BorderLayout());
         coffeeButtonPanel.setOpaque(false);
-        coffeeButtonPanel.add(coffeeButton);
+        coffeeButtonPanel.add(coffeeButton, BorderLayout.SOUTH);
         gbcLeft.gridy = 1;
-        gbcLeft.weighty = 0.8;
+        gbcLeft.weighty = 0.6;
         leftPanel.add(coffeeButtonPanel, gbcLeft);
+
+        // 3. Extra styled button
+        StyledButton clickButton = new StyledButton(
+                "imgs/click_icon.png",       // icono izquierdo
+                "imgs/click_upgrade_box.png",           // fondo normal
+                "imgs/click_upgrade_box_hover.png",     // fondo hover
+                "125.00 | 2x",                          // texto del botón
+                "CLICK_UPGRADE"                         // comando
+        );
+
+        // Añadir al panel
+        gbcLeft.gridy = 2;
+        gbcLeft.weighty = 0.05;
+        gbcLeft.insets = new Insets(0, 5, 50, 5);  // Margen inferior más grande
+        leftPanel.add(clickButton, gbcLeft);
+
+
 
         centralPanel.add(leftPanel);
 
@@ -464,18 +481,6 @@ public class GameView extends JPanel {
 
         // Total coffee label
         totalCoffeeLabel.setFont(totalCoffeeLabel.getFont().deriveFont((float) (32 * scale)));
-
-        // Upgrade buttons
-//        for (UpgradePanel upgrade : upgrades.values()) {
-//            upgrade.setPreferredSize(new Dimension((int) (60 * scale * 2), (int) (40 * scale)));
-//            upgrade.setFont(upgrade.getFont().deriveFont((float) (14 * scale)));
-//        }
-//
-//        // Generator buttons
-//        for (GeneratorPanel gen : generators.values()) {
-//            gen.setPreferredSize(new Dimension((int) (125 * scale * 2), (int) (81 * scale)));
-//            gen.resizeFont((float) (14 * scale));
-//        }
 
         settings = new ImageIcon(new ImageIcon("imgs/cog.png").getImage().getScaledInstance((int) (scale * 100), (int) (scale * 100), Image.SCALE_DEFAULT));
         settingsButton.setIcon(settings);
