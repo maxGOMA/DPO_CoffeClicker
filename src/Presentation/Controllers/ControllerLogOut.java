@@ -12,7 +12,7 @@ public class ControllerLogOut implements ActionListener {
     private UserManager userManager;
     private ConfirmationView confirmationView;
     private ControllerConfirmation controllerConfirmation;
-    private static String ViewBack;
+    private static String viewBack;
     private CoffeeClickerApp app;
 
     public ControllerLogOut(LogOutView view, UserManager userManager, ConfirmationView confirmationView, ControllerConfirmation controllerConfirmation, CoffeeClickerApp app) {
@@ -23,8 +23,8 @@ public class ControllerLogOut implements ActionListener {
         this.app = app;
     }
 
-    public static void ViewBack(String viewBack) {
-        ViewBack = viewBack;
+    public static void viewBack(String viewBack) {
+        ControllerLogOut.viewBack = viewBack;
     }
 
     @Override
@@ -34,10 +34,10 @@ public class ControllerLogOut implements ActionListener {
             userManager.logOut();
         } else if (e.getActionCommand().equals(view.DELETE_ACCOUNT_COMMAND)) {
             confirmationView.setMessage("Warning: The account " + userManager.getCurrentUser() + " will be deleted.");
-            if(ViewBack.equals("Settings")){
-                controllerConfirmation.ViewBack("Settings");
+            if(viewBack.equals("Settings")){
+                controllerConfirmation.viewBack("Settings");
             }else{
-                controllerConfirmation.ViewBack("SelectGame");
+                controllerConfirmation.viewBack("SelectGame");
             }
             app.showPanel("Confirmation");
         }

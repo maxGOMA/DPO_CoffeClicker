@@ -5,9 +5,7 @@ import Business.GameManager;
 import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameListView;
 import Presentation.Views.NewGameView;
-import Presentation.Views.PopUpErrorView;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,17 +14,15 @@ import static Presentation.Views.NewGameView.showError;
 public class ControllerNewGame implements ActionListener {
     private NewGameView view;
     private GameManager gameManager;
-    private Boolean iscopy;
+    private Boolean isCopy;
     private GameListView gameListView;
-    private ControllerConfirmation controllerConfirmation;
     private CoffeeClickerApp app;
 
-    public ControllerNewGame(NewGameView view, GameManager gameManager, Boolean iscopy, GameListView gameListView, ControllerConfirmation controllerConfirmation, CoffeeClickerApp app) {
+    public ControllerNewGame(NewGameView view, GameManager gameManager, Boolean isCopy, GameListView gameListView, ControllerConfirmation controllerConfirmation, CoffeeClickerApp app) {
         this.view = view;
         this.gameManager = gameManager;
-        this.iscopy = iscopy;
+        this.isCopy = isCopy;
         this.gameListView = gameListView;
-        this.controllerConfirmation = controllerConfirmation;
         this.app = app;
     }
 
@@ -40,7 +36,7 @@ public class ControllerNewGame implements ActionListener {
                 if(gameManager.gameNameAlreadyRegisteredByUser(nameGame)){
                     showError("ENTER GAME NAME", "This game name is already in use.");
                 } else {
-                    gameManager.createNewGame(nameGame, iscopy);
+                    gameManager.createNewGame(nameGame, isCopy);
                     app.createGameScreen();
                     gameListView.setComponentInterPanel(nameGame);
                     app.showPanel("GameView");

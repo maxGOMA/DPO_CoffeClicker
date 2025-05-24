@@ -21,15 +21,15 @@ public class ControllerMainMenu implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
-        if (command.equals(MainMenuView.VIEW_LOGIN)) {
+        if (command.equals(mainMenuView.VIEW_LOGIN)) {
             logInView.clearFields();
             logInView.clearErrorMessages();
             app.showPanel("Login");
         }
-        if (command.equals(MainMenuView.VIEW_REGISTER)) {
+        if (command.equals(mainMenuView.VIEW_REGISTER)) {
             app.showPanel("Register");
         }
-        if (command.equals(MainMenuView.VIEW_EXIT)) {
+        if (command.equals(mainMenuView.VIEW_EXIT)) {
             System.exit(0);
         }
     }

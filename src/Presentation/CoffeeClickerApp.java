@@ -90,7 +90,7 @@ public class CoffeeClickerApp extends JFrame {
     }
 
     public void createGameScreen() {
-        GameView gameView = new GameView(this);
+        GameView gameView = new GameView();
         ControllerGame controllerGame = new ControllerGame(gameView, gameManager, statManager, this);
         gameView.setController(controllerGame);
         mainPanel.add(gameView, "GameView");

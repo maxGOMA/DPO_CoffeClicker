@@ -30,16 +30,16 @@ public class EntityGenerator extends Thread {
         sleepRatio = (long) (timeIntervalProduction * 1000);
     }
 
-    void activateGenerator(CoffeGenerationListener coffeGenerationListener) {
+    public void activateGenerator(CoffeGenerationListener coffeGenerationListener) {
         active = true;
         this.coffGenlistener = coffeGenerationListener;
     }
 
-    void desactivateGenerator() {
+    public void desactivateGenerator() {
         active = false;
     }
 
-    public void incrementLevel_upgrade() {
+    public void incrementLevelUpgrade() {
         levelUpgrade++;
         coffeRatio = baseProduction * Math.pow(2, levelUpgrade);
     }

@@ -76,7 +76,7 @@ public class SettingsView extends JPanel {
         button.setFocusPainted(false);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        ControllerGameList.MouseListener(button, buttonHoverIcon, buttonIcon);
+        ControllerGameList.mouseListener(button, buttonHoverIcon, buttonIcon);
         button.setActionCommand(actionCommand);
 
         buttons.put(actionCommand, button);

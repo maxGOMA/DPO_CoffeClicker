@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Presentation.Views.GameView.UPG_BEANS_COMMAND;
 
 public class ControllerGame implements ActionListener, CoffeGenerationListener {
     private GameManager gameManager;
@@ -58,11 +57,11 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
-        if (command.equals(GameView.CLICKED_COFFEE_COMMAND)) {
+        if (command.equals(gameView.CLICKED_COFFEE_COMMAND)) {
             gameView.incrementNumCoffees(gameManager.incrementCoffeeByClicker());
         }
 
-        else if (command.equals(GameView.BUY_BEANS_COMMAND)) {
+        else if (command.equals(gameView.BUY_BEANS_COMMAND)) {
             try {
                 if (gameManager.hasResourcesToBuyGenerator("beans")) {
                     gameManager.buyNewGenerator("beans", this);
@@ -87,7 +86,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
 
         }
 
-        else if (command.equals(GameView.BUY_MAKER_COMMAND)) {
+        else if (command.equals(gameView.BUY_MAKER_COMMAND)) {
             try {
                 if (gameManager.hasResourcesToBuyGenerator("coffeeMaker")) {
                     gameManager.buyNewGenerator("coffeeMaker", this);
@@ -110,7 +109,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
-        else if (command.equals(GameView.BUY_TAKEAWAY_COMMAND)) {
+        else if (command.equals(gameView.BUY_TAKEAWAY_COMMAND)) {
             try {
                 if (gameManager.hasResourcesToBuyGenerator("TakeAway")) {
                     gameManager.buyNewGenerator("TakeAway", this);
@@ -133,7 +132,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
-        else if (command.equals(UPG_BEANS_COMMAND)) {
+        else if (command.equals(gameView.UPG_BEANS_COMMAND)) {
             try {
                 if (gameManager.hasResourcesToUpgradeGenerator("beans")) {
                     if (gameManager.getTotalNumberOfGenerators("beans") > 0) {
@@ -157,7 +156,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
-        else if (command.equals(GameView.UPG_MAKER_COMMAND)) {
+        else if (command.equals(gameView.UPG_MAKER_COMMAND)) {
             try {
                 if (gameManager.hasResourcesToUpgradeGenerator("coffeeMaker")) {
                     if (gameManager.getTotalNumberOfGenerators("coffeeMaker") > 0) {
@@ -181,7 +180,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
-        else if (command.equals(GameView.UPG_TAKEAWAY_COMMAND)) {
+        else if (command.equals(gameView.UPG_TAKEAWAY_COMMAND)) {
             try {
                 if (gameManager.hasResourcesToUpgradeGenerator("TakeAway")) {
                     if (gameManager.getTotalNumberOfGenerators("TakeAway") > 0) {
@@ -205,7 +204,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
-        else if(command.equals(GameView.SETTINGS_COMMAND)){
+        else if(command.equals(gameView.SETTINGS_COMMAND)){
             try {
                 gameManager.updateGame();
                 app.showPanel("Settings");
@@ -214,7 +213,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
-        else if(command.equals(GameView.STATS_COMMAND)) {
+        else if(command.equals(gameView.STATS_COMMAND)) {
             try {
                 gameManager.updateGame();
                 app.createStatsGraph();
@@ -224,7 +223,7 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
             }
         }
 
-        else if (command.equals(GameView.CLICK_UPGRADE_COMMAND)) {
+        else if (command.equals(gameView.CLICK_UPGRADE_COMMAND)) {
             if (gameManager.hasResourcesToUpgradeClicker() && gameManager.getClickerUpgrade() != 10) {
                 gameManager.upgradeClicker();
                 gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());

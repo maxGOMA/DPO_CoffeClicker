@@ -6,7 +6,6 @@ import Business.GameManager;
 import Business.StatManager;
 import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameListView;
-import Presentation.Views.PopUpErrorView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,8 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-
-import static Presentation.Views.GameListView.NEW_GAME;
 
 public class ControllerGameList implements ActionListener {
     private GameManager gameManager;
@@ -94,7 +91,7 @@ public class ControllerGameList implements ActionListener {
             view.paintGameSelected(name);
 
         }else if(command.equals("LOGOUT")){
-            ControllerLogOut.ViewBack("SelectGame");
+            ControllerLogOut.viewBack("SelectGame");
             app.showPanel("Logout");
 
         }else if(command.contains("START")){
@@ -138,7 +135,7 @@ public class ControllerGameList implements ActionListener {
         });
     }
 
-    public static void  MouseListener(JButton button, ImageIcon iconentered, ImageIcon iconexited){
+    public static void mouseListener(JButton button, ImageIcon iconentered, ImageIcon iconexited){
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
