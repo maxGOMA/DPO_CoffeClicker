@@ -11,15 +11,13 @@ import java.util.HashMap;
 public class RegisterView extends JPanel {
     public static final String REGISTER_COMMAND = "REGISTER_COMMAND";
     public static final String BACK_COMMAND = "BACK_COMMAND";
-    private final CoffeeClickerApp app;
     private final HashMap<String, JTextField> textFields = new HashMap<>();
     private static final HashMap<String, JLabel> errorLabels = new HashMap<>();
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private Font coffeeClickerFont;
 
 
-    public RegisterView(CoffeeClickerApp app) {
-        this.app = app;
+    public RegisterView() {
         setLayout(new BorderLayout());
 
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -279,7 +277,4 @@ public class RegisterView extends JPanel {
         return textFields;
     }
 
-    public CoffeeClickerApp getApp() {
-        return app;
-    }
 }

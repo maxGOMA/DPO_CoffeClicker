@@ -1,13 +1,13 @@
 package Business.Entities;
 
+import Business.BusinessException;
 import Business.StatManager;
 
 public class EntityStatisticsGenerator extends Thread {
     private EntityGame entityGame;
     private StatManager statManager;
-    boolean active;
+    private boolean active;
     private long sleepRatio;
-
 
     public EntityStatisticsGenerator(StatManager statManager) {
         sleepRatio = 60000;
@@ -36,8 +36,10 @@ public class EntityStatisticsGenerator extends Thread {
 
             if (!active) break;
             entityGame.incrementMinutePlayed();
-            statManager.saveCurrentStats(entityGame);
-            System.out.println("------------------- Name: " + entityGame.getName() + " minute: " + entityGame.getMinutesPlayed() + " currentCoffees: " + entityGame.getCurrentNumberOfCoffees());
+            try {
+                statManager.saveCurrentStats(entityGame);
+            } catch (BusinessException e) {
+            }
         }
     }
 }

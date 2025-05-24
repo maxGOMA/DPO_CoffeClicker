@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SQLUserDAO implements UserDAO {
+    public SQLUserDAO() {};
 
     /**
      * Method that saves a user in the system, persisting it.
@@ -20,14 +21,18 @@ public class SQLUserDAO implements UserDAO {
      * @param email The email from the user to save.
      */
     @Override
-    public void registerUser(String username, String password, String email) {
-        String query = "INSERT INTO users (username, email, password) VALUES ('" +
-                username + "', '" +
-                email + "', '" +
-                password +
-                "');";
+    public void registerUser(String username, String password, String email) throws PersistanceException{
+        try {
+            String query = "INSERT INTO users (username, email, password) VALUES ('" +
+                    username + "', '" +
+                    email + "', '" +
+                    password +
+                    "');";
 
-        SQLConnector.getInstance().insertQuery(query);
+            SQLConnector.getInstance().insertQuery(query);
+        } catch (PersistanceException e) {
+            throw new PersistanceException(e.getMessage());
+        }
     }
 
     /**
@@ -36,9 +41,13 @@ public class SQLUserDAO implements UserDAO {
      * @param username user_name from the user to delete.
      */
     @Override
-    public void deleteUser(String username) {
-        String query = "DELETE FROM users WHERE username = '" + username + "';";
-        SQLConnector.getInstance().deleteQuery(query);
+    public void deleteUser(String username) throws PersistanceException {
+        try {
+            String query = "DELETE FROM users WHERE username = '" + username + "';";
+            SQLConnector.getInstance().deleteQuery(query);
+        } catch (PersistanceException e) {
+            throw new PersistanceException(e.getMessage());
+        }
     }
 
     /**
@@ -53,7 +62,7 @@ public class SQLUserDAO implements UserDAO {
             String query = "SELECT * FROM users WHERE username = '" + username + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             return rs.next();
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't validate username");
         }
     }
@@ -70,7 +79,7 @@ public class SQLUserDAO implements UserDAO {
             String query = "SELECT * FROM users WHERE email = '" + email + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             return rs.next();
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't validate email");
         }
     }
@@ -89,7 +98,7 @@ public class SQLUserDAO implements UserDAO {
             String query = "SELECT * FROM users WHERE (username = '" + userIdentifier + "' OR email = '" + userIdentifier + "' ) AND password = '" + password + "';";
             ResultSet rs = SQLConnector.getInstance().selectQuery(query);
             return rs.next();
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't verify password");
         }
     }
@@ -102,16 +111,12 @@ public class SQLUserDAO implements UserDAO {
     public ArrayList<String> returnAllUsernamesRegistered() throws PersistanceException {
         ArrayList<String> usernames = new ArrayList<>();
         try {
-            try {
-                String query = "SELECT * FROM users";
-                ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-                while (rs.next()) {
-                    usernames.add(rs.getString("username"));
-                }
-            }catch(NullPointerException e){
-                throw new PersistanceException("Unable to connect to the database.");
+            String query = "SELECT * FROM users";
+            ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+            while (rs.next()) {
+                usernames.add(rs.getString("username"));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Can't access users information");
         }
         return usernames;
@@ -120,21 +125,21 @@ public class SQLUserDAO implements UserDAO {
     /**
      *  Method that returns the user from the database (class User).
      *
-     *  @param username username form the user to access.
+     *  @param usernameOrEmail username form the user to access.
      *  @return User from the database with user_name introduced.
      */
     @Override
-    public EntityUser getUserFromusername(String username) throws PersistanceException {
+    public EntityUser getUserFromIdentifier(String usernameOrEmail) throws PersistanceException {
         try {
             try{
-                String query = "SELECT * FROM users WHERE username = '" + username + "';";
+                String query = "SELECT * FROM users WHERE (username = '" + usernameOrEmail + "' OR email = '" + usernameOrEmail + "');";
                 ResultSet rs = SQLConnector.getInstance().selectQuery(query);
                 rs.next();
                 return new EntityUser(rs.getString("username"), rs.getString("email"), rs.getString("password"));
             }catch(NullPointerException e){
                 throw new PersistanceException("Unable to connect to the database");
             }
-        } catch (SQLException e) {
+        } catch (SQLException | PersistanceException e) {
             throw new PersistanceException("Couldn't find user in the database");
         }
 

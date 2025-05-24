@@ -2,6 +2,7 @@ package Presentation.Controllers;
 
 import Business.BusinessException;
 import Business.UserManager;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.RegisterView;
 
 import java.awt.event.ActionEvent;
@@ -11,12 +12,14 @@ import java.util.regex.Pattern;
 import static Presentation.Views.RegisterView.showError;
 
 public class ControllerRegister implements ActionListener {
-    UserManager userManager;
-    private final RegisterView registerView;
+    private UserManager userManager;
+    private RegisterView registerView;
+    private CoffeeClickerApp app;
 
-    public ControllerRegister(RegisterView registerView, UserManager userManager) {
+    public ControllerRegister(RegisterView registerView, UserManager userManager, CoffeeClickerApp app) {
         this.registerView = registerView;
         this.userManager = userManager;
+        this.app = app;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class ControllerRegister implements ActionListener {
         if(command.equals(RegisterView.BACK_COMMAND)){
             registerView.clearFields();
             registerView.clearErrorMessages();
-            registerView.getApp().showPanel("MainMenuView");
+            app.showPanel("MainMenuView");
         }
 
     }
@@ -47,7 +50,6 @@ public class ControllerRegister implements ActionListener {
             showError("USER", "User field cannot be empty!");
             isValid = false;
         } else {
-            // TODO: Check if user already exists in the database -----------------------------------------------------------------------------------------------------
             try {
                 if (userManager.checkUserRegistered(user)) {
                     showError("USER", "Username is already registered!");
@@ -63,7 +65,6 @@ public class ControllerRegister implements ActionListener {
             showError("EMAIL", "Invalid email format!");
             isValid = false;
         } else {
-            // TODO: Check if email already exists in the database -----------------------------------------------------------------------------------------------------
             try {
                 if (userManager.emailRegistered(email)) {
                     showError("EMAIL", "Email is already registered!");
@@ -74,8 +75,6 @@ public class ControllerRegister implements ActionListener {
                 isValid = false;
             }
         }
-
-
 
         if (!isValidPassword(password)) {
             showError("PASSWORD", "Password must have at least 8 characters, including uppercase, lowercase, and a number!");
@@ -91,17 +90,14 @@ public class ControllerRegister implements ActionListener {
         }
 
         if (isValid) {
-            System.out.println("USER: " + user);
-            System.out.println("EMAIL: " + email);
-            System.out.println("PASSWORD: " + password);
             try {
                 userManager.registerUser(user, password, email);
                 userManager.setUser(user);
                 registerView.clearFields();
                 registerView.clearErrorMessages();
-                registerView.getApp().showPanel("MainMenuView");
+                app.showPanel("MainMenuView");
             } catch (BusinessException e){
-                showError("USER", "Could not acces the database!");
+                app.finishProgramDueToPersistanceException(e.getMessage());
             }
 
         }

@@ -1,5 +1,6 @@
 package Presentation.Views;
 
+
 import Presentation.Controllers.ControllerGameList;
 import Presentation.Controllers.ControllerSettings;
 
@@ -14,12 +15,10 @@ public class SettingsView extends JPanel {
     public static final String BACK_COMMAND = "BACK_COMMAND";
     public static final String FINISH_COMMAND = "FINISH_COMMAND";
     public static final String SAVE_COMMAND = "SAVE_COMMAND";
-    private final CoffeeClickerApp app;
     private Font coffeeClickerFont;
     private final HashMap<String, JButton> buttons = new HashMap<>();
 
-    public SettingsView(CoffeeClickerApp app) {
-        this.app = app;
+    public SettingsView() {
         setLayout(new BorderLayout());
 
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -120,10 +119,6 @@ public class SettingsView extends JPanel {
         buttons.put(actionCommand, button);
 
         return button;
-    }
-
-    public CoffeeClickerApp getApp(){
-        return app;
     }
 
     public void setController(ControllerSettings controller_settings){

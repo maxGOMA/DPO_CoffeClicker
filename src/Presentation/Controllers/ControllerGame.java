@@ -4,7 +4,7 @@ import Business.BusinessException;
 import Business.CoffeGenerationListener;
 import Business.GameManager;
 import Business.StatManager;
-import Persistance.PersistanceException;
+import Presentation.CoffeeClickerApp;
 import Presentation.Views.GameView;
 import Presentation.Views.PopUpErrorView;
 
@@ -17,15 +17,15 @@ import static Presentation.Views.GameView.UPG_BEANS_COMMAND;
 public class ControllerGame implements ActionListener, CoffeGenerationListener {
     private GameManager gameManager;
     private GameView gameView;
+    private CoffeeClickerApp app;
 
-    public ControllerGame (GameView gameView, GameManager gameManager, StatManager statManager) {
+    public ControllerGame (GameView gameView, GameManager gameManager, StatManager statManager, CoffeeClickerApp app) {
         this.gameManager = gameManager;
         this.gameView = gameView;
-
+        this.app = app;
         try {
             gameManager.activateGenerators(this, new String[] {"beans", "coffeeMaker", "TakeAway"});
             statManager.initiateStatsGeneration(gameManager.getCurrentGame());
-
             //Incializar num coffees.
             gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
             //Inicializar num coffesPerSecond
@@ -44,9 +44,13 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
 
             gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
             gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+            if (gameManager.getClickerUpgrade() == 10) {
+                gameView.blockClickerButton();
+            } else {
+                gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());
+            }
         } catch (BusinessException e) {
-            System.out.println(e.getMessage());
-            PopUpErrorView.showErrorPopup(null, e.getMessage(), new ImageIcon("imgs/imageError.png"));
+            app.finishProgramDueToPersistanceException(e.getMessage());
         }
     }
 
@@ -67,7 +71,6 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     //Actualizar num generadores
                     gameView.setTotalNumberGenerators("beans", gameManager.getTotalNumberOfGenerators("beans"));
                     //Actualizar precio del generador
-                    System.out.println("---");
                     gameView.setActualPriceGenerator("beans", gameManager.getGeneratorCost("beans"));
                     //Actualizar cafes por segundo
                     gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
@@ -76,11 +79,10 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameManager.updateGame();
                 } else {
                     //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                    //gameView.showErrorMessage("You don't have enough coffees to buy another beans generator.");
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(exception.getMessage());
             }
 
         }
@@ -101,12 +103,10 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                     gameManager.updateGame();
                 } else {
-                    //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
-                    //gameView.showErrorMessage("You don't have enough coffees to buy another coffe maker generator.");
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(exception.getMessage());
             }
         }
 
@@ -126,26 +126,20 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
                     gameManager.updateGame();
                 } else {
-                    //Mostrar mensaje de error - No tengo suficiente dinero para comprar un nuevo generador.
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
-                    //gameView.showErrorMessage("You don't have enough coffees to buy another coffe takeaway generator.");
                 }
             } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(exception.getMessage());
             }
         }
 
         else if (command.equals(UPG_BEANS_COMMAND)) {
-            System.out.println(UPG_BEANS_COMMAND);
             try {
                 if (gameManager.hasResourcesToUpgradeGenerator("beans")) {
                     if (gameManager.getTotalNumberOfGenerators("beans") > 0) {
-                        System.out.println("upgrading beans");
-                        System.out.println(gameManager.getGeneratorLevelUpgrade("beans"));
                         gameView.buyUpgrade(gameManager.getGeneratorLevelUpgrade("beans"), "beans");
                         gameManager.upgradeGenerators("beans");
-                        System.out.println(gameManager.getGeneratorLevelUpgrade("beans"));
-                        gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("beans"), "beans");
+                        if (gameManager.getGeneratorLevelUpgrade("beans") < 3) gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("beans"), "beans");
                         //Actualizar num coffes (automatico decrementa)
                         gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
                         gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
@@ -156,25 +150,20 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                         PopUpErrorView.showErrorPopup(null, "Compra un generador primero", new ImageIcon("imgs/standingPerson.png"));
                     }
                 } else {
-                    //TODO MENSAJE DE NO SE PUEDE
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
 
         else if (command.equals(GameView.UPG_MAKER_COMMAND)) {
-            System.out.println(GameView.UPG_MAKER_COMMAND);
             try {
                 if (gameManager.hasResourcesToUpgradeGenerator("coffeeMaker")) {
                     if (gameManager.getTotalNumberOfGenerators("coffeeMaker") > 0) {
-                        System.out.println("upgrading coffeMaker");
-                        System.out.println(gameManager.getGeneratorLevelUpgrade("beans"));
                         gameView.buyUpgrade(gameManager.getGeneratorLevelUpgrade("coffeeMaker"), "coffeeMaker");
                         gameManager.upgradeGenerators("coffeeMaker");
-                        System.out.println(gameManager.getGeneratorLevelUpgrade("beans"));
-                        gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("coffeeMaker"), "coffeeMaker");
+                        if (gameManager.getGeneratorLevelUpgrade("coffeeMaker") < 3) gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("coffeeMaker"), "coffeeMaker");
                         //Actualizar num coffes (automatico decrementa)
                         gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
                         gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
@@ -188,53 +177,69 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
 
         else if (command.equals(GameView.UPG_TAKEAWAY_COMMAND)) {
-            System.out.println(GameView.UPG_MAKER_COMMAND);
             try {
                 if (gameManager.hasResourcesToUpgradeGenerator("TakeAway")) {
                     if (gameManager.getTotalNumberOfGenerators("TakeAway") > 0) {
-                        System.out.println("upgrading takeAway");
-                        gameView.buyUpgrade(gameManager.getGeneratorLevelUpgrade("TakeAway"), "TakeAway");
-                        gameManager.upgradeGenerators("TakeAway");
-                        gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("TakeAway"), "TakeAway");
-                        //Actualizar num coffes (automatico decrementa)
-                        gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
-                        gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
-                        gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
-                        gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
-                        gameManager.updateGame();
+                            gameView.buyUpgrade(gameManager.getGeneratorLevelUpgrade("TakeAway"), "TakeAway");
+                            gameManager.upgradeGenerators("TakeAway");
+                            if (gameManager.getGeneratorLevelUpgrade("TakeAway") < 3) gameView.unlockUpgrade(gameManager.getGeneratorLevelUpgrade("TakeAway"), "TakeAway");
+                            //Actualizar num coffes (automatico decrementa)
+                            gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                            gameView.setCoffeesPerSecondValue(gameManager.getCoffeesGeneratedPerSecond());
+                            gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
+                            gameView.updateGeneratorsInfoTable(gameManager.getTotalNumberOfGenerators("beans"), gameManager.getTotalNumberOfGenerators("coffeeMaker"), gameManager.getTotalNumberOfGenerators("TakeAway"), gameManager.getUnitProduction("beans"), gameManager.getUnitProduction("coffeeMaker"), gameManager.getUnitProduction("TakeAway"), gameManager.getTotalProduction("beans"), gameManager.getTotalProduction("coffeeMaker"), gameManager.getTotalProduction("TakeAway"), gameManager.getGlobalProduction("beans"), gameManager.getGlobalProduction("coffeeMaker"), gameManager.getGlobalProduction("TakeAway"));
+                            gameManager.updateGame();
                     } else {
                         PopUpErrorView.showErrorPopup(null, "Compra un generador primero", new ImageIcon("imgs/standingPerson.png"));
                     }
                 } else {
-                    //TODO MENSAJE DE NO SE PUEDE
                     PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
                 }
             } catch (BusinessException ex) {
-                PopUpErrorView.showErrorPopup(null, ex.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
 
         else if(command.equals(GameView.SETTINGS_COMMAND)){
-            gameManager.updateGame();
-            gameView.getApp().showPanel("Settings");
-            System.out.println(command);
-        }
-        else if(command.equals(GameView.STATS_COMMAND)) {
             try {
                 gameManager.updateGame();
-                gameView.getApp().createStatsGraph();
-                gameView.getApp().showPanel("stats");
-                System.out.println(command);
-            } catch (BusinessException exception) {
-                PopUpErrorView.showErrorPopup(null, exception.getMessage(), new ImageIcon("imgs/imageError.png"));
+                app.showPanel("Settings");
+            } catch (BusinessException ex) {
+                app.finishProgramDueToPersistanceException(ex.getMessage());
             }
         }
 
+        else if(command.equals(GameView.STATS_COMMAND)) {
+            try {
+                gameManager.updateGame();
+                app.createStatsGraph();
+                app.showPanel("stats");
+            } catch (BusinessException exception) {
+                app.finishProgramDueToPersistanceException(exception.getMessage());
+            }
+        }
+
+        else if (command.equals(GameView.CLICK_UPGRADE_COMMAND)) {
+            if (gameManager.hasResourcesToUpgradeClicker() && gameManager.getClickerUpgrade() != 10) {
+                gameManager.upgradeClicker();
+                gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());
+                gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                if (gameManager.getClickerUpgrade() == 10) {
+                    gameView.blockClickerButton();
+                }
+            } else {
+                if (gameManager.getClickerUpgrade() == 10) {
+                    PopUpErrorView.showErrorPopup(null, "No puedes mejorar mas el clicker!", new ImageIcon("imgs/standingPerson.png"));
+                } else {
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+                }
+            }
+        }
     }
 
 

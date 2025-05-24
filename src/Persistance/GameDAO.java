@@ -40,14 +40,14 @@ public interface GameDAO {
      * @param game Objeto de tipo EntityGame que contiene la información del juego a insertar.
      * @throws PersistanceException Si ocurre un error al ejecutar la consulta en la base de datos.
      */
-    void setInfoGame(EntityGame game);
+    void setInfoGame(EntityGame game) throws PersistanceException;
 
     /**
      * Elimina un juego del sistema según su identificador único.
      *
-     * @param ID_game El identificador único del juego que se desea eliminar.
+     * @param IDgame El identificador único del juego que se desea eliminar.
      */
-    public void deleteGame(int ID_game);
+    void deleteGame(int IDgame) throws PersistanceException;
 
     /**
      * Elimina un juego del sistema según su identificador único.
@@ -55,9 +55,9 @@ public interface GameDAO {
      * @param name     El nombre del juego que se desea eliminar.
      * @param userName El nombre del jugador al que pertenece el juego.
      */
-    public void deleteGame(String name, String userName);
+    void deleteGame(String name, String userName) throws PersistanceException;
 
-    void deleteAllGamesByUser(String username);
+    void deleteAllGamesByUser(String username) throws PersistanceException;
 
     /**
      * Obtiene el identificador de una partida desde la base de datos.
@@ -67,78 +67,6 @@ public interface GameDAO {
      * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
      */
     int getIdGame(String name, String userName) throws PersistanceException;
-
-    /**
-     * Obtiene el nombre de usuario asociado a una partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return El nombre de usuario como una cadena de texto.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    String getUsername(int ID_game) throws PersistanceException;
-
-    /**
-     * Obtiene la cantidad de cafés en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Número de cafés como un valor de tipo {@code Double}.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    Double getNumCoffees(int ID_game) throws PersistanceException;
-
-    /**
-     * Obtiene la cantidad de generadores beans en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Número de generadores beans como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    public int getNumBeansGenerators(int ID_game) throws PersistanceException;
-
-    /**
-     * Obtiene la cantidad de generadores CoffeeMakers en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Número de generadores CoffeeMakers como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    public int getNumCoffeeMakersGenerators(int ID_game) throws PersistanceException;
-
-    /**
-     * Obtiene la cantidad de generadores takeAway en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Número de generadores de TakeAways como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    public int getNumTakeAwayGenerators(int ID_game) throws PersistanceException;
-
-    /**
-     * Obtiene la cantidad de mejoras del generador Beans en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras del generador Beans como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    public int getUpgradeBeans(int ID_game) throws PersistanceException;
-
-    /**
-     * Obtiene la cantidad de mejoras del generador coffeeMaker en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return úmero de mejoras del generador coffeMaker como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    public int getUpgradeCoffeeMakers(int ID_game) throws PersistanceException;
-
-    /**
-     * Obtiene la cantidad de mejoras del generador takeAway en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras del generador takeAway como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
-     */
-    public int getUpgradeTakeAway(int ID_game) throws PersistanceException;
 
     /**
      * Obtiene la cantidad de mejoras Clicker en la partida.
@@ -151,7 +79,7 @@ public interface GameDAO {
 
     String getName(int ID_game) throws PersistanceException;
 
-    void setFinished(String userName, String name);
+    void setFinished(String userName, String name) throws PersistanceException;
 
     List<EntityGame> getGamesByUser(String user) throws PersistanceException;
 
@@ -159,7 +87,7 @@ public interface GameDAO {
 
     ArrayList<Integer> getUserFinishedGameIDs(String user) throws PersistanceException;
 
-    void updateGame(EntityGame game);
+    void updateGame(EntityGame game) throws PersistanceException;
 }
 
 

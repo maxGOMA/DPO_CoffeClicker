@@ -34,14 +34,18 @@ public class UserManager {
 
     public void setUser(String userName) throws BusinessException {
         try {
-            user = userDAO.getUserFromusername(userName);
+            user = userDAO.getUserFromIdentifier(userName);
         }catch(PersistanceException e){
            throw new BusinessException(e.getMessage());
         }
     }
 
     public void registerUser(String userName, String userPassword, String userEmail) throws BusinessException{
-        userDAO.registerUser(userName, userPassword, userEmail);
+        try {
+            userDAO.registerUser(userName, userPassword, userEmail);
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     public boolean emailRegistered(String userEmail) throws BusinessException {
@@ -53,21 +57,17 @@ public class UserManager {
         }
     }
 
-    public boolean verifyEmailFormat(String email){
-        return email.contains("@gmail.com");
-    }
-
-    public boolean verifyConfirmationPassword(String confirmationPassword,String password){
-        return Objects.equals(confirmationPassword, password);
-    }
-
     public void logOut() {
         user = null;
     }
 
-    public void deleteAccount() {
-        userDAO.deleteUser(user.getUsername());
-        user = null;
+    public void deleteAccount() throws BusinessException {
+        try {
+            userDAO.deleteUser(user.getUsername());
+            user = null;
+        } catch (PersistanceException e) {
+            throw new BusinessException(e.getMessage());
+        }
     }
 
     public ArrayList<String> getAllUsernames() throws BusinessException {

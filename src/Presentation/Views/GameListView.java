@@ -22,7 +22,6 @@ public class GameListView extends JPanel{
     private static int width;
     private static int height;
     private List<EntityGame> games;
-    private final CoffeeClickerApp app;
     private static HashMap<String, BackgroundPanel> panelsGames = new HashMap<>();
     private Image backgroundImage;
 
@@ -36,8 +35,7 @@ public class GameListView extends JPanel{
     private JButton cancelButton;
     private static JPanel internPanel;
 
-    public GameListView(CoffeeClickerApp app){
-        this.app = app;
+    public GameListView(){
         width = 1350;
         height = 1080;
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -290,15 +288,6 @@ public class GameListView extends JPanel{
         centerPanel.add(panelConfirmation);
 
         add(centerPanel, BorderLayout.CENTER);
-    }
-
-//    public static void updateCenterPanel() {
-//        internPanel.revalidate();
-//        internPanel.repaint();
-//    }
-
-    public CoffeeClickerApp getApp() {
-        return app;
     }
 
     public JButton getnewGameButton(){
