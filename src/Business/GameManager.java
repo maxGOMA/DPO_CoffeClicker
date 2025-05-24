@@ -221,6 +221,10 @@ public class GameManager {
         entityGame.upgradeGenerators(generatorType, getGeneratorUpgradesCosts(generatorType).get(entityGame.getUpgradeGenerators(generatorType)));
     }
 
+    public double getClickerUpgrade() {
+        return entityGame.getClickerLevelUpgrade();
+    }
+
     public double getNexClickerUpgradeCost() {
         return entityGame.getNextClickerUpgradeCost();
     }

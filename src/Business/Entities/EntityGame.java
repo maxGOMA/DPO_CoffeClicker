@@ -196,7 +196,7 @@ public class EntityGame {
     }
 
     public double getNextClickerUpgradeCost() {
-        return 5 * Math.pow(2, clickerLevelUpgrade);
+        return 5 * Math.pow(4, clickerLevelUpgrade);
     }
 
     public void upgradeCliker() {

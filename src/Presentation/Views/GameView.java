@@ -115,7 +115,7 @@ public class GameView extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                animatePop();
+                //animatePop(); //comentado por un tema de ejecución, posible logg.
             }
         });
 
@@ -724,6 +724,10 @@ public class GameView extends JPanel {
 
     public void updateClickerButton(double nextClickerUpgradeCost, double nextClickerMultiplicator) {
         clickButton.setText(formatPrice(nextClickerUpgradeCost) + " | x" + nextClickerMultiplicator);
+    }
+
+    public void blockClickerButton() {
+        clickButton.setText("LEVEL MAX");
     }
 
     public void buyUpgrade(int levelUpgrade, String generator) {

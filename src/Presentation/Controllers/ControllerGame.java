@@ -44,8 +44,11 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
 
             gameView.initUpgradeGrid(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
             gameView.updateUpgradeInfoTable(gameManager.getGeneratorLevelUpgrade("beans"), gameManager.getGeneratorLevelUpgrade("coffeeMaker"), gameManager.getGeneratorLevelUpgrade("TakeAway"), gameManager.getGeneratorUpgradesCosts("beans"), gameManager.getGeneratorUpgradesCosts("coffeeMaker"), gameManager.getGeneratorUpgradesCosts("TakeAway"));
-
-            gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());
+            if (gameManager.getClickerUpgrade() == 10) {
+                gameView.blockClickerButton();
+            } else {
+                gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());
+            }
         } catch (BusinessException e) {
             app.finishProgramDueToPersistanceException(e.getMessage());
         }
@@ -222,14 +225,20 @@ public class ControllerGame implements ActionListener, CoffeGenerationListener {
         }
 
         else if (command.equals(GameView.CLICK_UPGRADE_COMMAND)) {
-            if (gameManager.hasResourcesToUpgradeClicker()) {
+            if (gameManager.hasResourcesToUpgradeClicker() && gameManager.getClickerUpgrade() != 10) {
                 gameManager.upgradeClicker();
                 gameView.updateClickerButton(gameManager.getNexClickerUpgradeCost(), gameManager.getNextClickerMultiplicator());
                 gameView.setTotalCoffeeLabel(gameManager.getTotalNumberOfCoffees());
+                if (gameManager.getClickerUpgrade() == 10) {
+                    gameView.blockClickerButton();
+                }
             } else {
-                PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+                if (gameManager.getClickerUpgrade() == 10) {
+                    PopUpErrorView.showErrorPopup(null, "No puedes mejorar mas el clicker!", new ImageIcon("imgs/standingPerson.png"));
+                } else {
+                    PopUpErrorView.showErrorPopup(null, "No tienes cafes suficientes!", new ImageIcon("imgs/coin.png"));
+                }
             }
-
         }
     }
 
