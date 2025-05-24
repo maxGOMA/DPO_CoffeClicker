@@ -7,7 +7,6 @@ import Business.UserManager;
 import Presentation.CoffeeClickerApp;
 import Presentation.Views.ConfirmationView;
 import Presentation.Views.GameListView;
-import Presentation.Views.PopUpErrorView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +17,7 @@ public class ControllerConfirmation implements ActionListener {
     private GameManager gameManager;
     private StatManager statManager;
     private ConfirmationView view;
-    private String ViewBack;
+    private String viewBack;
     private CoffeeClickerApp app;
 
     public ControllerConfirmation (UserManager userManager, ConfirmationView view, GameManager gameManager, StatManager statManager, CoffeeClickerApp app) {
@@ -29,8 +28,8 @@ public class ControllerConfirmation implements ActionListener {
         this.app = app;
     }
 
-    public void ViewBack(String ViewBack){
-        this.ViewBack = ViewBack;
+    public void viewBack(String ViewBack){
+        this.viewBack = ViewBack;
     }
 
     @Override
@@ -62,7 +61,7 @@ public class ControllerConfirmation implements ActionListener {
                }
            }
         }else if(command.equals(view.CANCEL)){
-            app.showPanel(ViewBack);
+            app.showPanel(viewBack);
         }
     }
 }

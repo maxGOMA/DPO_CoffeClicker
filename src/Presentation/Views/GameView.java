@@ -28,7 +28,6 @@ public class GameView extends JPanel {
     private JTable generatorShopTable;
     private JTable purchasedgeneratorsInfoTable;
 
-    private final CoffeeClickerApp app;
 
     private final double ASPECT_RATIO = 1085.0 / 802.0;
     private BackgroundPanel centralPanel;
@@ -60,9 +59,7 @@ public class GameView extends JPanel {
 
     private MultiplierCellRenderer cellRenderer;
 
-    public GameView(CoffeeClickerApp app) {
-        this.app = app;
-
+    public GameView() {
         setPreferredSize(new Dimension(1200, 800));
         setMinimumSize(new Dimension(800, 600));
         setLayout(new BorderLayout());
@@ -738,7 +735,4 @@ public class GameView extends JPanel {
         upgrades.get(getUpgradeGridIndex(levelUpgrade,generator)).unlock();
     }
 
-    public CoffeeClickerApp getApp() {
-        return app;
-    }
 }

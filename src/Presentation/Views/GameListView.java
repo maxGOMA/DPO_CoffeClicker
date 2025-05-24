@@ -150,7 +150,7 @@ public class GameListView extends JPanel{
         button.setFocusPainted(false);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        ControllerGameList.MouseListener(button, buttonHoverIcon, buttonIcon);
+        ControllerGameList.mouseListener(button, buttonHoverIcon, buttonIcon);
         button.setActionCommand(actionCommand);
 
         buttons.put(actionCommand, button);
@@ -177,7 +177,7 @@ public class GameListView extends JPanel{
         button.setFocusPainted(false);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        ControllerGameList.MouseListener(button, buttonHoverIcon, buttonIcon);
+        ControllerGameList.mouseListener(button, buttonHoverIcon, buttonIcon);
         button.setActionCommand(actionCommand);
 
         buttons.put(actionCommand, button);
@@ -228,7 +228,7 @@ public class GameListView extends JPanel{
         txtPanel.add(nameGame);
 
         JButton start = new JButton(startIcon);
-        ControllerGameList.MouseListener(start, startPressedIcon, startIcon);
+        ControllerGameList.mouseListener(start, startPressedIcon, startIcon);
         start.setBorderPainted(false);
         start.setContentAreaFilled(false);
         start.setFocusPainted(false);
@@ -237,7 +237,7 @@ public class GameListView extends JPanel{
         buttons.put(START + "_" + text, start);
 
         JButton copy = new JButton(copyIcon);
-        ControllerGameList.MouseListener(copy, copyPressedIcon, copyIcon);
+        ControllerGameList.mouseListener(copy, copyPressedIcon, copyIcon);
         copy.setBorderPainted(false);
         copy.setContentAreaFilled(false);
         copy.setFocusPainted(false);
@@ -246,7 +246,7 @@ public class GameListView extends JPanel{
         buttons.put(COPY + "_" + text, copy);
 
         JButton delete = new JButton(deleteIcon);
-        ControllerGameList.MouseListener(delete, deletePressedIcon, deleteIcon);
+        ControllerGameList.mouseListener(delete, deletePressedIcon, deleteIcon);
         delete.setBorderPainted(false);
         delete.setContentAreaFilled(false);
         delete.setFocusPainted(false);
@@ -325,21 +325,21 @@ public class GameListView extends JPanel{
                         ImageIcon startPressedIcon = new ImageIcon(new ImageIcon("imgs/start_pressed.png")
                                 .getImage().getScaledInstance(50, 80, Image.SCALE_DEFAULT));
                         ((JButton)c).setIcon(newIcon);
-                        ControllerGameList.MouseListener(((JButton)c), startPressedIcon, newIcon);
+                        ControllerGameList.mouseListener(((JButton)c), startPressedIcon, newIcon);
                     }else if(((JButton) c).getActionCommand().contains(COPY)){
                         ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/copy.png")
                                 .getImage().getScaledInstance(60, 70, Image.SCALE_DEFAULT));
                         ImageIcon copyPressedIcon = new ImageIcon(new ImageIcon("imgs/copy_pressed.png")
                                 .getImage().getScaledInstance(60, 70, Image.SCALE_DEFAULT));
                         ((JButton)c).setIcon(newIcon);
-                        ControllerGameList.MouseListener(((JButton)c), copyPressedIcon, newIcon);
+                        ControllerGameList.mouseListener(((JButton)c), copyPressedIcon, newIcon);
                     }else if(((JButton) c).getActionCommand().contains(DELETE)){
                         ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/delete.png")
                                 .getImage().getScaledInstance(65, 75, Image.SCALE_DEFAULT));
                         ImageIcon deletePressedIcon = new ImageIcon(new ImageIcon("imgs/delete_pressed.png")
                                 .getImage().getScaledInstance(65, 75, Image.SCALE_DEFAULT));
                         ((JButton)c).setIcon(newIcon);
-                        ControllerGameList.MouseListener(((JButton)c), deletePressedIcon, newIcon);
+                        ControllerGameList.mouseListener(((JButton)c), deletePressedIcon, newIcon);
                     }
                 }else if(c instanceof JPanel){
                     for (Component component : ((JPanel)c).getComponents()) {
@@ -366,17 +366,17 @@ public class GameListView extends JPanel{
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/play_bttn_white.png")
                                     .getImage().getScaledInstance(50, 80, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), newIcon, newIcon);
+                            ControllerGameList.mouseListener(((JButton)c), newIcon, newIcon);
                         }else if(((JButton) c).getActionCommand().contains(COPY)){
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/copy_white.png")
                                     .getImage().getScaledInstance(60, 70, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), newIcon, newIcon);
+                            ControllerGameList.mouseListener(((JButton)c), newIcon, newIcon);
                         }else if(((JButton) c).getActionCommand().contains(DELETE)){
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/delete_white.png")
                                     .getImage().getScaledInstance(65, 75, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), newIcon, newIcon);
+                            ControllerGameList.mouseListener(((JButton)c), newIcon, newIcon);
                         }
                     }else if(c instanceof JPanel){
                         for (Component component : ((JPanel)c).getComponents()) {
@@ -396,21 +396,21 @@ public class GameListView extends JPanel{
                             ImageIcon startPressedIcon = new ImageIcon(new ImageIcon("imgs/start_pressed.png")
                                     .getImage().getScaledInstance(50, 80, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), startPressedIcon, newIcon);
+                            ControllerGameList.mouseListener(((JButton)c), startPressedIcon, newIcon);
                         }else if(((JButton) c).getActionCommand().contains(COPY)){
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/copy.png")
                                     .getImage().getScaledInstance(60, 70, Image.SCALE_DEFAULT));
                             ImageIcon copyPressedIcon = new ImageIcon(new ImageIcon("imgs/copy_pressed.png")
                                     .getImage().getScaledInstance(60, 70, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), copyPressedIcon, newIcon);
+                            ControllerGameList.mouseListener(((JButton)c), copyPressedIcon, newIcon);
                         }else if(((JButton) c).getActionCommand().contains(DELETE)){
                             ImageIcon newIcon = new ImageIcon(new ImageIcon("imgs/delete.png")
                                     .getImage().getScaledInstance(65, 75, Image.SCALE_DEFAULT));
                             ImageIcon deletePressedIcon = new ImageIcon(new ImageIcon("imgs/delete_pressed.png")
                                     .getImage().getScaledInstance(65, 75, Image.SCALE_DEFAULT));
                             ((JButton)c).setIcon(newIcon);
-                            ControllerGameList.MouseListener(((JButton)c), deletePressedIcon, newIcon);
+                            ControllerGameList.mouseListener(((JButton)c), deletePressedIcon, newIcon);
                         }
                     }else if(c instanceof JPanel){
                         for (Component component : ((JPanel)c).getComponents()) {

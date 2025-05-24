@@ -18,7 +18,7 @@ public class EntityGame {
     private int minutesPlayed;
     private int finished;
 
-    ArrayList<EntityGenerator> generators;
+    private ArrayList<EntityGenerator> generators;
 
     //-----------Inicialización del juego----------------------------------
     //Si recupero la partida de la persistencia
@@ -189,7 +189,7 @@ public class EntityGame {
 
         for (EntityGenerator generator : generators ) {
             if (generator.getType() == generatorType) {
-                generator.incrementLevel_upgrade();
+                generator.incrementLevelUpgrade();
                 break;
             }
         }

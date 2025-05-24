@@ -31,7 +31,7 @@ public class ControllerSettings implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(view.LOGOUT_COMMAND)) {
             try {
-                ControllerLogOut.ViewBack("Settings");
+                ControllerLogOut.viewBack("Settings");
                 statManager.stopStatsGeneration();
                 gameManager.endAndUpdateGame();
                 app.showPanel("Logout");
@@ -42,7 +42,7 @@ public class ControllerSettings implements ActionListener {
             app.showPanel("GameView");
         } else if (e.getActionCommand().equals(view.FINISH_COMMAND)){
             confirmationView.setMessage("Warning: Once the game is finished, you will no longer be able to access it.");
-            controllerConfirmation.ViewBack("Settings");
+            controllerConfirmation.viewBack("Settings");
             app.showPanel("Confirmation");
         } else if (e.getActionCommand().equals(view.SAVE_COMMAND)) {
             try {
