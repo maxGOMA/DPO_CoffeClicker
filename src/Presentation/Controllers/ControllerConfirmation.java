@@ -12,6 +12,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Controller responsible for confirming critical user actions.
+ */
 public class ControllerConfirmation implements ActionListener {
     private UserManager userManager;
     private GameManager gameManager;
@@ -20,6 +23,14 @@ public class ControllerConfirmation implements ActionListener {
     private String viewBack;
     private CoffeeClickerApp app;
 
+    /**
+     * Constructs the confirmation controller.
+     * @param userManager the user manager
+     * @param view the confirmation view
+     * @param gameManager the game manager
+     * @param statManager the statistics manager
+     * @param app the main application
+     */
     public ControllerConfirmation (UserManager userManager, ConfirmationView view, GameManager gameManager, StatManager statManager, CoffeeClickerApp app) {
         this.userManager = userManager;
         this.view = view;
@@ -28,10 +39,18 @@ public class ControllerConfirmation implements ActionListener {
         this.app = app;
     }
 
-    public void viewBack(String ViewBack){
-        this.viewBack = ViewBack;
+    /**
+     * Sets the view to return to in case of cancellation.
+     * @param viewBack name of the view
+     */
+    public void viewBack(String viewBack){
+        this.viewBack = viewBack;
     }
 
+    /**
+     * Handles confirmation and cancellation actions.
+     * @param e the action event
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -39,7 +58,6 @@ public class ControllerConfirmation implements ActionListener {
         if(command.equals(view.CONFIRM)){
            JLabel aux = (JLabel) view.getPanel().getComponent(5);
            if(aux.getText().contains("account")){
-                //BORRAR CUENTA
                try {
                    gameManager.deleteAllGamesByUser();
                    statManager.deleteAllStatsFromUser(gameManager.getUserFinishedGameIds(userManager.getCurrentUser()));
@@ -50,7 +68,6 @@ public class ControllerConfirmation implements ActionListener {
                }
            }else if(aux.getText().contains("game")){
                try {
-                   //FINALIZAR GAME
                    statManager.stopStatsGeneration();
                    gameManager.finishCurrentGame();
                    gameManager.endAndUpdateGame();
