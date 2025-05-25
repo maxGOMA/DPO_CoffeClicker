@@ -8,16 +8,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SQLGameDAO is the SQL implementation of the {@link Persistance.GameDAO} interface.
+ * It handles the persistence and retrieval of game data using SQL queries executed
+ * via the {@link SQLConnector} singleton.
+ */
 public class SQLGameDAO implements GameDAO {
-
+    /**
+     * Constructs a new SQLGameDAO instance.
+     */
     public SQLGameDAO() {};
 
     /**
-     * Carga la información de una partida desde la base de datos.
-     *
-     * @param IDgame Identificador único de la partida.
-     * @return Un objeto {@link EntityGame} con los datos de la partida.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     * Loads a game from the database by its ID.
+     * @param IDgame the unique identifier of the game
+     * @return the {@link EntityGame} with the corresponding data, or null if not found
+     * @throws PersistanceException if the game cannot be retrieved
      */
     @Override
     public EntityGame loadInfoGame(int IDgame) throws PersistanceException {
@@ -36,12 +42,11 @@ public class SQLGameDAO implements GameDAO {
     }
 
     /**
-     * Carga la información de un juego desde la base de datos utilizando su nombre.
-     *
-     * @param name Nombre del juego a buscar en la base de datos.
-     * @param userName Nombre del usuario al que pertenece el juego.
-     * @return Un objeto {@link EntityGame} con los datos del juego.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     * Loads a game by name and associated user.
+     * @param name the name of the game
+     * @param userName the owner of the game
+     * @return the {@link EntityGame} with the corresponding data, or null if not found
+     * @throws PersistanceException if the game cannot be retrieved
      */
     @Override
     public EntityGame loadInfoGame(String name, String userName) throws PersistanceException {
@@ -60,10 +65,9 @@ public class SQLGameDAO implements GameDAO {
     }
 
     /**
-     * Inserta la información de un juego en la base de datos.
-     *
-     * @param game Objeto de tipo EntityGame que contiene la información del juego a insertar.
-     * @throws PersistanceException Si ocurre un error al ejecutar la consulta en la base de datos.
+     * Inserts a new game record into the database.
+     * @param game the game entity to be saved
+     * @throws PersistanceException if the insertion fails
      */
     @Override
     public void setInfoGame(EntityGame game) throws PersistanceException {
@@ -89,11 +93,9 @@ public class SQLGameDAO implements GameDAO {
     }
 
     /**
-     * Elimina un juego de la base de datos utilizando su identificador único.
-     *
-     * Este método construye una consulta SQL DELETE y la ejecuta mediante el conector SQL.
-     *
-     * @param IDgame El identificador único del juego que se desea eliminar de la base de datos.
+     * Deletes a game by its ID.
+     * @param IDgame the game ID
+     * @throws PersistanceException if the deletion fails
      */
     @Override
     public void deleteGame(int IDgame) throws PersistanceException {
@@ -103,14 +105,13 @@ public class SQLGameDAO implements GameDAO {
         } catch (PersistanceException ex) {
             throw new PersistanceException("Couldn't find game in the database");
         }
-
     }
 
     /**
-     * Elimina un juego del sistema según su identificador único.
-     *
-     * @param name El nombre del juego que se desea eliminar.
-     * @param userName El nombre del jugador al que pertenece el juego.
+     * Deletes a game by its name and associated user.
+     * @param name the name of the game
+     * @param userName the user who owns the game
+     * @throws PersistanceException if the deletion fails
      */
     @Override
     public void deleteGame(String name, String userName) throws PersistanceException {
@@ -122,6 +123,11 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    /**
+     * Deletes all games owned by the specified user.
+     * @param username the user whose games will be deleted
+     * @throws PersistanceException if the deletion fails
+     */
     @Override
     public void deleteAllGamesByUser(String username) throws PersistanceException {
         try {
@@ -133,12 +139,11 @@ public class SQLGameDAO implements GameDAO {
     }
 
     /**
-     * Obtiene el identificador de una partida desde la base de datos.
-     *
-     * @param name El nombre del juego que se desea eliminar.
-     * @param userName El nombre del jugador al que pertenece el juego.
-     * @return El identificador de la partida.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     * Retrieves the ID of a game given its name and owner.
+     * @param name the name of the game
+     * @param userName the username of the owner
+     * @return the ID of the game
+     * @throws PersistanceException if the query fails
      */
     @Override
     public int getIdGame(String name, String userName) throws PersistanceException {
@@ -153,11 +158,10 @@ public class SQLGameDAO implements GameDAO {
     }
 
     /**
-     * Obtiene la cantidad de mejoras Clicker en la partida.
-     *
-     * @param ID_game Identificador único de la partida.
-     * @return Número de mejoras Clicker como un entero.
-     * @throws PersistanceException Si ocurre un error al acceder a la base de datos.
+     * Gets the level of clicker upgrades for a given game.
+     * @param ID_game the game ID
+     * @return the clicker upgrade level
+     * @throws PersistanceException if the query fails
      */
     @Override
     public int getUpgradeClicker(int ID_game) throws PersistanceException {
@@ -171,6 +175,12 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    /**
+     * Gets the name of the game given its ID.
+     * @param ID_game the game ID
+     * @return the name of the game
+     * @throws PersistanceException if the query fails
+     */
     @Override
     public String getName(int ID_game) throws PersistanceException {
         try {
@@ -183,6 +193,12 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    /**
+     * Marks a game as finished in the database.
+     * @param username the user who owns the game
+     * @param gameName the name of the game to mark
+     * @throws PersistanceException if the update fails
+     */
     @Override
     public void setFinished(String username, String gameName) throws PersistanceException {
         try {
@@ -194,6 +210,12 @@ public class SQLGameDAO implements GameDAO {
 
     }
 
+    /**
+     * Retrieves all games owned by a specific user.
+     * @param user the username
+     * @return a list of {@link EntityGame} instances
+     * @throws PersistanceException if the query fails
+     */
     @Override
     public List<EntityGame> getGamesByUser(String user) throws PersistanceException {
         try {
@@ -211,6 +233,12 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    /**
+     * Gets the names of all finished games owned by a user.
+     * @param user the username
+     * @return a list of finished game names
+     * @throws PersistanceException if the query fails
+     */
     @Override
     public ArrayList<String> getUserFinishedGameNames(String user) throws PersistanceException {
         ArrayList<String> games = new ArrayList<>();
@@ -226,6 +254,12 @@ public class SQLGameDAO implements GameDAO {
         return games;
     }
 
+    /**
+     * Gets the IDs of all finished games owned by a user.
+     * @param user the username
+     * @return a list of finished game IDs
+     * @throws PersistanceException if the query fails
+     */
     @Override
     public ArrayList<Integer> getUserFinishedGameIDs(String user) throws PersistanceException {
         ArrayList<Integer> gamesIds = new ArrayList<>();
@@ -241,6 +275,11 @@ public class SQLGameDAO implements GameDAO {
         return gamesIds;
     }
 
+    /**
+     * Updates an existing game's information in the database.
+     * @param game the game to update
+     * @throws PersistanceException if the update fails
+     */
     @Override
     public void updateGame(EntityGame game) throws PersistanceException {
         try {

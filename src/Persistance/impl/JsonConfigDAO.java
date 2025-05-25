@@ -9,6 +9,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+/**
+ * JsonConfigDAO is the implementation of {@link JsonDao} that loads configuration data
+ * (such as database credentials and connection info) from a local JSON file.
+ * The configuration is expected to be stored in a file located at "data/config.json".
+ */
 public class JsonConfigDAO implements JsonDao {
     private String username;
     private String password;
@@ -22,15 +27,12 @@ public class JsonConfigDAO implements JsonDao {
     private static final String JSON_FILE_PATH = "data/config.json";
 
     /**
-     * Constructor de la clase JsonConfigDAO.
-     * Carga el archivo JSON de configuración y lo convierte en un JsonArray.
-     *
-     * @throws FileNotFoundException si el archivo JSON no se encuentra o no se puede abrir.
+     * Constructs a JsonConfigDAO instance and loads the configuration file.
+     * @throws FileNotFoundException if the JSON file does not exist or cannot be opened
      */
     public JsonConfigDAO() throws FileNotFoundException {
         File file = new File(JSON_FILE_PATH); // Ruta al archivo JSON
         if (!file.exists()) {
-            // Lanza una excepción si el archivo no existe
             throw new FileNotFoundException("Error: The items.json file can’t be accessed.");
         } else {
             try {
@@ -38,15 +40,14 @@ public class JsonConfigDAO implements JsonDao {
                 JsonElement element = JsonParser.parseReader(fr); // Parsea el contenido del archivo
                 array = element.getAsJsonArray(); // Convierte el contenido a un JsonArray
             } catch (Exception e) {
-                // Muestra un mensaje de error si ocurre una excepción
                 throw new FileNotFoundException("ERROR: Cant open file: config.json");
             }
         }
     }
 
     /**
-     * Método que carga la información de configuración desde el archivo JSON.
-     * Extrae los valores de usuario, contraseña, host, puerto y nombre de la base de datos.
+     * Loads the configuration values from the JSON file into memory.
+     * Values include: username, password, host, port, and database name.
      */
     @Override
     public void loadInfo(){
@@ -58,10 +59,29 @@ public class JsonConfigDAO implements JsonDao {
         this.dbname = jsonElement.getAsJsonObject().get("dbname").getAsString();
     }
 
+    /**
+     * @return the configured username
+     */
     public String getUsername() { return username; }
+
+    /**
+     * @return the configured password
+     */
     public String getPassword() { return password; }
+
+    /**
+     * @return the configured host
+     */
     public String getHost() { return host; }
+
+    /**
+     * @return the configured port
+     */
     public int getPort() { return port; }
+
+    /**
+     * @return the configured database name
+     */
     public String getDbname() { return dbname; }
 
 }

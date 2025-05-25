@@ -19,7 +19,6 @@ import java.sql.*;
  */
 public class SQLConnector {
 
-    // The static attribute to implement the singleton design pattern.
     private static SQLConnector instance = null;
 
     /**
@@ -36,14 +35,12 @@ public class SQLConnector {
             }catch(FileNotFoundException e){
                 System.out.println(e.getMessage());
             }
-            // NOT a good practice to hardcode connection data! Be aware of this for your project delivery ;)
             instance = new SQLConnector(jsDao.getUsername(), jsDao.getPassword(), jsDao.getHost(), jsDao.getPort(), jsDao.getDbname());
             instance.connect();
         }
         return instance;
     }
 
-    // Attributes to connect to the database.
     private final String username;
     private final String password;
     private final String url;
@@ -66,7 +63,6 @@ public class SQLConnector {
             conn = DriverManager.getConnection(url, username, password);
         } catch(SQLException e) {
             throw new PersistanceException("Couldln't connect to the database");
-            //System.err.println("Couldn't connect to --> " + url + " (" + e.getMessage() + ")");
         }
     }
 
@@ -82,15 +78,12 @@ public class SQLConnector {
             s.executeUpdate(query);
         } catch (SQLException e) {
             throw new PersistanceException("Couldln't connect to the database");
-            //System.err.println(query);
-            //System.err.println("Problem when inserting --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
     }
 
 
     /**
      * Method that executes an update query to the connected database.
-     *
      * @param query String representation of the query to execute.
      */
     public void updateQuery(String query) throws PersistanceException {
@@ -99,15 +92,12 @@ public class SQLConnector {
             s.executeUpdate(query);
         } catch (SQLException e) {
             throw new PersistanceException("Couldln't connect to the database");
-            //System.err.println(query);
-            //System.err.println("Problema when updating --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
     }
 
 
     /**
      * Method that executes a deletion query to the connected database.
-     *
      * @param query String representation of the query to execute.
      */
     public void deleteQuery(String query) throws PersistanceException {
@@ -116,8 +106,6 @@ public class SQLConnector {
             s.executeUpdate(query);
         } catch (SQLException e) {
             throw new PersistanceException("Couldln't connect to the database");
-            //System.err.println(query);
-            //System.err.println("Problem when deleting --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
 
     }
@@ -137,12 +125,9 @@ public class SQLConnector {
                 rs = s.executeQuery(query);
             }catch(NullPointerException e) {
                 throw new PersistanceException("Couldln't connect to the database");
-                //System.err.println("Error in selectQuery -> cant connect with database");
             }
         } catch (SQLException e) {
             throw new PersistanceException("Couldln't connect to the database");
-            //System.err.println(query);
-            //System.err.println("Problem when selecting data --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
         return rs;
     }
@@ -157,7 +142,6 @@ public class SQLConnector {
             conn.close();
         } catch (SQLException e) {
             throw new PersistanceException("Couldln't connect to the database");
-            //System.err.println("Problem when closing the connection --> " + e.getSQLState() + " (" + e.getMessage() + ")");
         }
     }
 }

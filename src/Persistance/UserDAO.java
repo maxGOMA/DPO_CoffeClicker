@@ -1,8 +1,5 @@
 package Persistance;
 
-//DAO_USERS - Persistance
-//Guardaremos en estructuras "USER": user_name, password, email
-
 import Business.Entities.EntityUser;
 
 import Persistance.PersistanceException;
