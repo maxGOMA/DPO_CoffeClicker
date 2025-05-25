@@ -7,6 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
+/**
+ * View responsible for displaying a confirmation panel before executing critical actions,
+ * such as deleting a user account or ending a game.
+ * Includes animated header support and interactive confirmation buttons.
+ */
 public class ConfirmationView extends JPanel {
     public static final String CONFIRM = "CONFIRM_DELETE";
     public static final String CANCEL = "CANCEL";
@@ -19,6 +24,9 @@ public class ConfirmationView extends JPanel {
     private JLabel text;
     private JLabel label;
 
+    /**
+     * Constructs the confirmation view layout with styled components and header image.
+     */
     public ConfirmationView() {
         setLayout(new BorderLayout());
 
@@ -66,6 +74,13 @@ public class ConfirmationView extends JPanel {
         setVisible(true);
     }
 
+    /**
+     * Creates and returns a new JLabel with a specified style.
+     * @param txt the text to display
+     * @param size font size
+     * @param rotate whether to animate the text with scrolling effect
+     * @return a styled JLabel instance
+     */
     private JLabel newText(String txt, float size, boolean rotate) {
         JLabel txtTitle = new JLabel(txt);
 
@@ -83,6 +98,13 @@ public class ConfirmationView extends JPanel {
         return txtTitle;
     }
 
+    /**
+     * Creates a styled JButton with normal appearance.
+     *
+     * @param text the label text
+     * @param actionCommand the associated action command
+     * @return a styled JButton
+     */
     private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(250, 70, Image.SCALE_DEFAULT));
@@ -110,6 +132,13 @@ public class ConfirmationView extends JPanel {
         return button;
     }
 
+    /**
+     * Creates a styled JButton with warning appearance (typically red).
+     *
+     * @param text the label text
+     * @param actionCommand the associated action command
+     * @return a styled warning JButton
+     */
     private JButton newButtonRed(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/warning_button.png")
                 .getImage().getScaledInstance(250, 70, Image.SCALE_DEFAULT));
@@ -137,13 +166,22 @@ public class ConfirmationView extends JPanel {
         return button;
     }
 
-
-    public void setController(ControllerConfirmation controller_confirmation){
+    /**
+     * Assigns a controller to all buttons in the view to handle user actions.
+     *
+     * @param controllerConfirmation the controller handling confirmation logic
+     */
+    public void setController(ControllerConfirmation controllerConfirmation){
         for (JButton button : buttons.values()) {
-            button.addActionListener(controller_confirmation);
+            button.addActionListener(controllerConfirmation);
         }
     }
 
+    /**
+     * Updates the message shown in the confirmation panel.
+     * May alter layout based on the type of action (e.g., account deletion).
+     * @param txt the message to display
+     */
     public void setMessage(String txt){
         if(txt.contains("account")){
             JLabel text2 = newText("All information related to this user will be permanently removed.", 15, false);
@@ -179,6 +217,10 @@ public class ConfirmationView extends JPanel {
         label.setText(txt);
     }
 
+    /**
+     * Returns the main panel used to layout and display confirmation content.
+     * @return the content panel of the confirmation view
+     */
     public JPanel getPanel(){
         return contentPane;
     }

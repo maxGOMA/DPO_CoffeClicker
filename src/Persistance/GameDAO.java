@@ -1,8 +1,5 @@
 package Persistance;
 
-//DAO_USERS - Persistance
-//Guardaremos en estructuras "USER": user_name, password, email
-
 import Business.Entities.EntityGame;
 import Business.Entities.EntityUser;
 import Persistance.sql.SQLConnector;
@@ -13,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * GameDAO defines the contract for accessing and modifying game-related data
+ * in the persistence layer. It includes methods for loading, saving, deleting,
+ * and updating game entries from the database.
+ */
 public interface GameDAO {
 
     /**
@@ -77,16 +79,51 @@ public interface GameDAO {
      */
     int getUpgradeClicker(int ID_game) throws PersistanceException;
 
+    /**
+     * Retrieves the name of the game using its ID.
+     * @param ID_game the ID of the game
+     * @return the name of the game
+     * @throws PersistanceException if a database access error occurs
+     */
     String getName(int ID_game) throws PersistanceException;
 
+    /**
+     * Marks a game as finished in the database.
+     * @param userName the user who owns the game
+     * @param name the name of the game to mark as finished
+     * @throws PersistanceException if a database access error occurs
+     */
     void setFinished(String userName, String name) throws PersistanceException;
 
+    /**
+     * Retrieves a list of games associated with the specified user.
+     * @param user the username to query
+     * @return a list of {@link EntityGame} instances
+     * @throws PersistanceException if a database access error occurs
+     */
     List<EntityGame> getGamesByUser(String user) throws PersistanceException;
 
+    /**
+     * Retrieves the names of finished games for a specific user.
+     * @param user the username to query
+     * @return a list of finished game names
+     * @throws PersistanceException if a database access error occurs
+     */
     ArrayList<String> getUserFinishedGameNames(String user) throws PersistanceException;
 
+    /**
+     * Retrieves the IDs of finished games for a specific user.
+     * @param user the username to query
+     * @return a list of finished game IDs
+     * @throws PersistanceException if a database access error occurs
+     */
     ArrayList<Integer> getUserFinishedGameIDs(String user) throws PersistanceException;
 
+    /**
+     * Updates an existing game's data in the database.
+     * @param game the game entity containing updated information
+     * @throws PersistanceException if a database access error occurs
+     */
     void updateGame(EntityGame game) throws PersistanceException;
 }
 

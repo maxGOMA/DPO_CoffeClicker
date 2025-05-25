@@ -11,12 +11,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static Presentation.Views.LoginView.showError;
-
+/**
+ * Controller responsible for managing user login.
+ */
 public class ControllerLogin implements ActionListener {
     private UserManager userManager;
     private LoginView loginView;
     private CoffeeClickerApp app;
 
+    /**
+     * Constructor for the login controller.
+     * @param userManager the user manager
+     * @param loginView the login view
+     * @param app the main application instance
+     */
     public ControllerLogin(LoginView loginView, UserManager userManager, CoffeeClickerApp app) {
         this.userManager = userManager;
         this.loginView = loginView;
@@ -24,6 +32,9 @@ public class ControllerLogin implements ActionListener {
         this.app = app;
     }
 
+    /**
+     * Handles de login and validation of the user .
+     */
     private void validateAndLogin() {
         String userEmail = loginView.getTextFields().get("USER/EMAIL").getText().trim();
         String password = loginView.getTextFields().get("PASSWORD").getText().trim();
@@ -86,6 +97,10 @@ public class ControllerLogin implements ActionListener {
         }
     }
 
+    /**
+     * Handles login actions triggered in the login view.
+     * @param e the action event
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();

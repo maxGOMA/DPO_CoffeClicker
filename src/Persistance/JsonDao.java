@@ -1,49 +1,48 @@
 package Persistance;
 
-//DAO_USERS - Persistance
-//Guardaremos en estructuras "USER": user_name, password, email
 
 import Business.Entities.EntityGame;
 
-
+/**
+ * JsonDao defines the interface for loading and retrieving configuration
+ * data from a JSON source. This typically includes database connection parameters
+ * such as username, password, host, port, and database name.
+ */
 public interface JsonDao {
+
     /**
-     * Carga la información de configuración desde el archivo JSON.
+     * Loads the configuration information from the JSON file.
+     * This should be called before accessing any other getter methods.
      */
     void loadInfo();
 
     /**
-     * Obtiene el nombre de usuario de la configuración.
-     *
-     * @return el nombre de usuario como una cadena de texto.
+     * Retrieves the configured username from the JSON.
+     * @return the username as a String
      */
     String getUsername();
 
     /**
-     * Obtiene la contraseña de la configuración.
-     *
-     * @return la contraseña como una cadena de texto.
+     * Retrieves the configured password from the JSON.
+     * @return the password as a String
      */
     String getPassword();
 
     /**
-     * Obtiene el host de la base de datos desde la configuración.
-     *
-     * @return el host como una cadena de texto.
+     * Retrieves the configured database host from the JSON.
+     * @return the host as a String
      */
     String getHost();
 
     /**
-     * Obtiene el puerto de la base de datos desde la configuración.
-     *
-     * @return el puerto como un número entero.
+     * Retrieves the configured database port from the JSON.
+     * @return the port as an int
      */
     int getPort();
 
     /**
-     * Obtiene el nombre de la base de datos desde la configuración.
-     *
-     * @return el nombre de la base de datos como una cadena de texto.
+     * Retrieves the configured database name from the JSON.
+     * @return the database name as a String
      */
     String getDbname();
 }

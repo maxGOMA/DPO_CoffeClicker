@@ -8,6 +8,10 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * View responsible for displaying a list of games associated with the current user.
+ * Allows selection, creation, deletion, and copying of games, as well as logging out.
+ */
 public class GameListView extends JPanel{
     public static final String NEW_GAME = "NEWGAME";
     public static final String LOG_OUT = "LOGOUT";
@@ -35,6 +39,9 @@ public class GameListView extends JPanel{
     private JButton cancelButton;
     private static JPanel internPanel;
 
+    /**
+     * Constructs and initializes the layout and UI components of the game list view.
+     */
     public GameListView(){
         width = 1350;
         height = 1080;
@@ -83,6 +90,11 @@ public class GameListView extends JPanel{
 
     }
 
+    /**
+     * Configures and returns a JScrollPane containing the internal panel with game entries.
+     * @param scrollPane the scroll pane to configure
+     * @return the configured scroll pane
+     */
     private JScrollPane configureScrollPanel(JScrollPane scrollPane){
         internPanel = new JPanel();
         internPanel.setLayout(new BoxLayout(internPanel, BoxLayout.Y_AXIS));
@@ -112,6 +124,13 @@ public class GameListView extends JPanel{
         return scrollPane;
     }
 
+    /**
+     * Creates a styled JLabel with optional rotating animation.
+     * @param txt the text to display
+     * @param size the font size
+     * @param rotate whether to animate the label
+     * @return the styled JLabel
+     */
     private JLabel newText(String txt, float size, boolean rotate) {
         JLabel txtTitle = new JLabel(txt);
 
@@ -129,8 +148,12 @@ public class GameListView extends JPanel{
         return txtTitle;
     }
 
-
-
+    /**
+     * Creates and returns a button styled according to the app’s theme.
+     * @param text button label
+     * @param actionCommand command associated with the button
+     * @return the configured JButton
+     */
     private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(250, 70, Image.SCALE_DEFAULT));
@@ -158,6 +181,13 @@ public class GameListView extends JPanel{
         return button;
     }
 
+    /**
+     * Creates and returns a red-styled warning button.
+     * This is typically used for delete or critical actions.
+     * @param text the label text for the button
+     * @param actionCommand the command to associate with this button
+     * @return the configured red warning JButton
+     */
     private JButton newButtonRed(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/warning_button.png")
                 .getImage().getScaledInstance(250, 70, Image.SCALE_DEFAULT));
@@ -185,6 +215,12 @@ public class GameListView extends JPanel{
         return button;
     }
 
+    /**
+     * Constructs the panel and components for a single game item, with interactive buttons.
+     *
+     * @param text the name of the game
+     * @return the constructed JPanel for that game
+     */
     private JPanel newButtonGame(String text){
         ImageIcon startIcon = new ImageIcon(new ImageIcon("imgs/start.png")
                 .getImage().getScaledInstance(50, 80, Image.SCALE_DEFAULT));
@@ -266,6 +302,10 @@ public class GameListView extends JPanel{
         return panelGame;
     }
 
+    /**
+     * Assigns the controller to the buttons and starts loading game entries.
+     * @param controller_gameList the controller to assign
+     */
     public void setController(ControllerGameList controller_gameList){
         games = controller_gameList.getGamesByUser();
         start();
@@ -274,6 +314,9 @@ public class GameListView extends JPanel{
         }
     }
 
+    /**
+     * Rebuilds the view content after updating the game list.
+     */
     private void start(){
         JScrollPane scrollPane = null;
         scrollPane = configureScrollPanel(scrollPane);
@@ -290,14 +333,26 @@ public class GameListView extends JPanel{
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Retrieves the 'new game' button component.
+     * @return the new game button
+     */
     public JButton getnewGameButton(){
         return newGameButton;
     }
 
+    /**
+     * Retrieves the confirmation panel used for delete confirmation.
+     * @return the confirmation panel
+     */
     public JPanel getPanelConfirmation() {
         return panelConfirmation;
     }
 
+    /**
+     * Deletes the UI entry corresponding to a given game name.
+     * @param name the game name to remove
+     */
     public static void deleteGameSelectedView(String name) {
         Component aux = internPanel.getComponent(0);
         for(Component c: internPanel.getComponents()){
@@ -312,6 +367,10 @@ public class GameListView extends JPanel{
 
     }
 
+    /**
+     * Clears the selection of any highlighted game.
+     * Resets all game panels to the default style.
+     */
     public void clearGameSelected(){
         Image backgroundImageRest = new ImageIcon("imgs/button_game.png")
                 .getImage().getScaledInstance(600, 115, Image.SCALE_DEFAULT);
@@ -352,6 +411,10 @@ public class GameListView extends JPanel{
         }
     }
 
+    /**
+     * Highlights the selected game panel visually, changing background and icon styles.
+     * @param name the name of the selected game
+     */
     public void paintGameSelected(String name){
         backgroundImage = new ImageIcon("imgs/game_selected.png")
                 .getImage().getScaledInstance(600, 115, Image.SCALE_DEFAULT);
@@ -423,15 +486,23 @@ public class GameListView extends JPanel{
             }
         }
     }
-
     private class BackgroundPanel extends JPanel {
         private Image bg;
 
+        /**
+         * Sets the background image of the panel.
+         *
+         * @param image the image to set
+         */
         public void setBackgroundImage(Image image) {
             this.bg = image;
             repaint();
         }
 
+        /**
+         * Paints the background image on the panel.
+         * @param g the graphics context
+         */
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -441,6 +512,11 @@ public class GameListView extends JPanel{
         }
     }
 
+    /**
+     * Adds a new game panel to the internal scroll panel.
+     * This is used when a new game is created or copied.
+     * @param name the name of the game to display in the panel
+     */
     public void setComponentInterPanel(String name){
         JPanel aux = newButtonGame(name);
         aux.setAlignmentX(Component.CENTER_ALIGNMENT);

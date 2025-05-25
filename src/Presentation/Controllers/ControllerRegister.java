@@ -11,17 +11,30 @@ import java.util.regex.Pattern;
 
 import static Presentation.Views.RegisterView.showError;
 
+/**
+ * Controller responsible for handling the user registration process.
+ */
 public class ControllerRegister implements ActionListener {
     private UserManager userManager;
     private RegisterView registerView;
     private CoffeeClickerApp app;
 
+    /**
+     * Constructs the registration controller.
+     * @param registerView the registration view
+     * @param userManager the user manager
+     * @param app the main application instance
+     */
     public ControllerRegister(RegisterView registerView, UserManager userManager, CoffeeClickerApp app) {
         this.registerView = registerView;
         this.userManager = userManager;
         this.app = app;
     }
 
+    /**
+     * Handles actions performed in the registration view.
+     * @param e the action event triggered by the view
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -34,9 +47,12 @@ public class ControllerRegister implements ActionListener {
             registerView.clearErrorMessages();
             app.showPanel("MainMenuView");
         }
-
     }
 
+    /**
+     * Validates the user input fields in the registration form.
+     * If valid, registers the user and redirects to the main menu.
+     */
     private void validateAndRegister() {
         String user = registerView.getTextFields().get("USER").getText().trim();
         String email = registerView.getTextFields().get("EMAIL").getText().trim();
@@ -103,11 +119,21 @@ public class ControllerRegister implements ActionListener {
         }
     }
 
+    /**
+     * Validates whether the email format is correct.
+     * @param email the email to check
+     * @return true if the format is valid, false otherwise
+     */
     private boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         return Pattern.matches(emailRegex, email);
     }
 
+    /**
+     * Validates the strength of the given password.
+     * @param password the password to validate
+     * @return true if the password meets the security requirements and false otherwise
+     */
     private boolean isValidPassword(String password) {
         return password.length() >= 8 &&
                 password.matches(".*[A-Z].*") &&

@@ -6,7 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-
+/**
+ * GraphView is a custom panel responsible for visualizing player statistics
+ * in a line graph format. It allows selection of users and their finished games,
+ * dynamically updating the chart based on the associated data.
+ * Also handles error display and interactive controls.
+ */
 public class GraphView extends JPanel {
     public static final String BACK_COMMAND = "BACK_COMMAND";
     public static final String GAME_SELECTED = "GAME_SELECTED";
@@ -15,7 +20,6 @@ public class GraphView extends JPanel {
     private Font coffeeClickerFont;
     private ArrayList<Double> stats;
 
-    //JcomboBoxs
     private ArrayList<String> usernames;
     private ArrayList<String> finishedGames;
 
@@ -28,6 +32,10 @@ public class GraphView extends JPanel {
     private JLabel gameSelectionLabel;
     private JLabel userSelectionLabel;
 
+    /**
+     * Constructs a new GraphView panel and initializes its layout, components,
+     * and graphical rendering properties.
+     */
     public GraphView () {
         setLayout(new BorderLayout());
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -53,7 +61,6 @@ public class GraphView extends JPanel {
         backButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         backButton.setActionCommand(BACK_COMMAND);
 
-        //Panel de las jComboBox
         JPanel selectionPanel = new JPanel();
         selectionPanel.setLayout(new BoxLayout(selectionPanel, BoxLayout.Y_AXIS));
         selectionPanel.setBorder(BorderFactory.createEmptyBorder(150, 50, 150, 50));
@@ -119,6 +126,10 @@ public class GraphView extends JPanel {
         add(backGroundPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Sets the list of usernames available in the statistics view.
+     * @param usernames the list of usernames to populate in the dropdown
+     */
     public void setUsernames(ArrayList<String> usernames) {
         this.usernames = usernames;
         userSelectionComboBox.removeAllItems();
@@ -127,6 +138,10 @@ public class GraphView extends JPanel {
         }
     }
 
+    /**
+     * Sets the list of finished games for the selected user.
+     * @param finishedGames the list of finished games to populate
+     */
     public void setFinishedGames(ArrayList<String> finishedGames) {
         this.finishedGames = finishedGames;
         gameSelectionComboBox.removeAllItems();
@@ -135,13 +150,18 @@ public class GraphView extends JPanel {
         }
     }
 
-
+    /**
+     * Makes the game selection combo box visible and hides error messages.
+     */
     public void showGameSelectionComboBox() {
         errorLabel.setVisible(false);
         gameSelectionLabel.setVisible(true);
         gameSelectionComboBox.setVisible(true);
     }
 
+    /**
+     * Displays an error message when no users are registered.
+     */
     public void showNoUsersRegisteredMessage() {
         errorLabel.setText("No registered users found!");
         errorLabel.setVisible(true);
@@ -149,6 +169,10 @@ public class GraphView extends JPanel {
         gameSelectionComboBox.setVisible(false);
     }
 
+    /**
+     * Displays an error message when the selected user has no finished games.
+     * Also triggers an empty graph placeholder.
+     */
     public void showNoFinishedGamesForSelectedUserMessage() {
         errorLabel.setText("This user does not have finished games!");
         errorLabel.setVisible(true);
@@ -157,12 +181,21 @@ public class GraphView extends JPanel {
         updateStats(new ArrayList<>()); //Para que aparezca loading...
     }
 
-
+    /**
+     * Updates the graph with a new list of statistics.
+     * @param newStats the new list of statistics to be plotted
+     */
     public void updateStats(ArrayList<Double> newStats) {
         stats = newStats;
         repaint();
     }
 
+    /**
+     * Paints the statistical graph based on the current list of stats.
+     * @param g the Graphics2D context to draw on
+     * @param w the width of the drawing area
+     * @param h the height of the drawing area
+     */
     protected void paintGraph(Graphics2D g, int w, int h) {
         super.paintComponent(g);
         Graphics2D g2 = g;
@@ -257,6 +290,10 @@ public class GraphView extends JPanel {
         }
     }
 
+    /**
+     * Sets the controller that handles user actions in this view.
+     * @param controller the ControllerStatistics instance to assign
+     */
     public void setController(ControllerStatistics controller) {
         userSelectionComboBox.addActionListener(controller);
         gameSelectionComboBox.addActionListener(controller);

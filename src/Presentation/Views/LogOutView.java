@@ -8,6 +8,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+/**
+ * LogOutView is the view that presents options to either log out from the session
+ * or delete the current user account. It provides visual components styled with
+ * CoffeeClicker's theme and binds button actions to a controller.
+ */
 public class LogOutView extends JPanel {
     public static final String LOGOUT_COMMAND = "LOGOUT_COMMAND";
     public static final String DELETE_ACCOUNT_COMMAND = "DELETE_ACCOUNT_COMMAND";
@@ -15,6 +20,9 @@ public class LogOutView extends JPanel {
     private Font coffeeClickerFont;
     private final HashMap<String, JButton> buttons = new HashMap<>();
 
+    /**
+     * Constructs the logout view and initializes UI components, layout and event mapping.
+     */
     public LogOutView() {
         setLayout(new BorderLayout());
 
@@ -48,6 +56,12 @@ public class LogOutView extends JPanel {
         setVisible(true);
     }
 
+    /**
+     * Creates a new button styled according to the application's theme.
+     * @param text the button label
+     * @param actionCommand the action command to associate with the button
+     * @return the constructed and styled JButton
+     */
     private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(257, 82, Image.SCALE_DEFAULT));
@@ -85,7 +99,10 @@ public class LogOutView extends JPanel {
         return button;
     }
 
-
+    /**
+     * Binds the given controller to all actionable buttons in the view.
+     * @param controller_logOut the logout controller to register
+     */
     public void setController(ControllerLogOut controller_logOut){
         for (JButton button : buttons.values()) {
             button.addActionListener(controller_logOut);

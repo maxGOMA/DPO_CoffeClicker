@@ -10,6 +10,11 @@ import Presentation.Views.*;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * CoffeeClickerApp is the main application window for the Coffee Clicker game.
+ * It sets up and manages all views and controllers, and serves as the navigation hub.
+ * The app uses a CardLayout to switch between different user interface panels.
+ */
 public class CoffeeClickerApp extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
@@ -19,6 +24,10 @@ public class CoffeeClickerApp extends JFrame {
     private NewGameView newGame;
     private ControllerConfirmation controller_confirmation;
 
+    /**
+     * Constructs the application and initializes all managers, views, and controllers.
+     * Loads the initial views and sets the window configuration.
+     */
     public CoffeeClickerApp() {
         try {
             userManager = new UserManager();
@@ -75,6 +84,11 @@ public class CoffeeClickerApp extends JFrame {
         }
     }
 
+    /**
+     * Creates and displays the NewGameView with the specified name (used when copying a game).
+     * @param name the name of the game to pre-fill (if copying); null for a fresh new game
+     * @param gameListView the parent view from which the new game screen was requested
+     */
     public void createNewGameView(String name, GameListView gameListView){
         newGame = new NewGameView(name);
         ControllerNewGame controller_newgame = new ControllerNewGame(newGame, gameManager, (name != null), gameListView, controller_confirmation, this);
@@ -82,6 +96,9 @@ public class CoffeeClickerApp extends JFrame {
         mainPanel.add(newGame, "NewGame");
     }
 
+    /**
+     * Initializes and displays the SelectGame view, which lists saved games.
+     */
     public void createSelectGame() {
         GameListView selectGame = new GameListView();
         ControllerGameList controllerGameList = new ControllerGameList(selectGame, gameManager, statManager, this);
@@ -89,6 +106,9 @@ public class CoffeeClickerApp extends JFrame {
         mainPanel.add(selectGame, "SelectGame");
     }
 
+    /**
+     * Initializes and displays the GameView for the currently selected game.
+     */
     public void createGameScreen() {
         GameView gameView = new GameView();
         ControllerGame controllerGame = new ControllerGame(gameView, gameManager, statManager, this);
@@ -96,6 +116,9 @@ public class CoffeeClickerApp extends JFrame {
         mainPanel.add(gameView, "GameView");
     }
 
+    /**
+     * Initializes and displays the statistics graph view.
+     */
     public void createStatsGraph() throws BusinessException {
         GraphView graphView = new GraphView();
         ControllerStatistics controllerStatistics = new ControllerStatistics(statManager, userManager, gameManager, graphView, this);
@@ -103,8 +126,16 @@ public class CoffeeClickerApp extends JFrame {
         mainPanel.add(graphView, "stats");
     }
 
+    /**
+     * Displays the view associated with the specified panel name.
+     * @param panelName the string identifier of the view to show
+     */
     public void showPanel(String panelName) { cardLayout.show(mainPanel, panelName);}
 
+    /**
+     * Exits the application after showing a persistence-related error message.
+     * @param exceptionMessage the error message to display
+     */
     public void finishProgramDueToPersistanceException(String exceptionMessage) {
         this.setVisible(false);
         this.dispose();
