@@ -10,6 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+/**
+ * MainMenuView is the initial screen shown to the user.
+ * It provides navigation buttons to log in, register, or exit the application.
+ * Each button is styled with a custom font and image, and all actions are linked to a controller.
+ */
 public class MainMenuView extends JPanel {
     public static final String VIEW_LOGIN = "VIEW_LOGIN";
     public static final String VIEW_REGISTER = "VIEW_REGISTER";
@@ -17,6 +22,9 @@ public class MainMenuView extends JPanel {
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private static Font coffeeClickerFont;
 
+    /**
+     * Constructs the main menu view, loading components, layout, fonts and buttons.
+     */
     public MainMenuView() {
         setLayout(new BorderLayout());
 
@@ -65,6 +73,12 @@ public class MainMenuView extends JPanel {
         setVisible(true);
     }
 
+    /**
+     * Creates and returns a styled JButton with icon and hover effects.
+     * @param text the display text of the button
+     * @param actionCommand the command assigned to the button
+     * @return the configured JButton instance
+     */
     private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(159, 51, Image.SCALE_DEFAULT));
@@ -103,6 +117,10 @@ public class MainMenuView extends JPanel {
         return button;
     }
 
+    /**
+     * Loads the custom font from resources and registers it to the environment.
+     * @return the loaded Font, or null if loading failed
+     */
     public static Font loadCustomFont() {
         try {
             InputStream is = MainMenuView.class.getResourceAsStream("/res/font/CoffeeClicker.ttf");
@@ -119,6 +137,10 @@ public class MainMenuView extends JPanel {
         return coffeeClickerFont;
     }
 
+    /**
+     * Assigns the controller to all buttons in the menu.
+     * @param controller the ControllerMainMenu instance to assign
+     */
     public void setController(ControllerMainMenu controller) {
         for (JButton button : buttons.values()) {
             button.addActionListener(controller);

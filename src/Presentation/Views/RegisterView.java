@@ -8,6 +8,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+/**
+ * RegisterView provides the user interface for new users to register an account.
+ * It includes fields for user input, validation error messages, and action buttons
+ * to proceed with registration or go back.
+ */
 public class RegisterView extends JPanel {
     public static final String REGISTER_COMMAND = "REGISTER_COMMAND";
     public static final String BACK_COMMAND = "BACK_COMMAND";
@@ -16,7 +21,9 @@ public class RegisterView extends JPanel {
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private Font coffeeClickerFont;
 
-
+    /**
+     * Constructs the RegisterView and initializes all layout and UI components.
+     */
     public RegisterView() {
         setLayout(new BorderLayout());
 
@@ -66,6 +73,11 @@ public class RegisterView extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates an input panel for a standard text field with label and error message.
+     * @param text the identifier for the field (e.g., "EMAIL", "USER")
+     * @return the constructed input panel
+     */
     public JPanel askInfo(String text) {
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
@@ -102,6 +114,11 @@ public class RegisterView extends JPanel {
         return infoBox;
     }
 
+    /**
+     * Adds and returns a styled text box for a given field.
+     * @param text the key to associate with this text field
+     * @return the panel containing the text field
+     */
     public JPanel addTextbox(String text) {
         JPanel frame = new JPanel();
 
@@ -173,6 +190,11 @@ public class RegisterView extends JPanel {
         return infoBox;
     }
 
+    /**
+     * Adds and returns a styled password text box for a given field.
+     * @param text the key to associate with this password field
+     * @return the panel containing the password field
+     */
     public JPanel addTextboxPassword(String text) {
         JPanel frame = new JPanel();
 
@@ -212,6 +234,12 @@ public class RegisterView extends JPanel {
         return frame;
     }
 
+    /**
+     * Creates a new styled JButton with hover and click effects.
+     * @param text the label to display on the button
+     * @param actionCommand the command to associate with the button
+     * @return the constructed JButton
+     */
     private JButton newButton(String text, String actionCommand) {
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(159, 51, Image.SCALE_DEFAULT));
@@ -248,12 +276,20 @@ public class RegisterView extends JPanel {
         return button;
     }
 
+    /**
+     * Clears all text fields in the form.
+     */
     public void clearFields() {
         for (JTextField field : textFields.values()) {
             field.setText(""); // Borra el texto de cada campo
         }
     }
 
+    /**
+     * Shows an error message below the specified field.
+     * @param field the key associated with the field
+     * @param message the error message to show
+     */
     public static void showError(String field, String message) {
         JLabel errorLabel = errorLabels.get(field);
         if (errorLabel != null) {
@@ -261,18 +297,29 @@ public class RegisterView extends JPanel {
         }
     }
 
+    /**
+     * Clears all visible validation error messages in the form.
+     */
     public void clearErrorMessages() {
         for (JLabel label : errorLabels.values()) {
             label.setText(" ");
         }
     }
 
+    /**
+     * Assigns the register controller to all actionable buttons.
+     * @param controller the controller that handles actions
+     */
     public void setController(ControllerRegister controller) {
         for (JButton button : buttons.values()) {
             button.addActionListener(controller);
         }
     }
 
+    /**
+     * Retrieves the current map of input fields.
+     * @return the map of field identifiers to text fields
+     */
     public HashMap<String, JTextField> getTextFields() {
         return textFields;
     }

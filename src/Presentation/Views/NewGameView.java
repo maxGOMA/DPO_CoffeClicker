@@ -7,6 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
+/**
+ * NewGameView is the view that handles user input when creating a new game.
+ * It supports both creating a fresh game or copying statistics from an existing one.
+ * The view includes interactive elements for input validation and confirmation.
+ */
 public class NewGameView extends JPanel {
     public static final String CANCEL = "CANCEL";
     public static final String START = "START";
@@ -24,6 +29,10 @@ public class NewGameView extends JPanel {
     private JPanel buttonPanel;
     private String name;
 
+    /**
+     * Constructs a new game creation view and sets up its UI layout.
+     * @param name the name of the game to use as a template (or null for a new game)
+     */
     public NewGameView(String name){
         this.name = name;
         coffeeClickerFont = MainMenuView.loadCustomFont();
@@ -71,6 +80,13 @@ public class NewGameView extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates a styled label component.
+     * @param txt the text to display
+     * @param size the font size
+     * @param rotate whether the text should animate with a scroll effect
+     * @return the configured JLabel
+     */
     private JLabel newText(String txt, float size, boolean rotate) {
         JLabel txtTitle = new JLabel(txt);
 
@@ -88,6 +104,12 @@ public class NewGameView extends JPanel {
         return txtTitle;
     }
 
+    /**
+     * Creates a new styled JButton with hover and click effects.
+     * @param text the button label to display
+     * @param actionCommand the action command to assign to the button
+     * @return the constructed JButton
+     */
     private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(250, 70, Image.SCALE_DEFAULT));
@@ -115,6 +137,11 @@ public class NewGameView extends JPanel {
         return button;
     }
 
+    /**
+     * Creates a panel containing a label, input field, and an error label for a text entry.
+     * @param text the field identifier
+     * @return a JPanel combining label, input box, and error display
+     */
     public JPanel askInfo(String text) {
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
@@ -151,6 +178,11 @@ public class NewGameView extends JPanel {
         return infoBox;
     }
 
+    /**
+     * Adds a styled textbox for entering data.
+     * @param text the field identifier
+     * @return a JPanel containing the text field
+     */
     public JPanel addTextbox(String text) {
         JPanel frame = new JPanel();
 
@@ -186,18 +218,29 @@ public class NewGameView extends JPanel {
         return frame;
     }
 
+    /**
+     * Clears all visible error messages in the form.
+     */
     public void clearErrorMessages() {
         for (JLabel label : errorLabels.values()) {
             label.setText(" ");
         }
     }
 
+    /**
+     * Clears all text input fields.
+     */
     public void clearFields() {
         for (JTextField field : textFields.values()) {
             field.setText("");
         }
     }
 
+    /**
+     * Displays an error message associated with a specific input field.
+     * @param field the field name
+     * @param message the error message to show
+     */
     public static void showError(String field, String message) {
         JLabel errorLabel = errorLabels.get(field);
         if (errorLabel != null) {
@@ -205,16 +248,28 @@ public class NewGameView extends JPanel {
         }
     }
 
+    /**
+     * Returns the map of input fields for accessing user-entered data.
+     * @return a HashMap of JTextField components
+     */
     public HashMap<String, JTextField> getTextFields(){
         return textFields;
     }
 
+    /**
+     * Binds a ControllerNewGame instance to all buttons in the view.
+     * @param controller_newGame the controller to assign
+     */
     public void setController(ControllerNewGame controller_newGame){
         for (JButton button : buttons.values()) {
             button.addActionListener(controller_newGame);
         }
     }
 
+    /**
+     * Sets the internal name of the game being created or copied.
+     * @param name the new game name to set
+     */
     public void setGameName(String name) {
         this.name = name;
     }

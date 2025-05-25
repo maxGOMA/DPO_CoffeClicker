@@ -9,6 +9,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A custom JPanel used to display a generator in the GameView.
+ * Includes generator name, level, icon, price overlay, and handles user interaction.
+ */
 public class GeneratorPanel extends JPanel {
     private final String command;
     private final JLabel nameLabel;
@@ -18,6 +22,12 @@ public class GeneratorPanel extends JPanel {
     private final JLabel priceCardLabel;
     private final List<ActionListener> listeners = new ArrayList<>();
 
+    /**
+     * Constructs a new GeneratorPanel for the specified generator.
+     * @param generatorName the internal key or type of the generator
+     * @param command the action command associated with this panel
+     * @param text the display name to show on the panel
+     */
     public GeneratorPanel(String generatorName, String command, String text) {
         this.command = command;
         setLayout(new GridBagLayout());
@@ -30,7 +40,6 @@ public class GeneratorPanel extends JPanel {
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Nombre
         nameLabel = new JLabel(text, SwingConstants.CENTER);
         nameLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 12));
         nameLabel.setForeground(Color.WHITE);
@@ -38,7 +47,6 @@ public class GeneratorPanel extends JPanel {
         gbc.insets = new Insets(0, 0, 4, 0);
         add(nameLabel, gbc);
 
-        // Nivel
         levelLabel = new JLabel("LV.1", SwingConstants.CENTER);
         levelLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 12));
         levelLabel.setForeground(Color.WHITE);
@@ -46,7 +54,6 @@ public class GeneratorPanel extends JPanel {
         gbc.insets = new Insets(2, 0, 4, 0);
         add(levelLabel, gbc);
 
-        // Panel de imagen con Overlay
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new OverlayLayout(imagePanel));
         imagePanel.setOpaque(false);
@@ -89,7 +96,6 @@ public class GeneratorPanel extends JPanel {
         revalidate();
         repaint();
 
-        // Hover effect
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -112,20 +118,38 @@ public class GeneratorPanel extends JPanel {
         });
     }
 
+    /**
+     * Loads and scales an image icon from a given path.
+     * @param path the image file path
+     * @param width the desired width
+     * @param height the desired height
+     * @return the scaled ImageIcon
+     */
     private ImageIcon loadImageIcon(String path, int width, int height) {
         ImageIcon img = new ImageIcon(path);
         return new ImageIcon(img.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
     }
 
-    // Métodos públicos
+    /**
+     * Sets the name text shown on the panel.
+     * @param name the new name string to display
+     */
     public void setName(String name) {
         nameLabel.setText(name);
     }
 
+    /**
+     * Sets the level text shown on the panel.
+     * @param levelText the new level string to display
+     */
     public void setLevel(String levelText) {
         levelLabel.setText(levelText);
     }
 
+    /**
+     * Updates the price overlay label text.
+     * @param text the new price string to display
+     */
     public void updatePrice(String text) {
         try {
             double value = Double.parseDouble(text);
@@ -133,16 +157,6 @@ public class GeneratorPanel extends JPanel {
         } catch (NumberFormatException e) {
             overlayTextLabel.setText(text);
         }
-    }
-
-    public void setImageIcon(Icon icon) {
-        imageLabel.setIcon(icon);
-    }
-
-    public void resizeFont(float size) {
-        nameLabel.setFont(nameLabel.getFont().deriveFont(size));
-        levelLabel.setFont(levelLabel.getFont().deriveFont(size));
-        overlayTextLabel.setFont(overlayTextLabel.getFont().deriveFont(size));
     }
 
     private String formatPrice(double price) {
@@ -155,7 +169,10 @@ public class GeneratorPanel extends JPanel {
         return String.format("%.2f%s", price, suffixes[index]);
     }
 
-
+    /**
+     * Adds an ActionListener to this panel, allowing it to handle click events.
+     * @param listener the ActionListener to add
+     */
     public void addActionListener(ActionListener listener) {
         listeners.add(listener);
     }

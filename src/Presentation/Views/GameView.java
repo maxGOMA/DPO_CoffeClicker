@@ -11,6 +11,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * GameView represents the main gameplay screen where the player can interact with
+ * generators, upgrades, and buttons to produce and spend coffee resources.
+ * It displays statistics, handles user actions, and visually presents the game's state.
+ */
 public class GameView extends JPanel {
     public static final String CLICKED_COFFEE_COMMAND = "CLICKED_COFFEE_COMMAND";
     public static final String BUY_BEANS_COMMAND = "BUY_BEANS_COMMAND";
@@ -59,6 +64,9 @@ public class GameView extends JPanel {
 
     private MultiplierCellRenderer cellRenderer;
 
+    /**
+     * Constructs and initializes the GameView UI layout.
+     */
     public GameView() {
         setPreferredSize(new Dimension(1200, 800));
         setMinimumSize(new Dimension(800, 600));
@@ -136,7 +144,6 @@ public class GameView extends JPanel {
         );
 
 
-        // Añadir al panel
         gbcLeft.gridy = 2;
         gbcLeft.weighty = 0.05;
         gbcLeft.insets = new Insets(0, 5, 50, 5);  // Margen inferior más grande
@@ -144,7 +151,6 @@ public class GameView extends JPanel {
 
         centralPanel.add(leftPanel);
 
-        // === RIGHT PANEL ===
         JPanel rightPanel = new JPanel(new GridBagLayout());
         rightPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -159,7 +165,6 @@ public class GameView extends JPanel {
         gbc.weighty = 0.5;
         rightPanel.add(emptyPanel3, gbc);
 
-        // 1. Cps (20%)
         cpsLabel = new JLabel("254.32M cfs/s", SwingConstants.CENTER);
         cpsLabel.setFont(new Font("CoffeeClicker", Font.PLAIN, 22));
         cpsLabel.setForeground(Color.WHITE);
@@ -173,12 +178,9 @@ public class GameView extends JPanel {
         gbc.weighty = 0.01;
         rightPanel.add(emptyPanel4, gbc);
 
-        // 2. 9 upgrade buttons (40%)
-        // Panel contenedor para upgrades + info
         JPanel upgradesContainer = new JPanel(new BorderLayout());
         upgradesContainer.setOpaque(false);
 
-        // Botón de información (i) para upgrades
         ImageIcon infoIcon = new ImageIcon(new ImageIcon("imgs/info.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH));
         JButton upgradesInfoButton = new JButton(infoIcon);
         upgradesInfoButton.setBorderPainted(false);
@@ -186,15 +188,12 @@ public class GameView extends JPanel {
         upgradesInfoButton.setFocusPainted(false);
         upgradesInfoButton.setPreferredSize(new Dimension(24, 24));
 
-        //String[] upgradeGenerators_Commands =  {UPG_SILVER_BEANS, UPG_GOLD_BEANS, UPG_DIAMOND_BEANS, UPG_SILVER_MAKER, UPG_GOLD_MAKER, UPG_DIAMOND_MAKER, UPG_SILVER_TAKEAWAY, UPG_GOLD_TAKEAWAY, UPG_DIAMOND_TAKEAWAY};
         String[] upgradeGenerators_Commands =  {UPG_BEANS_COMMAND, UPG_MAKER_COMMAND, UPG_TAKEAWAY_COMMAND};
 
-        // Panel para alinear el botón (i) a la izquierda
         JPanel upgradesInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         upgradesInfoPanel.setOpaque(false);
         upgradesInfoPanel.add(upgradesInfoButton);
 
-        // Panel real de upgrades
         JPanel upgradesPanel = new JPanel(new GridLayout(3, 3, 5, 5));
         upgradesPanel.setOpaque(false);
 
@@ -212,22 +211,18 @@ public class GameView extends JPanel {
         upgradesCardPanel.setOpaque(false);
         upgradesCardPanel.setLayout(new BorderLayout());
 
-        // Panel contenedor para la tabla
         JPanel upgradesTablesPanel = new JPanel();
         upgradesTablesPanel.setOpaque(false);
         upgradesTablesPanel.setLayout(new BorderLayout());
 
         cellRenderer = new MultiplierCellRenderer();
-        // Columnas sin "%":
         String[] emptyCols = {""};
-        // Datos combinados sin la columna de porcentaje
         String[][] emptyData = {new String[]{""}};
 
         Font tableFont = new Font("CoffeeClicker", Font.PLAIN, 8);
         Color bgColor = Color.decode("#cccccc");
         Color fgColor = Color.decode("#7c483c");
 
-        // Crear la tabla unificada
         upgradesTable = new NonEditableTable(emptyData, emptyCols);
         upgradesTable.setFont(tableFont);
         upgradesTable.setForeground(fgColor);
@@ -237,7 +232,6 @@ public class GameView extends JPanel {
         upgradesTable.setIntercellSpacing(new Dimension(0, 0));
         upgradesTable.setFocusable(false);
 
-        // ScrollPane para la tabla combinada
         JScrollPane scrollCombined = new JScrollPane(upgradesTable);
         scrollCombined.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollCombined.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -245,11 +239,9 @@ public class GameView extends JPanel {
 
         upgradesTablesPanel.add(scrollCombined, BorderLayout.CENTER);
 
-        // Añadir al panel principal
         upgradesCardPanel.removeAll();
         upgradesCardPanel.add(upgradesTablesPanel, BorderLayout.CENTER);
 
-        // Añadir ambos al contenedor y alternar visibilidad con el botón (i)
         JPanel upgradesStack = new JPanel(null);
         upgradesStack.setOpaque(false);
         upgradesStack.setLayout(new CardLayout());
@@ -265,7 +257,6 @@ public class GameView extends JPanel {
             cl.show(upgradesStack, upgradesShowingCards ? "CARDS" : "UPGRADES");
         });
 
-        // Añadir al layout principal
         gbc.gridy = 3;
         gbc.weighty = 0.001;
         rightPanel.add(upgradesContainer, gbc);
@@ -276,11 +267,9 @@ public class GameView extends JPanel {
         gbc.weighty = 0.01;
         rightPanel.add(emptyPanel5, gbc);
 
-        // 3. 3 generator buttons (40%)
         JPanel generatorsContainer = new JPanel(new BorderLayout());
         generatorsContainer.setOpaque(false);
 
-        // Botón de información (i) para generadores
         JButton generatorsInfoButton = new JButton(infoIcon);
         generatorsInfoButton.setBorderPainted(false);
         generatorsInfoButton.setContentAreaFilled(false);
@@ -306,9 +295,6 @@ public class GameView extends JPanel {
             generators.put(keys[i], generatorPanel);
             generatorsPanel.add(generatorPanel);
 
-            // TODO añadir el comando del setActionCommand (lo de abajo no va)
-            // generatorPanel.setActionCommand(buyGenerators_commands[i]);
-
             generators.put(keys[i], generatorPanel);
             generatorsPanel.add(generatorPanel);
         }
@@ -322,7 +308,6 @@ public class GameView extends JPanel {
         generatorsTablesPanel.setLayout(new GridLayout(2, 1, 5, 5));
 
 
-        // === Tabla Generadores Comprados ===
         purchasedgeneratorsInfoTable = new NonEditableTable(emptyData, emptyCols);
         purchasedgeneratorsInfoTable.setFont(tableFont);
         purchasedgeneratorsInfoTable.setForeground(fgColor);
@@ -332,14 +317,12 @@ public class GameView extends JPanel {
         purchasedgeneratorsInfoTable.setIntercellSpacing(new Dimension(0, 0));
         purchasedgeneratorsInfoTable.setFocusable(false);
 
-        // ScrollPane
         JScrollPane scrollPurchasedGenerators = new JScrollPane(purchasedgeneratorsInfoTable);
         scrollPurchasedGenerators.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollPurchasedGenerators.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPurchasedGenerators.getViewport().setBackground(bgColor);
         generatorsTablesPanel.add(scrollPurchasedGenerators);
 
-        // === Tabla Próximos Costes ===
         generatorShopTable = new NonEditableTable(emptyData, emptyCols);
         generatorShopTable.setFont(tableFont);
         generatorShopTable.setForeground(fgColor);
@@ -349,18 +332,15 @@ public class GameView extends JPanel {
         generatorShopTable.setIntercellSpacing(new Dimension(0, 0));
         generatorShopTable.setFocusable(false);
 
-        // ScrollPane
         JScrollPane scrollNextUpgrades = new JScrollPane(generatorShopTable);
         scrollNextUpgrades.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollNextUpgrades.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollNextUpgrades.getViewport().setBackground(bgColor);
         generatorsTablesPanel.add(scrollNextUpgrades);
 
-        // Agregar a tu panel principal
         generatorsCardPanel.removeAll();
         generatorsCardPanel.add(generatorsTablesPanel, BorderLayout.CENTER);
 
-        // Añadir ambos al contenedor y alternar visibilidad
         JPanel generatorsStack = new JPanel(null);
         generatorsStack.setOpaque(false);
         generatorsStack.setLayout(new CardLayout());
@@ -388,7 +368,6 @@ public class GameView extends JPanel {
 
         centralPanel.add(rightPanel);
 
-        // === ICON PANEL ===
         iconPanel = new JPanel();
         iconPanel.setPreferredSize(new Dimension(150,400));
         iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.Y_AXIS));
@@ -408,11 +387,9 @@ public class GameView extends JPanel {
         statsButton.setFocusPainted(false);
         statsButton.setActionCommand(STATS_COMMAND);
 
-        // Centrado
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         statsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Espaciado vertical
         iconPanel.add(Box.createVerticalGlue());
         iconPanel.add(settingsButton);
         iconPanel.add(Box.createVerticalStrut(20));
@@ -421,14 +398,12 @@ public class GameView extends JPanel {
 
         add(iconPanel, BorderLayout.EAST);
 
-        // === EMPTY PANEL ===
         JPanel emptyPanel = new JPanel();
         emptyPanel.setLayout(new BoxLayout(emptyPanel, BoxLayout.Y_AXIS));
         emptyPanel.setPreferredSize(new Dimension(100, 120));
         emptyPanel.setOpaque(false);
         add(emptyPanel, BorderLayout.WEST);
 
-        // === Proportional scaling listener ===
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -527,17 +502,32 @@ public class GameView extends JPanel {
         });
         t.start();
     }
-
+    /**
+     * Updates the label displaying the total number of coffees.
+     * @param numCoffees the current coffee count
+     */
     public void setTotalCoffeeLabel(double numCoffees) {
         totalNumCoffees = numCoffees;
         totalCoffeeLabel.setText(String.format("%.2f cfs", totalNumCoffees));
     }
 
+    /**
+     * Updates the current price label for a specific generator.
+     *
+     * @param generatorType the generator type
+     * @param priceGenerator the price to display
+     */
     public void setActualPriceGenerator(String generatorType, double priceGenerator) {
         GeneratorPanel generatorPanel = generators.get(generatorType);
         generatorPanel.updatePrice(String.valueOf(priceGenerator));
     }
 
+    /**
+     * Updates the number of generators shown for a specific type.
+     *
+     * @param generatorType the generator type (beans, coffee maker, TakeAway)
+     * @param numGenerators the number of generators owned
+     */
     public void setTotalNumberGenerators(String generatorType, int numGenerators) {
         GeneratorPanel generatorPanel = generators.get(generatorType);
         if (generatorPanel != null) {
@@ -546,6 +536,11 @@ public class GameView extends JPanel {
         }
     }
 
+    /**
+     * Updates the label showing coffees produced per second.
+     *
+     * @param coffeesPerSecond the coffees per second rate
+     */
     public void setCoffeesPerSecondValue(double coffeesPerSecond) {
         cpsLabel.setText(String.format("%s cfs/s", formatPrice(coffeesPerSecond)));
     }
@@ -595,10 +590,18 @@ public class GameView extends JPanel {
         }
     }
 
+    /**
+     * Initializes the upgrade grid with upgrade levels and costs.
+     * @param beansLevelUpgrade current level of the beans generator
+     * @param makerLevelUpgrade current level of the coffee maker generator
+     * @param takeAwayLevelUpgrade current level of the takeaway generator
+     * @param beansUpgradeCosts list of costs for beans upgrades
+     * @param makerUpgradeCosts list of costs for coffee maker upgrades
+     * @param takeAwayUpgradeCosts list of costs for takeaway upgrades
+     */
     public void initUpgradeGrid(int beansLevelUpgrade, int makerLevelUpgrade, int takeAwayLevelUpgrade, ArrayList<Float> beansUpgradeCosts, ArrayList<Float> makerUpgradeCosts, ArrayList<Float> takeAwayUpgradeCosts) {
         int mejorasPorTipo = 3;
 
-        // Café (índices 0-2)
         for (int i = 0; i < mejorasPorTipo; i++) {
             if (i < beansLevelUpgrade) {
                 upgrades.get("upgrade" + i).markAsBought();
@@ -610,7 +613,6 @@ public class GameView extends JPanel {
             upgrades.get("upgrade" + i).setUpgradePrice(beansUpgradeCosts.get(i));
         }
 
-        // Máquina (índices 3-5)
         for (int i = 0; i < mejorasPorTipo; i++) {
             int index = i + mejorasPorTipo;
             if (i < makerLevelUpgrade) {
@@ -623,7 +625,6 @@ public class GameView extends JPanel {
             upgrades.get("upgrade" + index).setUpgradePrice(makerUpgradeCosts.get(i));
         }
 
-        // Para llevar (índices 6-8)
         for (int i = 0; i < mejorasPorTipo; i++) {
             int index = i + 2 * mejorasPorTipo;
             if (i < takeAwayLevelUpgrade) {
@@ -637,6 +638,15 @@ public class GameView extends JPanel {
         }
     }
 
+    /**
+     * Updates the upgrade info table with the latest upgrade status.
+     * @param beansLevelUpgrade current beans generator upgrade level
+     * @param makerLevelUpgrade current coffee maker generator upgrade level
+     * @param takeAwayLevelUpgrade current takeaway generator upgrade level
+     * @param beansUpgradeCosts costs for each beans upgrade level
+     * @param makerUpgradeCosts costs for each coffee maker upgrade level
+     * @param takeAwayUpgradeCosts costs for each takeaway upgrade level
+     */
     public void updateUpgradeInfoTable(int beansLevelUpgrade, int makerLevelUpgrade, int takeAwayLevelUpgrade, ArrayList<Float> beansUpgradeCosts, ArrayList<Float> makerUpgradeCosts, ArrayList<Float> takeAwayUpgradeCosts) {
         String[][] combinedUpgrades = {
                 {"Coffee Beans", beansUpgradeCosts.get(0) + " cfs", "x2", (beansLevelUpgrade >= 1) ? "Bought" : "Available"},
@@ -667,6 +677,15 @@ public class GameView extends JPanel {
         upgradesTable.getColumnModel().getColumn(0).setPreferredWidth(120);
     }
 
+    /**
+     * Updates the shop table with current generator prices and production rates.
+     * @param beansPriceGenerator price of beans generator
+     * @param beansUnitProduction production rate of beans generator
+     * @param makerPriceGenerator price of coffee maker generator
+     * @param makerUnitProduction production rate of coffee maker generator
+     * @param takeAwayPriceGenerator price of takeaway generator
+     * @param takeAwayUnitProduction production rate of takeaway generator
+     */
     public void updateGeneratorsShopTable (double beansPriceGenerator, String beansUnitProduction, double makerPriceGenerator, String makerUnitProduction, double takeAwayPriceGenerator, String takeAwayUnitProduction) {
         String[] generatorsShopCols = {
                 "Name", "Cost", "Unit Production"
@@ -693,6 +712,21 @@ public class GameView extends JPanel {
         generatorShopTable.getColumnModel().getColumn(0).setPreferredWidth(140);
     }
 
+    /**
+     * Updates the generator info table with quantities and production stats.
+     * @param beansQuantity  quantity of beans generators
+     * @param makerQuantity quantity of coffee maker generators
+     * @param takeAwayQuantity quantity of takeaway generators
+     * @param beansUnitProduction unit production of beans
+     * @param makerUnitProduction  unit production of coffee maker
+     * @param takeAwayUnitProduction unit production of takeaway
+     * @param beansTotalProduction total production of beans
+     * @param makerTotalProduction total production of coffee maker
+     * @param takeAwayTotalProduction total production of takeaway
+     * @param beansGlobalProduction global production of beans
+     * @param makerGlobalProduction global production of coffee maker
+     * @param takeAwayGlobalProduction global production of takeaway
+     */
     public void updateGeneratorsInfoTable(int beansQuantity, int makerQuantity, int takeAwayQuantity, String beansUnitProduction, String makerUnitProduction, String takeAwayUnitProduction, String beansTotalProduction, String makerTotalProduction, String takeAwayTotalProduction, String beansGlobalProduction, String makerGlobalProduction, String takeAwayGlobalProduction) {
 
         String[] generatorInfoTableCols = {
@@ -723,14 +757,29 @@ public class GameView extends JPanel {
         clickButton.setText(formatPrice(nextClickerUpgradeCost) + " | x" + nextClickerMultiplicator);
     }
 
+    /**
+     * Blocks the clicker upgrade button visually and functionally.
+     */
     public void blockClickerButton() {
         clickButton.setText("LEVEL MAX");
     }
 
+    /**
+     * Displays the selected upgrade visually as purchased.
+     *
+     * @param levelUpgrade the level being purchased
+     * @param generator the type of generator being upgraded
+     */
     public void buyUpgrade(int levelUpgrade, String generator) {
         upgrades.get(getUpgradeGridIndex(levelUpgrade,generator)).markAsBought();
     }
 
+    /**
+     * Unlocks the next available upgrade for a given generator.
+     *
+     * @param levelUpgrade the upgrade level to unlock
+     * @param generator the type of generator to unlock upgrade for
+     */
     public void unlockUpgrade(int levelUpgrade, String generator) {
         upgrades.get(getUpgradeGridIndex(levelUpgrade,generator)).unlock();
     }

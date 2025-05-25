@@ -10,6 +10,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+/**
+ * SettingsView provides an interface for the user to manage session-related actions
+ * such as saving the game, logging out, finishing the game, or returning to gameplay.
+ * All buttons are styled according to the CoffeeClicker UI theme.
+ */
 public class SettingsView extends JPanel {
     public static final String LOGOUT_COMMAND = "LOGOUT_COMMAND";
     public static final String BACK_COMMAND = "BACK_COMMAND";
@@ -18,6 +23,9 @@ public class SettingsView extends JPanel {
     private Font coffeeClickerFont;
     private final HashMap<String, JButton> buttons = new HashMap<>();
 
+    /**
+     * Constructs and initializes the settings view layout and components.
+     */
     public SettingsView() {
         setLayout(new BorderLayout());
 
@@ -57,6 +65,12 @@ public class SettingsView extends JPanel {
         setVisible(true);
     }
 
+    /**
+     * Creates a red-styled warning button typically used for critical actions.
+     * @param text the button label
+     * @param actionCommand the command associated with the button
+     * @return the styled red JButton
+     */
     private JButton newButtonRed(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/warning_button.png")
                 .getImage().getScaledInstance(257, 82, Image.SCALE_DEFAULT));
@@ -84,6 +98,12 @@ public class SettingsView extends JPanel {
         return button;
     }
 
+    /**
+     * Creates a standard styled button with hover effects.
+     * @param text the button label
+     * @param actionCommand the command associated with the button
+     * @return the styled JButton
+     */
     private JButton newButton(String text, String actionCommand){
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(257, 82, Image.SCALE_DEFAULT));
@@ -121,6 +141,10 @@ public class SettingsView extends JPanel {
         return button;
     }
 
+    /**
+     * Assigns a ControllerSettings instance to all actionable buttons.
+     * @param controller_settings the controller handling settings logic
+     */
     public void setController(ControllerSettings controller_settings){
         for (JButton button : buttons.values()) {
             button.addActionListener(controller_settings);

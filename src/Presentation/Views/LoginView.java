@@ -7,6 +7,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+/**
+ * LoginView represents the user interface panel where users can enter
+ * their credentials to log into the game. It includes fields for user/email
+ * and password input, as well as login and back buttons. It also supports
+ * error display and interaction with a controller.
+ */
 public class LoginView extends JPanel {
     public static final String LOGIN_COMMAND = "LOGIN_COMMAND";
     public static final String BACK_COMMAND = "BACK_COMMAND";
@@ -16,6 +22,9 @@ public class LoginView extends JPanel {
     private final HashMap<String, JButton> buttons = new HashMap<>();
     private Font coffeeClickerFont;
 
+    /**
+     * Constructs and initializes the login view layout and components.
+     */
     public LoginView () {
         setLayout(new BorderLayout());
 
@@ -58,6 +67,11 @@ public class LoginView extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Creates and returns a JPanel for password input.
+     * @param text the label of the input field
+     * @return the assembled password input panel
+     */
     public JPanel askInfoPassword(String text) {
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
@@ -94,6 +108,11 @@ public class LoginView extends JPanel {
         return infoBox;
     }
 
+    /**
+     * Creates and returns a JPanel for standard text input.
+     * @param text the label of the input field
+     * @return the assembled input panel
+     */
     public JPanel askInfo(String text) {
         JPanel infoBox = new JPanel();
         infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
@@ -130,6 +149,11 @@ public class LoginView extends JPanel {
         return infoBox;
     }
 
+    /**
+     * Creates and returns a textbox component for regular text.
+     * @param text the identifier key for the field
+     * @return a JPanel containing the styled textbox
+     */
     public JPanel addTextbox(String text) {
         JPanel frame = new JPanel();
 
@@ -165,6 +189,11 @@ public class LoginView extends JPanel {
         return frame;
     }
 
+    /**
+     * Creates and returns a textbox component specifically for passwords.
+     * @param text the identifier key for the password field
+     * @return a JPanel containing the styled password textbox
+     */
     public JPanel addTextboxPassword(String text) {
         JPanel frame = new JPanel();
 
@@ -204,7 +233,12 @@ public class LoginView extends JPanel {
         return frame;
     }
 
-
+    /**
+     * Creates and configures a button with hover effects.
+     * @param text the display text of the button
+     * @param actionCommand the action command to be assigned
+     * @return the configured JButton instance
+     */
     private JButton newButton(String text, String actionCommand) {
         ImageIcon buttonIcon = new ImageIcon(new ImageIcon("imgs/button.png")
                 .getImage().getScaledInstance(159, 51, Image.SCALE_DEFAULT));
@@ -243,6 +277,11 @@ public class LoginView extends JPanel {
         return button;
     }
 
+    /**
+     * Displays an error message beneath the field associated with the provided key.
+     * @param field the identifier of the field
+     * @param message the error message to display
+     */
     public static void showError(String field, String message) {
         JLabel errorLabel = errorLabels.get(field);
         if (errorLabel != null) {
@@ -250,24 +289,38 @@ public class LoginView extends JPanel {
         }
     }
 
+    /**
+     * Clears all visible error messages in the form.
+     */
     public void clearErrorMessages() {
         for (JLabel label : errorLabels.values()) {
             label.setText(" ");
         }
     }
 
+    /**
+     * Clears all user input fields.
+     */
     public void clearFields() {
         for (JTextField field : textFields.values()) {
             field.setText("");
         }
     }
 
+    /**
+     * Binds a controller to all actionable components in this view.
+     * @param controller the controller to set
+     */
     public void setController(ControllerLogin controller) {
         for (JButton button : buttons.values()) {
             button.addActionListener(controller);
         }
     }
 
+    /**
+     * Provides access to the internal map of input fields.
+     * @return a HashMap linking field keys to JTextField components
+     */
     public HashMap<String, JTextField> getTextFields(){
         return textFields;
     }

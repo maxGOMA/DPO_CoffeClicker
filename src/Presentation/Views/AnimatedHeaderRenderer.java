@@ -6,12 +6,21 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Custom table header renderer that animates scrolling text for columns with long titles.
+ * This renderer creates a smooth horizontal marquee effect by periodically updating the
+ * displayed portion of the column title.
+ */
 public class AnimatedHeaderRenderer extends DefaultTableCellRenderer {
     private final Map<Integer, String> scrollingTexts = new HashMap<>();
     private final Map<Integer, Integer> offsets = new HashMap<>();
     private final JTableHeader header;
     private final Timer timer;
 
+    /**
+     * Constructs an animated header renderer with a scrolling effect.
+     * @param header the table header component this renderer belongs to
+     */
     public AnimatedHeaderRenderer(JTableHeader header) {
         this.header = header;
 
@@ -38,6 +47,16 @@ public class AnimatedHeaderRenderer extends DefaultTableCellRenderer {
         timer.start();
     }
 
+    /**
+     * Returns the component used for drawing the header cell.
+     * @param table the JTable that uses this header
+     * @param value the value to assign to the cell
+     * @param isSelected whether the cell is selected
+     * @param hasFocus whether the cell has focus
+     * @param row the row index (ignored for headers)
+     * @param column the column index of the header
+     * @return a component used for header rendering with animated text
+     */
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
                                                    boolean isSelected, boolean hasFocus, int row, int column) {
